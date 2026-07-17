@@ -336,43 +336,6 @@ The platform supports the following deployment topologies:
 
 **Hybrid.** The control plane runs in the cloud. Device workers run on-premises or at the edge. The two communicate over encrypted channels with the control-plane tether. This is the default posture for enterprise deployments with distributed operations.
 
-### 9.2 Domain and URL Structure
-
-The platform's public documentation presence is structured as follows:
-
-| Domain | Purpose |
-|--------|---------|
-| `www.aaiaas.ai` | Reference architecture documentation, whitepapers, and public technical content |
-| `aaiaas.ai` (apex) | Public entry; product surfaces may redirect here or to docs as the control plane matures |
-
-The `www.aaiaas.ai` subdomain hosts static documentation and is served through a CDN-backed static hosting provider. Dynamic operator dashboards and product URLs are published when those surfaces are production-ready; this whitepaper does not treat product hostnames as fixed public contracts.
-
-### 9.3 DNS Requirements for www.aaiaas.ai
-
-To deploy the whitepaper documentation at `www.aaiaas.ai`, the following DNS records are required:
-
-**For CNAME-based deployment (static hosting provider):**
-
-```
-Type    Name              Value
-CNAME   www               <vercel-project-id>.vercel.app
-```
-
-**For A-record-based deployment (if using managed DNS):**
-
-```
-Type    Name              Value
-A       www               <provider-ip-address>
-```
-
-Apex DNS for product redirects is independent of the whitepaper deployment and may change as the control plane matures.
-
-### 9.4 Production vs. Roadmap
-
-The current production capability set includes: Planner (natural-language to task specification), Scheduling (natural-language cron expressions), Skill Health Check (diagnostic scoring), Proof-of-Execution (tamper-evident audit artifacts), and the skill evolutor (self-improvement loop).
-
-Roadmap capabilities include: expanded model provider support, enhanced local-assist inference capabilities, improved cross-skill learning patterns, additional compliance integrations, and publication of product-surface documentation once the control plane is mature enough for external operator onboarding. These are planned but not yet in production.
-
 ---
 
 *This whitepaper is published by AAIAAS.ai (Agentic Artificial Intelligence as a Service). Architectural invariants, governance patterns, and operational procedures described herein reflect the public reference architecture. Product-specific naming systems and actor taxonomies are reserved for later publication when the control plane is ready.*

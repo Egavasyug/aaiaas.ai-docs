@@ -210,15 +210,14 @@ p {
 <li><a href="#section9">Deployment Topologies and Production Posture</a>
 <ul>
 <li>9.1 Canonical Deployment Reference</li>
-<li>9.2 Domain and URL Structure</li>
-<li>9.3 DNS Requirements for www.aaiaas.ai</li>
-<li>9.4 Production vs. Roadmap</li>
 </ul>
 </li>
 </ol>
 </div>
 
 <div id="content">
+<p><strong>AAIAAS (Agentic Artificial Intelligence as a Service) Reference Architecture Whitepaper</strong>   <strong>Version 1.1</strong>   <strong>July 2026</strong></p>
+
 <h2 id="section1">1. Executive Summary</h2>
 
 <p>The prevailing narrative in enterprise AI focuses on models: which foundation model is best, which provider offers the best price-performance ratio, which prompt engineering technique unlocks the highest accuracy. This model-centric view produces systems that are fragile, opaque, and difficult to govern. When the model changes — and it will change — the entire system must be rebuilt.</p>
@@ -462,32 +461,6 @@ p {
 <p><strong>Sovereign/On-Premises.</strong> The control plane is deployed within the tenant's infrastructure. Model providers may be external (via secure API) or fully local. Workers run on tenant hardware. This configuration satisfies strict data residency and sovereignty requirements.</p>
 
 <p><strong>Hybrid.</strong> The control plane runs in the cloud. Device workers run on-premises or at the edge. The two communicate over encrypted channels with the control-plane tether. This is the default posture for enterprise deployments with distributed operations.</p>
-
-<h3 id="section9">9.2 Domain and URL Structure</h3>
-
-<p>The platform's public documentation presence is structured as follows:</p>
-
-<table><thead><tr><th>Domain</th><th>Purpose</th></tr></thead><tbody><tr><td><code>www.aaiaas.ai</code></td><td>Reference architecture documentation, whitepapers, and public technical content</td></tr><tr><td><code>aaiaas.ai</code> (apex)</td><td>Public entry; product surfaces may redirect here or to docs as the control plane matures</td></tr></tbody></table>
-
-<p>The <code>www.aaiaas.ai</code> subdomain hosts static documentation and is served through a CDN-backed static hosting provider. Dynamic operator dashboards and product URLs are published when those surfaces are production-ready; this whitepaper does not treat product hostnames as fixed public contracts.</p>
-
-<h3 id="section9">9.3 DNS Requirements for www.aaiaas.ai</h3>
-
-<p>To deploy the whitepaper documentation at <code>www.aaiaas.ai</code>, the following DNS records are required:</p>
-
-<pre><code>Type    Name              Value
-CNAME   www               &lt;vercel-project-id&gt;.vercel.app</code></pre>
-
-<pre><code>Type    Name              Value
-A       www               &lt;provider-ip-address&gt;</code></pre>
-
-<p>Apex DNS for product redirects is independent of the whitepaper deployment and may change as the control plane matures.</p>
-
-<h3 id="section9">9.4 Production vs. Roadmap</h3>
-
-<p>The current production capability set includes: Planner (natural-language to task specification), Scheduling (natural-language cron expressions), Skill Health Check (diagnostic scoring), Proof-of-Execution (tamper-evident audit artifacts), and the skill evolutor (self-improvement loop).</p>
-
-<p>Roadmap capabilities include: expanded model provider support, enhanced local-assist inference capabilities, improved cross-skill learning patterns, additional compliance integrations, and publication of product-surface documentation once the control plane is mature enough for external operator onboarding. These are planned but not yet in production.</p>
 
 <p><em>This whitepaper is published by AAIAAS.ai (Agentic Artificial Intelligence as a Service). Architectural invariants, governance patterns, and operational procedures described herein reflect the public reference architecture. Product-specific naming systems and actor taxonomies are reserved for later publication when the control plane is ready.</em></p>
 </div>
