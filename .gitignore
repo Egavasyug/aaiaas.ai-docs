@@ -3,3 +3,5 @@
 .vercel/
 node_modules/
 package-lock.json
+.vercel
+!docs/harness-first-agentic-ai.pdf
