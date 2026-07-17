@@ -33,7 +33,7 @@ await page.pdf({
   margin: { top: '0.7in', bottom: '0.7in', left: '0.85in', right: '0.85in' },
   printBackground: true,
   displayHeaderFooter: true,
-  headerTemplate: `<div style="font-size:7.5pt; font-family:Georgia; text-align:right; width:100%; padding-right:16px; color:#444;">Harness-First Agentic AI — AAIAAS.ai Whitepaper v1.0</div>`,
+  headerTemplate: `<div style="font-size:7.5pt; font-family:Georgia; text-align:right; width:100%; padding-right:16px; color:#444;">Harness-First Agentic AI — AAIAAS.ai Whitepaper v1.1</div>`,
   footerTemplate: `<div style="font-size:7.5pt; font-family:Georgia; text-align:center; width:100%; color:#444;">Page <span class="pageNumber"></span> of <span class="totalPages"></span></div>`
 });
 await browser.close();
