@@ -1,3 +1,5 @@
+!harness-first-agentic-ai.pdf
 *.pdf
-node_modules/
 .vercel/
+node_modules/
+package-lock.json
