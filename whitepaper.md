@@ -1,7 +1,7 @@
 # Harness-First Agentic AI: Control Plane, Execution, and Governed Autonomy
 
-**AAIAAS.ai Reference Architecture Whitepaper**  
-**Version 1.0**  
+**AAIAAS (Agentic Artificial Intelligence as a Service) Reference Architecture Whitepaper**  
+**Version 1.1**  
 **July 2026**
 
 ---
@@ -11,13 +11,12 @@
 1. [Executive Summary](#1-executive-summary)
 2. [The Problem: Model-Centric Failure Modes](#2-the-problem-model-centric-failure-modes)
 3. [Reference Architecture](#3-reference-architecture)
-4. [Control Plane and Falconry Governance Map](#4-control-plane-and-falconry-governance-map)
+4. [Control Plane and Worker Governance](#4-control-plane-and-worker-governance)
 5. [HITL Governance: Risk-Tiered Human-in-the-Loop](#5-hitl-governance-risk-tiered-human-in-the-loop)
 6. [OGACS: Execution Invariants and Operational Governance](#6-ogacs-execution-invariants-and-operational-governance)
 7. [Cognitive Compounding: Self-Improving Skill Loops](#7-cognitive-compounding-self-improving-skill-loops)
 8. [Execution Planes: Cloud, Device, and Air-Gap](#8-execution-planes-cloud-device-and-air-gap)
 9. [Deployment Topologies and Production Posture](#9-deployment-topologies-and-production-posture)
-10. [Appendix: Falconry Actor Taxonomy](#10-appendix-falconry-actor-taxonomy)
 
 ---
 
@@ -27,7 +26,7 @@ The prevailing narrative in enterprise AI focuses on models: which foundation mo
 
 The alternative is to flip the architecture. Place the model abstraction layer — the **Harness** — at the center of the design. Models become interchangeable commodities. Planning, policy, verification, and governance remain centralized and stable. Execution remains distributed, provider-agnostic, and resilient.
 
-This whitepaper presents the reference architecture behind AAIAAS.ai — a platform built on this harness-first principle. It is designed for organizations that need autonomous AI that can be trusted: systems that execute reliably, remain compliant under pressure, and improve themselves over time.
+This whitepaper presents the reference architecture behind **AAIAAS (Agentic Artificial Intelligence as a Service)** — published at AAIAAS.ai — a platform built on this harness-first principle. It is designed for organizations that need autonomous AI that can be trusted: systems that execute reliably, remain compliant under pressure, and improve themselves over time.
 
 The architecture delivers five capabilities that are rare in production:
 
@@ -40,6 +39,8 @@ The architecture delivers five capabilities that are rare in production:
 The platform is deployed across three execution planes (cloud-shared, device-local, air-gapped), supports hybrid configurations where local inference assists without replacing central orchestration, and is designed to operate in sovereign or private environments where data residency requirements are strict.
 
 This document describes the architecture, the governance model, and the operational invariants that make it work. It is intended for technical leaders, security architects, and operators evaluating autonomous AI platforms for production deployment.
+
+Product-branded internal nomenclature and product-specific actor taxonomies are intentionally out of scope for this public reference architecture; they will be published when the control-plane product surface is mature enough for that level of detail.
 
 ---
 
@@ -82,7 +83,7 @@ The AAIAAS architecture is organized into six distinct layers, each with a bound
 | **Experience Layer** | User interfaces, dashboards, input capture |
 | **Orchestration Layer** | Planning, routing, policy enforcement, task decomposition |
 | **Harness Layer** | Model/tool abstraction, provider isolation, verification, governance |
-| **Capability Layer** | Talons (modular skills) and connectors — provider-agnostic interfaces |
+| **Capability Layer** | Modular skills and connectors — provider-agnostic interfaces |
 | **Execution Layer** | Workers that execute tasks on their assigned execution plane |
 | **Memory Layer** | Tenant-segmented knowledge storage and retrieval |
 
@@ -100,9 +101,9 @@ No plane may silently assume the responsibilities of another. Control plans and 
 
 The Harness Layer is the differentiator. It provides:
 
-**Invariant 1 — Provider Isolation.** Provider-specific execution logic is confined to dedicated adapters. Task logic (Talons) never embeds model-provider concerns. Swapping a model provider requires changing the adapter, not rewriting the skill.
+**Invariant 1 — Provider Isolation.** Provider-specific execution logic is confined to dedicated adapters. Task logic (skills) never embeds model-provider concerns. Swapping a model provider requires changing the adapter, not rewriting the skill.
 
-**Invariant 2 — Provider-Agnostic Capabilities.** Skill semantics are defined independently of any model. A "browse the web" Talon produces the same output contract whether powered by a GPT model, a Claude model, or a local open-source model.
+**Invariant 2 — Provider-Agnostic Capabilities.** Skill semantics are defined independently of any model. A "browse the web" skill produces the same output contract whether powered by a GPT model, a Claude model, or a local open-source model.
 
 **Invariant 3 — Graceful Degradation.** Optional enrichment steps (retrieval-augmented generation, planner critic passes, billing telemetry) degrade gracefully unless explicitly marked as hard-required by policy. Failures produce structured diagnostics, not cascading failures.
 
@@ -124,39 +125,39 @@ The execution layer is governed by its own invariant set:
 
 ### 3.4 Tenant Isolation
 
-Every tenant undergoes a hatching lifecycle before activation: a defined provisioning sequence that establishes tenant record, settings, feature flags, memory namespace, public skill access, execution authorization, and observability scope. A tenant must not reach active status until all bootstrap resources exist. Authentication success alone does not imply readiness.
+Every tenant undergoes a bootstrap lifecycle before activation: a defined provisioning sequence that establishes tenant record, settings, feature flags, memory namespace, public skill access, execution authorization, and observability scope. A tenant must not reach active status until all bootstrap resources exist. Authentication success alone does not imply readiness.
 
 All tenant data and execution remain isolated. Cross-tenant data leakage is structurally forbidden by the architecture.
 
 ---
 
-## 4. Control Plane and Falconry Governance Map
+## 4. Control Plane and Worker Governance
 
-### 4.1 The Falconer Model
+### 4.1 Roles and Responsibilities
 
-The AAIAAS platform uses a structured governance metaphor — not as marketing language, but as a precise mapping between falconry discipline and operational control:
+The platform separates orchestration from execution:
 
-**The Falconer** is the orchestrator intelligence. It receives intent, expands goals into task specifications, generates execution plans, and exercises human-in-the-loop approval authority. The Falconer is always in the control plane — never in the execution layer.
+**Control-plane orchestrator.** Receives intent, expands goals into task specifications, generates execution plans, and exercises human-in-the-loop approval authority. Orchestration logic lives in the control plane — never in the execution layer.
 
-**The Peregrine** is the worker agent. It executes tasks dispatched by the control plane. It is fast, precise, and capable — but it acts only under the Falconer's direction. A Peregrine that cannot return to the Falconer is considered a system failure.
+**Worker agents.** Execute tasks dispatched by the control plane on an assigned execution plane. Workers are capable and precise, but act only under control-plane direction. A worker that cannot report status or accept recall is treated as a system failure.
 
-**The Mews** is the permanent home — the local development and staging environment where workers are trained, skills are developed, and configurations are tested before deployment.
+**Staging environment.** Local development and staging is where workers are trained, skills are developed, and configurations are tested before production deployment.
 
-**The Perch** is the operator dashboard — the elevated observation and decision point where the Falconer monitors task state, reviews HITL approval queues, and directs the hunt.
+**Operator dashboard.** The elevated observation and decision surface where operators monitor task state, review HITL approval queues, and direct execution.
 
-### 4.2 The Governance Tether
+### 4.2 Governance Controls
 
 Three mechanisms keep autonomous execution safe:
 
-**The Hood (HITL Gate).** Tasks at the High and Critical risk tiers are held behind a human approval gate. No task bypasses this silently. The Hood is never removed by default — it requires explicit human action (approve, reject, or waive-by-action at the individual task level).
+**HITL gate.** Tasks at the High and Critical risk tiers are held behind a human approval gate. No task bypasses this silently. Approval is never removed by default — it requires explicit human action (approve, reject, or waive-by-action at the individual task level).
 
-**The Jesses (Budget Constraints).** Every worker has an associated cost envelope. Execution paths are bounded by per-task and per-session spending limits. When the envelope is exhausted, execution halts and reports — it does not continue silently.
+**Budget constraints.** Every worker has an associated cost envelope. Execution paths are bounded by per-task and per-session spending limits. When the envelope is exhausted, execution halts and reports — it does not continue silently.
 
-**The Creance (Tether).** Workers remain connected to the control plane through heartbeat signals and recall paths. Even workers running locally (in "at hack" mode, where they operate with local inference assistance) are tethered to the central orchestrator. They can operate semi-independently but can always be recalled.
+**Control-plane tether.** Workers remain connected to the control plane through heartbeat signals and recall paths. Even workers running locally with local inference assistance are tethered to the central orchestrator. They can operate semi-independently but can always be recalled.
 
-### 4.3 Telemetry: The Bell
+### 4.3 Telemetry and Observability
 
-Every worker emits telemetry at every lifecycle stage — planning, dispatch, execution, completion, and verification. This "bell" is always attached, even during local-assist mode. Silent operation is not an option. Every task produces structured logs suitable for aggregation and analysis, with traceability across tenant, worker, execution plane, and skill.
+Every worker emits telemetry at every lifecycle stage — planning, dispatch, execution, completion, and verification. Silent operation is not an option. Every task produces structured logs suitable for aggregation and analysis, with traceability across tenant, worker, execution plane, and skill.
 
 ---
 
@@ -215,7 +216,7 @@ OGACS evaluates operations through two primary dimensions:
 **Operational Mode.** The system operates in one of two modes:
 
 - **OPEN mode** (standard): All capabilities are available, standard governance applies. This is the default operational condition.
-- **LOCKDOWN mode** (containment): Execution is suppressed; only safety-critical operations are permitted, and all other operations require explicit operator authorization. Talon loading collapses to the safety layer only.
+- **LOCKDOWN mode** (containment): Execution is suppressed; only safety-critical operations are permitted, and all other operations require explicit operator authorization. Skill loading collapses to the safety layer only.
 
 **Drift Detection.** The system continuously compares current operational state against the authoritative baseline (the committed configuration state). When drift is detected, OGACS triggers convergence workflows — controlled processes that align the current state back to the authoritative baseline through merge, re-commit, or governance intervention.
 
@@ -279,7 +280,7 @@ The cloud execution plane provides shared, multi-tenant worker infrastructure ho
 - Are managed and upgraded centrally
 - Benefit from shared model provider relationships and caching
 - Require an authorized tenant set for cross-tenant access
-- Always maintain the Creance (control-plane tether) — heartbeat, registration, and recall paths
+- Always maintain the control-plane tether — heartbeat, registration, and recall paths
 
 This is the default deployment posture and the operational baseline. Most tasks execute in the cloud plane.
 
@@ -290,14 +291,14 @@ The device execution plane provides tenant-owned local or on-premises workers. W
 - Serve a single tenant exclusively
 - Run on infrastructure controlled by the tenant
 - May operate with local inference models (Ollama, local LLMs) for preprocessing, retrieval, summarization, and redaction
-- Maintain the Creance — they can operate semi-independently ("at hack") but remain tethered to the central orchestrator
+- Maintain the control-plane tether — they can operate semi-independently with local-assist inference but remain connected to the central orchestrator
 - Support hybrid configurations where local inference assists strategic planning without replacing it
 
 Local inference in device mode is explicitly constrained: it operates as a **Harness Layer co-processor**, not as a second orchestrator. It may assist with local retrieval, summarization, fact extraction, redaction, and privacy-preserving preprocessing. Strategic planning, policy decisions, and authoritative task orchestration remain control-plane responsibilities.
 
 This separation is structural. The control plane is the brain. Device-local models are the sensory apparatus.
 
-### 8.3 Air-Gap Deployment: Sequestered Flight
+### 8.3 Air-Gap Deployment
 
 For tenants with strict data residency or sovereignty requirements, the architecture supports air-gap execution:
 
@@ -307,7 +308,7 @@ For tenants with strict data residency or sovereignty requirements, the architec
 - Model inference runs on local hardware
 - All artifacts, proofs, and audit logs are generated and stored on-premises
 
-This is the "sequestered flight" configuration — the falcon hunts in enclosed reserve with no outside contact. It is the most restrictive deployment mode and requires the most careful operational planning, but it is natively supported by the architecture, not bolted on as an afterthought.
+This is the most restrictive deployment mode and requires careful operational planning, but it is natively supported by the architecture, not bolted on as an afterthought.
 
 ### 8.4 Hybrid Configurations
 
@@ -317,9 +318,9 @@ Most production deployments will use hybrid configurations:
 - Data-sensitive preprocessing runs on local workers with local models
 - Heavy computation tasks run in the cloud plane
 - Compliance-critical verification runs on-premises
-- The Creance connects everything, ensuring that even locally-operating workers can be directed, recalled, and audited by the central orchestrator
+- The control-plane tether connects everything, ensuring that even locally operating workers can be directed, recalled, and audited by the central orchestrator
 
-This is the "at hack" posture — the falcon operates independently in the field but remains within tether distance and can be recalled at any time.
+Local-assist workers may operate semi-independently in the field while remaining within tether distance and subject to recall at any time.
 
 ---
 
@@ -333,19 +334,18 @@ The platform supports the following deployment topologies:
 
 **Sovereign/On-Premises.** The control plane is deployed within the tenant's infrastructure. Model providers may be external (via secure API) or fully local. Workers run on tenant hardware. This configuration satisfies strict data residency and sovereignty requirements.
 
-**Hybrid.** The control plane runs in the cloud. Device workers run on-premises or at the edge. The two communicate over encrypted channels with the Creance tether. This is the default posture for enterprise deployments with distributed operations.
+**Hybrid.** The control plane runs in the cloud. Device workers run on-premises or at the edge. The two communicate over encrypted channels with the control-plane tether. This is the default posture for enterprise deployments with distributed operations.
 
 ### 9.2 Domain and URL Structure
 
-The platform's web presence is structured as follows:
+The platform's public documentation presence is structured as follows:
 
 | Domain | Purpose |
 |--------|---------|
 | `www.aaiaas.ai` | Reference architecture documentation, whitepapers, and public technical content |
-| `cp.aaiaas.ai` | Control plane dashboard and operator interface |
-| `aaiaas.ai` (apex) | Redirects to `cp.aaiaas.ai` |
+| `aaiaas.ai` (apex) | Public entry; product surfaces may redirect here or to docs as the control plane matures |
 
-The `www.aaiaas.ai` subdomain hosts static documentation and is served through a CDN-backed static hosting provider. The `cp.aaiaas.ai` subdomain hosts the dynamic control plane application.
+The `www.aaiaas.ai` subdomain hosts static documentation and is served through a CDN-backed static hosting provider. Dynamic operator dashboards and product URLs are published when those surfaces are production-ready; this whitepaper does not treat product hostnames as fixed public contracts.
 
 ### 9.3 DNS Requirements for www.aaiaas.ai
 
@@ -365,79 +365,14 @@ Type    Name              Value
 A       www               <provider-ip-address>
 ```
 
-The apex domain `aaiaas.ai` is unchanged and continues to redirect to `cp.aaiaas.ai`. No apex DNS changes are required for the whitepaper deployment.
+Apex DNS for product redirects is independent of the whitepaper deployment and may change as the control plane matures.
 
 ### 9.4 Production vs. Roadmap
 
 The current production capability set includes: Planner (natural-language to task specification), Scheduling (natural-language cron expressions), Skill Health Check (diagnostic scoring), Proof-of-Execution (tamper-evident audit artifacts), and the skill evolutor (self-improvement loop).
 
-Roadmap capabilities include: expanded model provider support, enhanced local-assist inference capabilities, improved cross-skill learning patterns, and additional compliance integrations. These are planned but not yet in production.
+Roadmap capabilities include: expanded model provider support, enhanced local-assist inference capabilities, improved cross-skill learning patterns, additional compliance integrations, and publication of product-surface documentation once the control plane is mature enough for external operator onboarding. These are planned but not yet in production.
 
 ---
 
-## 10. Appendix: Falconry Actor Taxonomy
-
-The following table provides a complete reference for the falconry-derived nomenclature used throughout the AAIAAS architecture. Each term maps a falconry concept to its technical equivalent in the platform.
-
-### 10.1 Actors
-
-| Falconry Term | AAIAAS Mapping |
-|--------------|---------------|
-| **The Falconer** | Orchestrator intelligence — intent expansion, plan generation, HITL approval authority, centralized in the control plane |
-| **The Peregrine** | Worker agent — executes tasks dispatched by the control plane, runs on assigned execution plane |
-| **The Austringer** | Self-hosted / fully local configuration — operates without cloud dependency |
-
-### 10.2 Locations and Infrastructure
-
-| Falconry Term | AAIAAS Mapping |
-|--------------|---------------|
-| **The Mews** | Local development and staging environment — Docker, Ollama, skill development workspace |
-| **The Perch** | Operator dashboard — AAIAAS interface served by the control plane; task state, HITL queue, and risk tiers |
-| **The Field** | Target execution environment — internet, customer infrastructure, or air-gapped network |
-
-### 10.3 Lifecycle Events
-
-| Falconry Term | AAIAAS Mapping |
-|--------------|---------------|
-| **The Cast** | Deployment event — worker spawn, railway deploy, execution plane assignment |
-| **The Stoop** | Worker task execution — committed execution of a dispatched task |
-| **Manning** | Worker onboarding and skill lifecycle (experimental → candidate → blessed) |
-| **The Hack** | Worker running locally with inference assistance, not actively reporting to the control plane |
-| **Hack-Back** | Re-registering a local worker with the cloud control plane |
-| **Called In** | Worker re-connects to control plane via heartbeat or recall signal |
-| **Hatching** | Tenant genesis — the `requested → provisioning → hatched → active` lifecycle |
-
-### 10.4 Controls and Constraints
-
-| Falconry Term | AAIAAS Mapping |
-|--------------|---------------|
-| **The Hood** | HITL gate — blocks task execution until the operator approves or waives |
-| **The Jesses** | Budget and runaway prevention constraints |
-| **The Creance** | Control-plane tether — heartbeat, registration, and recall paths |
-| **The Lure** | Heartbeat and recall signal — returns idle or runaway workers to the control plane |
-| **The Bell** | Always-emitting telemetry — `recordTaskMetrics()` at every lifecycle stage |
-
-### 10.5 Execution Plane Classifications
-
-| Falconry Term | Execution Plane |
-|--------------|----------------|
-| **Cloud Cast** | Cloud-shared or cloud-dedicated multi-tenant workers |
-| **Home Roost** | Local device workers — tenant-owned execution |
-| **Private Mews** | Sovereign/private deployment policy for tenant-owned execution |
-| **Sequestered Flight** | Air-gapped workers — no outbound connectivity |
-
-### 10.6 Naming Conventions
-
-| Context | Term | Usage |
-|---------|------|-------|
-| Marketing / product | **Talon** | Branded noun for individual skills ("Browse our Talon catalog") |
-| Technical / code | **skill** | Code-layer term (`skill_type`, `skill_manifest`) |
-| Tenant creation program | **Peregrines Hatching** | Docs, roadmap, program name |
-| Tenant creation code | `tenant_genesis` / `tenant_bootstrap` | Service names, API paths |
-| Hybrid/local configuration | **At Hack** / **The Hack** | Worker operating semi-independently with local inference |
-| Local inference role | **local_assist** | Device/on-prem LLM co-processor mode |
-| Cloud inference role | **strategic** | Control-plane providers handle planning, orchestration, policy |
-
----
-
-*This whitepaper is published by AAIAAS.ai. All architectural invariants, governance patterns, and operational procedures described herein are operational in production. The falconry taxonomy is used throughout documentation and code for consistent, intuitive naming.*
+*This whitepaper is published by AAIAAS.ai (Agentic Artificial Intelligence as a Service). Architectural invariants, governance patterns, and operational procedures described herein reflect the public reference architecture. Product-specific naming systems and actor taxonomies are reserved for later publication when the control plane is ready.*
