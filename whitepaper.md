@@ -1,7 +1,7 @@
 # Harness-First Agentic AI: Control Plane, Execution, and Governed Autonomy
 
 **AAIAAS (Agentic Artificial Intelligence as a Service) Reference Architecture Whitepaper**  
-**Version 1.1**  
+**Version 1.2**
 **July 2026**
 
 ---
@@ -341,4 +341,8 @@ The platform supports the following deployment topologies:
 
 ---
 
-*This whitepaper is published by AAIAAS.ai (Agentic Artificial Intelligence as a Service). Architectural invariants, governance patterns, and operational procedures described herein reflect the public reference architecture. Product-specific naming systems and actor taxonomies are reserved for later publication when the control plane is ready.*
+*This whitepaper is published by AAIAAS.ai (Agentic Artificial Intelligence as a Service). Architectural invariants, governance patterns, and operational procedures described herein reflect the public reference architecture. Actor taxonomies and product-specific naming are published at:*
+
+https://www.peregrines.ai/docs/falconry-taxonomy
+
+*For high-level reference, the Falconry Taxonomy defines three actor roles: **Falconer** (strategic planner and governor), **Peregrine** (autonomous execution worker), and **Talon** (control-plane orchestrator with HITL authority). www.peregrines.ai is the product marketing surface; this whitepaper remains the architectural reference.*
