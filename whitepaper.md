@@ -159,6 +159,18 @@ Three mechanisms keep autonomous execution safe:
 
 Every worker emits telemetry at every lifecycle stage — planning, dispatch, execution, completion, and verification. Silent operation is not an option. Every task produces structured logs suitable for aggregation and analysis, with traceability across tenant, worker, execution plane, and skill.
 
+### 4.4 Managed Concurrency and Admission Control
+
+Workers may execute in parallel as a capacity optimization — but parallelism is never an unmanaged default. The control plane exercises authoritative task admission and sequencing. Unbounded simultaneous agent execution without WIP or admission control is a governance failure mode: it produces conflicting writes, undoable state, and unauditable outcomes, not operational maturity.
+
+The architecture enforces:
+
+- **Task admission gate.** Every task must be accepted by the orchestrator before execution begins. Workers do not self-dispatch or peer-schedule.
+- **Managed concurrency.** Parallel workers are optional capacity under orchestrator direction, operating within WIP bounds defined by the control plane. They are not peer orchestrators and do not plan independently.
+- **Serial-first, parallel-when-proven.** The default execution model is serial (WIP=1 at the orchestrator level). Parallelism is introduced only when the control plane has verified that independent workers do not compete for shared state.
+
+This is the difference between a choreographed fleet and agent sprawl: one managed thread, one orchestrator directing traffic, bounded by governance. The doctrine is simple — and necessary at any scale.
+
 ---
 
 ## 5. HITL Governance: Risk-Tiered Human-in-the-Loop
