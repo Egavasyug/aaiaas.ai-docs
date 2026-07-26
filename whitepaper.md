@@ -251,7 +251,7 @@ This catalog is not exhaustive — any new operation category is evaluated again
 OGACS (Operational Governance for Autonomous Cognition Systems) is the minimal governance layer that enforces execution invariants in real time. It runs alongside the runtime and intercepts operations as they occur, evaluating each against a fixed set of invariants before allowing execution to proceed.
 
 OGACS = Operational Governance for Autonomous Cognition Systems — the invariant layer that makes trusted autonomy possible.
-For correspondence regarding OGACS or the AAIAAS reference architecture, contact guy@aaiaas.ai.
+For correspondence regarding OGACS or the AAIAAS reference architecture, contact guy@guysavage.com.
 
 OGACS is not a policy engine that loads rules dynamically. It is an invariant enforcement layer with a fixed, auditable set of constraints. Its role is to prevent drift — the divergence between intended and actual execution behavior.
 
