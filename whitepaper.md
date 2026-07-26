@@ -14,9 +14,10 @@
 4. [Control Plane and Worker Governance](#4-control-plane-and-worker-governance)
 5. [HITL Governance: Risk-Tiered Human-in-the-Loop](#5-hitl-governance-risk-tiered-human-in-the-loop)
 6. [OGACS: Execution Invariants and Operational Governance](#6-ogacs-execution-invariants-and-operational-governance)
-7. [Cognitive Compounding: Self-Improving Skill Loops](#7-cognitive-compounding-self-improving-skill-loops)
-8. [Execution Planes: Cloud, Device, and Air-Gap](#8-execution-planes-cloud-device-and-air-gap)
-9. [Deployment Topologies and Production Posture](#9-deployment-topologies-and-production-posture)
+7. [Identity & Zero-Trust Alignment](#7-identity--zero-trust-alignment)
+8. [Cognitive Compounding: Self-Improving Skill Loops](#8-cognitive-compounding-self-improving-skill-loops)
+9. [Execution Planes: Cloud, Device, and Air-Gap](#9-execution-planes-cloud-device-and-air-gap)
+10. [Deployment Topologies and Production Posture](#10-deployment-topologies-and-production-posture)
 
 ---
 
@@ -259,7 +260,51 @@ This loop is continuous and automated. Drift detection is not a periodic audit �
 
 ---
 
-## 7. Cognitive Compounding: Self-Improving Skill Loops
+## 7. Identity & Zero-Trust Alignment
+
+### 7.1 Dual-Plane Architecture
+
+AAIAAS follows a dual-plane identity model: a cloud control plane (policy, audit, orchestration) and a customer- or device-hosted execution plane (agency). This separation ensures that identity secrets never transit the control plane.
+
+> Customer Falconer runs on a governed endpoint (desktop/VDI). For interactive SSO applications it operates under the user's (or approved robot's) already-established ICAM session, similar to an attended RPA agent. Long-lived or API access uses vault-brokered delegated credentials, not password relay through the cloud control plane. The control plane provides policy and audit; it does not hold agency SSO secrets.
+
+The control plane provides **policy and audit**; it does **not** hold agency SSO secrets.
+
+### 7.2 Identity & SSO Principles
+
+The platform implements three SSO access models, aligned with Zero Trust and ICAM best practices:
+
+| Model | How identity is obtained | ZT fit |
+|-------|--------------------------|--------|
+| **A. Attended / session inheritance** | User or robot already authenticated on endpoint (ICAM, PIV/CAC, MFA, VDI). Falconer drives that session. | **Best default** — identity from agency IdP |
+| **B. Vaulted app identity** | Service account / OAuth client / PAT from customer vault at edge. | Preferred for APIs and unattended work |
+| **C. Cloud CP holds SSO** | Password relay or SaaS browser as user without endpoint session | **Forbidden** — violates zero-trust |
+
+### 7.3 Zero Trust Principles
+
+| ZT Principle | Falconer Implication |
+|--------------|---------------------|
+| **Never trust the network** | Falconer on a governed endpoint (desktop / VDI / enclave), not a cloud-hosted browser holding ICAM session |
+| **Verify explicitly (ICAM)** | Identity is issued by agency IdP — Falconer does **not** replace ICAM |
+| **Least privilege** | Policy envelope governs which sites, vault paths, and seats are accessible |
+| **No secret sprawl** | No SSO passwords in chat; no CP as customer IdP; short-lived tokens preferred |
+| **Continuous evaluation** | Session expiry or step-up MFA → Falconer fails closed and escalates to human re-auth |
+
+Falconer operates **in** the governed endpoint bubble (not around agency ICAM). This is a **reference design** aligned with Zero Trust principles — it is not a Zero Trust certification, FedRAMP authorization, or ICAM replacement.
+
+### 7.4 Explicit Non-Claims
+
+The following are **not** claims of this design:
+
+- Falconer does **not** bypass ICAM, CAPTCHA, or agency anti-automation by design
+- Falconer does **not** inherit customer ICAM via a SaaS browser in the Peregrines cloud without an endpoint install
+- Falconer does **not** accept password paste into chat or use the CP as a customer identity provider
+- This whitepaper is not an ATO, FedRAMP, or agency ICAM certification document
+- The open-web (Pathfinder) capability is not production-complete for all hostile UX surfaces
+
+---
+
+## 8. Cognitive Compounding: Self-Improving Skill Loops
 
 ### 7.1 The Evolutor Pattern
 
