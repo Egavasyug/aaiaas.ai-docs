@@ -101,6 +101,26 @@ This produces fragile systems because:
 
 The harness-first architecture inverts this priority. The model is a commodity input. The harness — the layer that provides provider isolation, verification, bounded execution, and governance — is the product.
 
+### 2.3 Inference as Commodity, Second Brain as Value
+
+Extending the harness-first principle: inference itself is a commodity. Models and providers are swappable inputs — you can change a model family, swap a cloud provider, or route to a local endpoint without rewriting task logic. The harness abstracts these away. What the operator pays for is not raw token volume or model capability; it is the **bespoke state** that each deployed executor accrues over time.
+
+That bespoke state is the tenant-scoped second brain: a customized state vector comprising memory artifacts, executed skills, policy-bound history, and cognitive compounding patterns. Two tenants running the same model on the same harness will produce different outcomes because their second brains are different. The model is the engine; the second brain is the product.
+
+This has implications for how organizations evaluate autonomous AI investment. The ROI does not come from which model you choose — it comes from how thoroughly the executor has learned your operational context, embedded your policies, and compounded its skills through execution. A well-tuned second brain running a commodity model outperforms a blank-slate executor on a premium model.
+
+### 2.4 Local Inference Security Boundary
+
+When workloads use device-local, on-premises, or air-gap inference endpoints, sensitive content can be processed without sending that content to external cloud model providers. This is a capability of the deployment topology, not a property of the harness itself. The table below summarizes content residency by mode:
+
+| Mode | Sensitive content to external model API? | Notes |
+|------|------------------------------------------|-------|
+| Device-local inference endpoint | No (stays on device / local network) | Co-processor; preprocessing, redaction, retrieval |
+| Hybrid | Depends on task path | Cloud CP / cloud workers may still see admitted payloads |
+| Air-gap | No outbound from execution plane | Strictest residency; model runs on local hardware |
+
+Device-local inference is explicitly a **Harness Layer co-processor** (§9.2) — it assists with local retrieval, summarization, fact extraction, and privacy-preserving preprocessing without replacing strategic planning or policy authority in the control plane. Even when inference is local, the control-plane tether remains the orchestrator.
+
 ---
 
 ## 3. Reference Architecture
@@ -319,6 +339,10 @@ The platform implements three SSO access models, aligned with Zero Trust and ICA
 | **Least privilege** | Policy envelope governs which sites, vault paths, and seats are accessible |
 | **No secret sprawl** | No SSO passwords in chat; no CP as customer IdP; short-lived tokens preferred |
 | **Continuous evaluation** | Session expiry or step-up MFA → Falconer fails closed and escalates to human re-auth |
+
+**Credentials at the edge.** Access credentials are resolved from an approved vault system at the execution plane. The control plane provides policy, audit, and orchestration — it is not a password store. This keeps secrets out of chat logs, prompts, and model context.
+
+**No secret sprawl.** No long-lived secrets in chat, prompts, or as model context SSoT. Short-lived, least-privilege credentials preferred. No model or harness component serves as a de facto credential repository.
 
 Falconer operates **in** the governed endpoint bubble (not around agency ICAM). This is a **reference design** aligned with Zero Trust principles — it is not a Zero Trust certification, FedRAMP authorization, or ICAM replacement.
 
