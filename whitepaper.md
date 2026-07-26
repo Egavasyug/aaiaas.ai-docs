@@ -10,14 +10,44 @@
 
 1. [Executive Summary](#1-executive-summary)
 2. [The Problem: Model-Centric Failure Modes](#2-the-problem-model-centric-failure-modes)
+   - 2.1 Three Recurring Failure Patterns
+   - 2.2 Why the Model-Centric Approach Fails
 3. [Reference Architecture](#3-reference-architecture)
+   - 3.1 Six Layers, Three Planes
+   - 3.2 The Harness Layer: Five Invariants
+   - 3.3 Execution Plane Invariants
+   - 3.4 Tenant Isolation
 4. [Control Plane and Worker Governance](#4-control-plane-and-worker-governance)
+   - 4.1 Roles and Responsibilities
+   - 4.2 Governance Controls
+   - 4.3 Telemetry and Observability
+   - 4.4 Managed Concurrency and Admission Control
 5. [HITL Governance: Risk-Tiered Human-in-the-Loop](#5-hitl-governance-risk-tiered-human-in-the-loop)
+   - 5.1 Risk Tiers
+   - 5.2 Operation Permanence Classification
+   - 5.3 Waiver Policy
+   - 5.4 High-Risk Operation Catalog
 6. [OGACS: Execution Invariants and Operational Governance](#6-ogacs-execution-invariants-and-operational-governance)
+   - 6.1 What Is OGACS?
+   - 6.2 Enforcement Model
+   - 6.3 Invariant Set
+   - 6.4 Drift and Convergence
 7. [Identity & Zero-Trust Alignment](#7-identity--zero-trust-alignment)
+   - 7.1 Dual-Plane Architecture
+   - 7.2 Identity & SSO Principles
+   - 7.3 Zero Trust Principles
+   - 7.4 Explicit Non-Claims
 8. [Cognitive Compounding: Self-Improving Skill Loops](#8-cognitive-compounding-self-improving-skill-loops)
+   - 8.1 The Evolutor Pattern
+   - 8.2 How It Works
+   - 8.3 Why This Matters
 9. [Execution Planes: Cloud, Device, and Air-Gap](#9-execution-planes-cloud-device-and-air-gap)
+   - 9.1 Cloud Execution: Multi-Tenant Worker Infrastructure
+   - 9.2 Device Execution: Tenant-Local Workers
+   - 9.3 Air-Gap Deployment
+   - 9.4 Hybrid Configurations
 10. [Deployment Topologies and Production Posture](#10-deployment-topologies-and-production-posture)
+   - 10.1 Canonical Deployment Reference
 
 ---
 
@@ -306,13 +336,13 @@ The following are **not** claims of this design:
 
 ## 8. Cognitive Compounding: Self-Improving Skill Loops
 
-### 7.1 The Evolutor Pattern
+### 8.1 The Evolutor Pattern
 
 Most AI platforms deliver static capability: you define a skill or workflow, it executes as designed, and improvement requires manual re-engineering. The AAIAAS platform implements a cognitive compounding pattern — a self-improvement loop where skills become more effective through accumulated execution experience.
 
 This is not training in the traditional ML sense. The platform does not fine-tune models or adjust weights. Instead, it implements a skill evolutor that observes execution outcomes, evaluates quality signals (completion rate, verification pass rate, operator feedback, cost efficiency), and proposes skill improvements for operator review.
 
-### 7.2 How It Works
+### 8.2 How It Works
 
 The evolutor pattern operates on three timescales:
 
@@ -322,7 +352,7 @@ The evolutor pattern operates on three timescales:
 
 **Cross-skill learning (monthly).** Patterns that emerge across skill executions — such as a particular verification step consistently catching the same class of errors — are abstracted into general improvements that propagate to related skills. This is where compounding accelerates: each skill's improvement raises the floor for all others.
 
-### 7.3 Why This Matters
+### 8.3 Why This Matters
 
 The cognitive compounding pattern produces a system whose capabilities grow over time without proportional engineering investment. The first run of a skill delivers baseline value. The twentieth run, informed by accumulated execution data, delivers measurably better results. The hundredth run, benefiting from cross-skill patterns, delivers results that no single engineer could have engineered manually.
 
@@ -330,9 +360,9 @@ This is the core product thesis: agents that improve themselves are not a featur
 
 ---
 
-## 8. Execution Planes: Cloud, Device, and Air-Gap
+## 9. Execution Planes: Cloud, Device, and Air-Gap
 
-### 8.1 Cloud Execution: Multi-Tenant Worker Infrastructure
+### 9.1 Cloud Execution: Multi-Tenant Worker Infrastructure
 
 The cloud execution plane provides shared, multi-tenant worker infrastructure hosted on managed cloud services. Workers in this plane:
 
@@ -344,7 +374,7 @@ The cloud execution plane provides shared, multi-tenant worker infrastructure ho
 
 This is the default deployment posture and the operational baseline. Most tasks execute in the cloud plane.
 
-### 8.2 Device Execution: Tenant-Local Workers
+### 9.2 Device Execution: Tenant-Local Workers
 
 The device execution plane provides tenant-owned local or on-premises workers. Workers in this plane:
 
@@ -358,7 +388,7 @@ Local inference in device mode is explicitly constrained: it operates as a **Har
 
 This separation is structural. The control plane is the brain. Device-local models are the sensory apparatus.
 
-### 8.3 Air-Gap Deployment
+### 9.3 Air-Gap Deployment
 
 For tenants with strict data residency or sovereignty requirements, the architecture supports air-gap execution:
 
@@ -370,7 +400,7 @@ For tenants with strict data residency or sovereignty requirements, the architec
 
 This is the most restrictive deployment mode and requires careful operational planning, but it is natively supported by the architecture, not bolted on as an afterthought.
 
-### 8.4 Hybrid Configurations
+### 9.4 Hybrid Configurations
 
 Most production deployments will use hybrid configurations:
 
@@ -384,9 +414,9 @@ Local-assist workers may operate semi-independently in the field while remaining
 
 ---
 
-## 9. Deployment Topologies and Production Posture
+## 10. Deployment Topologies and Production Posture
 
-### 9.1 Canonical Deployment Reference
+### 10.1 Canonical Deployment Reference
 
 The platform supports the following deployment topologies:
 
