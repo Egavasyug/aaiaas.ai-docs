@@ -268,7 +268,13 @@ This catalog is not exhaustive — any new operation category is evaluated again
 
 ### 6.1 What Is OGACS?
 
-OGACS (Operational Governance for Autonomous Cognition Systems) is the minimal governance layer that enforces execution invariants in real time. It runs alongside the runtime and intercepts operations as they occur, evaluating each against a fixed set of invariants before allowing execution to proceed.
+OGACS (Operational Governance for Autonomous Cognition Systems) is the policy framework for trusted autonomy — not a product, not a single implementation. OGACS defines the governance layers (SQDEC priority order, CR/Review Gate, Done=disk evidence, HITL gating, vault governance, doctrine) that autonomous systems follow.
+
+The Peregrines Falconer HERO stack (Hermes-Sasha custom configuration and vault process) is a primary live implementation of OGACS policy for a supervised agent seat, not the whole of OGACS. The AAIAAS dual-plane architecture (control plane + customer Falconer plane) is the product architecture that also runs under OGACS policy.
+
+> OGACS is the operational governance framework for autonomous cognition. The Peregrines Falconer HERO stack is a primary live implementation of OGACS policy for a supervised agent seat — not the whole of OGACS, and not a substitute for the dual-plane product architecture.
+
+OGACS is the operational governance framework for autonomous cognition. The Peregrines Falconer HERO stack (Hermes-Sasha custom configuration and vault process) is a primary live implementation of OGACS policy for a supervised agent seat — not the whole of OGACS, and not a substitute for the dual-plane product architecture described in §7.1.
 
 OGACS = Operational Governance for Autonomous Cognition Systems — the invariant layer that makes trusted autonomy possible.
 For correspondence regarding OGACS or the AAIAAS reference architecture, contact guy@guysavage.com.
