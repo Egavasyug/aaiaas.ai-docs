@@ -62,7 +62,7 @@ This whitepaper presents the reference architecture behind **AAIAAS (Agentic Art
 The architecture delivers five capabilities that are rare in production:
 
 1. **Provider-agnostic execution** — swap models without rewriting task logic
-2. **Governed autonomy** — human-in-the-loop gates scaled across thousands of concurrent tasks
+2. **Governed autonomy** — human-in-the-loop gates that scale with managed concurrency, rather than unmanaged agent sprawl
 3. **Execution invariants** — circuit breakers, cost limits, and step ceilings that prevent runaway behavior
 4. **Proof-of-execution** — every task produces tamper-evident audit artifacts
 5. **Cognitive compounding** — skills that improve run-over-run through a closed self-improvement loop
@@ -96,7 +96,7 @@ The dominant paradigm treats the model as the product. Engineering effort flows 
 This produces fragile systems because:
 
 - **Model swap requires rewriting.** When a provider is deprecated, pricing changes, or a better model emerges, the task logic must be re-engineered because execution and model coupling are inseparable.
-- **Governance is inconsistent.** Ad hoc safety checks and manual approvals do not scale. Teams that can't handle thousands of concurrent tasks with consistent risk-tiering cannot operate at production volume.
+- **Governance is inconsistent.** Ad hoc safety checks and manual approvals do not scale. Teams that cannot apply consistent risk-tiering under load cannot operate at production volume.
 - **Audit trails are incomplete.** When every execution path is model-dependent and ad hoc, producing tamper-evident proof-of-execution for compliance is an engineering project, not a native capability.
 
 The harness-first architecture inverts this priority. The model is a commodity input. The harness — the layer that provides provider isolation, verification, bounded execution, and governance — is the product.
@@ -212,15 +212,14 @@ Every worker emits telemetry at every lifecycle stage — planning, dispatch, ex
 
 ### 4.4 Managed Concurrency and Admission Control
 
-Workers may execute in parallel as a capacity optimization — but parallelism is never an unmanaged default. The control plane exercises authoritative task admission and sequencing. Unbounded simultaneous agent execution without WIP or admission control is a governance failure mode: it produces conflicting writes, undoable state, and unauditable outcomes, not operational maturity.
+Workers may execute in parallel as a capacity optimization — but parallelism is never an unmanaged default. The control plane exercises authoritative task admission and sequencing. Unbounded multi-agent execution without admission control is a governance failure mode: conflicting writes, undoable state, and unauditable outcomes — not operational maturity.
 
-The architecture enforces:
+**Doctrine (reference):**
+- Tasks are admitted by the orchestrator; workers do not self-dispatch or peer-schedule as peer orchestrators.
+- Parallel workers are optional capacity under control-plane direction, not independent planners.
+- Serial-first is the safe default; parallelism is introduced only when shared-state contention is controlled.
 
-- **Task admission gate.** Every task must be accepted by the orchestrator before execution begins. Workers do not self-dispatch or peer-schedule.
-- **Managed concurrency.** Parallel workers are optional capacity under orchestrator direction, operating within WIP bounds defined by the control plane. They are not peer orchestrators and do not plan independently.
-- **Serial-first, parallel-when-proven.** The default execution model is serial (WIP=1 at the orchestrator level). Parallelism is introduced only when the control plane has verified that independent workers do not compete for shared state.
-
-This is the difference between a choreographed fleet and agent sprawl: one managed thread, one orchestrator directing traffic, bounded by governance. The doctrine is simple — and necessary at any scale.
+This is the difference between a choreographed fleet and agent sprawl: one orchestrator directing traffic under governance. Detailed WIP bounds, admission algorithms, and deployment knobs are implementation concerns and are out of scope for this public reference.
 
 ---
 
@@ -290,7 +289,7 @@ OGACS evaluates operations through two primary dimensions:
 - **OPEN mode** (standard): All capabilities are available, standard governance applies. This is the default operational condition.
 - **LOCKDOWN mode** (containment): Execution is suppressed; only safety-critical operations are permitted, and all other operations require explicit operator authorization. Skill loading collapses to the safety layer only.
 
-**Drift Detection.** The system continuously compares current operational state against the authoritative baseline (the committed configuration state). When drift is detected, OGACS triggers convergence workflows — controlled processes that align the current state back to the authoritative baseline through merge, re-commit, or governance intervention.
+**Drift Detection.** The system compares operational state against an authoritative baseline. When drift is detected, OGACS requires controlled convergence — automated where safe, escalated to operators where judgment is required — rather than silent divergence.
 
 ### 6.3 Invariant Set
 
@@ -305,14 +304,9 @@ OGACS invariants cover the following domains:
 
 ### 6.4 Drift and Convergence
 
-When the system detects that current state diverges from the authoritative baseline, it initiates a convergence workflow:
+OGACS treats divergence from the authoritative baseline as a first-class governance event. When drift is detected, the system requires a controlled return to baseline — via automated reconciliation where safe, or operator escalation where judgment is required — then verifies that authoritative state is restored.
 
-1. **Detection:** State comparison against committed baseline identifies the divergence.
-2. **Classification:** The drift is classified by severity (minor configuration change, skill version mismatch, execution policy deviation).
-3. **Resolution:** The system either automatically converges (for minor changes) or escalates to human review (for significant deviations).
-4. **Verification:** Post-convergence validation confirms the system is back to authoritative state.
-
-This loop is continuous and automated. Drift detection is not a periodic audit — it is a real-time structural property of the architecture.
+Drift handling is a continuous architectural property, not a periodic audit exercise. Step-by-step convergence runbooks, severity taxonomies, and merge procedures are implementation detail and are reserved for a later operating-model guide.
 
 ---
 
@@ -374,13 +368,14 @@ This is not training in the traditional ML sense. The platform does not fine-tun
 
 ### 8.2 How It Works
 
-The evolutor pattern operates on three timescales:
+Cognitive compounding accumulates structured quality signals from execution — completion, verification outcomes, operator feedback, and cost/effort — and uses them to propose skill improvements for human review. The platform does not silently retrain models or auto-promote unreviewed skill changes.
 
-**Run-over-run improvement (immediate).** Each execution produces structured quality signals — did the task complete? Did it pass verification? How much did it cost? How many steps were required? These signals accumulate into a skill health score that is visible at a glance. A health score of 82/100 with three specific recommendations tells the operator exactly what to improve.
+**Reference loop (principle-level):**
+- **Immediate:** Per-run signals accumulate so operators can see skill health trend, not only pass/fail of the last run.
+- **Iterative:** Underperforming skills can enter a reviewed improvement cycle; approved changes are versioned before promotion.
+- **Compounding:** Patterns that recur across skills may be abstracted into shared improvements over time, raising the floor for related capabilities.
 
-**Skill iteration (weekly).** Skills that consistently score below a threshold trigger an improvement cycle. The system proposes modifications — adjusted parameters, alternative execution paths, different enrichment steps — and the operator reviews and approves changes. Approved changes are versioned and tested before promotion to production.
-
-**Cross-skill learning (monthly).** Patterns that emerge across skill executions — such as a particular verification step consistently catching the same class of errors — are abstracted into general improvements that propagate to related skills. This is where compounding accelerates: each skill's improvement raises the floor for all others.
+Exact scoring formulas, health-score UIs, and calendar cadences (weekly/monthly) are product implementation details and are out of scope for this public reference architecture.
 
 ### 8.3 Why This Matters
 
@@ -462,4 +457,4 @@ The platform supports the following deployment topologies:
 
 https://www.peregrines.ai/docs/falconry-taxonomy
 
-*For high-level reference, the Falconry Taxonomy defines three actor roles: **Falconer** (strategic planner and governor), **Peregrine** (autonomous execution worker), and **Talon** (control-plane orchestrator with HITL authority). www.peregrines.ai is the product marketing surface; this whitepaper remains the architectural reference.*
+*For high-level reference, the Falconry Taxonomy defines: **Falconer** (orchestrator / control plane with HITL authority), **Peregrine** (worker agent on an assigned execution plane), and **Talon** (skill or modular capability the worker calls). www.peregrines.ai is the product marketing surface; this whitepaper remains the architectural reference.*

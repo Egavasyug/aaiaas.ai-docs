@@ -243,7 +243,7 @@ blockquote {
 <p>The architecture delivers five capabilities that are rare in production:</p>
 <ol>
 <li><strong>Provider-agnostic execution</strong> — swap models without rewriting task logic</li>
-<li><strong>Governed autonomy</strong> — human-in-the-loop gates scaled across thousands of concurrent tasks</li>
+<li><strong>Governed autonomy</strong> — human-in-the-loop gates that scale with managed concurrency, rather than unmanaged agent sprawl</li>
 <li><strong>Execution invariants</strong> — circuit breakers, cost limits, and step ceilings that prevent runaway behavior</li>
 <li><strong>Proof-of-execution</strong> — every task produces tamper-evident audit artifacts</li>
 <li><strong>Cognitive compounding</strong> — skills that improve run-over-run through a closed self-improvement loop</li>
@@ -264,7 +264,7 @@ blockquote {
 <p>This produces fragile systems because:</p>
 <ul>
 <li><strong>Model swap requires rewriting.</strong> When a provider is deprecated, pricing changes, or a better model emerges, the task logic must be re-engineered because execution and model coupling are inseparable.</li>
-<li><strong>Governance is inconsistent.</strong> Ad hoc safety checks and manual approvals do not scale. Teams that can&#x27;t handle thousands of concurrent tasks with consistent risk-tiering cannot operate at production volume.</li>
+<li><strong>Governance is inconsistent.</strong> Ad hoc safety checks and manual approvals do not scale. Teams that cannot apply consistent risk-tiering under load cannot operate at production volume.</li>
 <li><strong>Audit trails are incomplete.</strong> When every execution path is model-dependent and ad hoc, producing tamper-evident proof-of-execution for compliance is an engineering project, not a native capability.</li>
 </ul>
 <p>The harness-first architecture inverts this priority. The model is a commodity input. The harness — the layer that provides provider isolation, verification, bounded execution, and governance — is the product.</p>
@@ -387,14 +387,14 @@ blockquote {
 <h3 id="43-telemetry-and-observability">4.3 Telemetry and Observability</h3>
 <p>Every worker emits telemetry at every lifecycle stage — planning, dispatch, execution, completion, and verification. Silent operation is not an option. Every task produces structured logs suitable for aggregation and analysis, with traceability across tenant, worker, execution plane, and skill.</p>
 <h3 id="44-managed-concurrency-and-admission-control">4.4 Managed Concurrency and Admission Control</h3>
-<p>Workers may execute in parallel as a capacity optimization — but parallelism is never an unmanaged default. The control plane exercises authoritative task admission and sequencing. Unbounded simultaneous agent execution without WIP or admission control is a governance failure mode: it produces conflicting writes, undoable state, and unauditable outcomes, not operational maturity.</p>
-<p>The architecture enforces:</p>
+<p>Workers may execute in parallel as a capacity optimization — but parallelism is never an unmanaged default. The control plane exercises authoritative task admission and sequencing. Unbounded multi-agent execution without admission control is a governance failure mode: conflicting writes, undoable state, and unauditable outcomes — not operational maturity.</p>
+<p><strong>Doctrine (reference):</strong></p>
 <ul>
-<li><strong>Task admission gate.</strong> Every task must be accepted by the orchestrator before execution begins. Workers do not self-dispatch or peer-schedule.</li>
-<li><strong>Managed concurrency.</strong> Parallel workers are optional capacity under orchestrator direction, operating within WIP bounds defined by the control plane. They are not peer orchestrators and do not plan independently.</li>
-<li><strong>Serial-first, parallel-when-proven.</strong> The default execution model is serial (WIP=1 at the orchestrator level). Parallelism is introduced only when the control plane has verified that independent workers do not compete for shared state.</li>
+<li>Tasks are admitted by the orchestrator; workers do not self-dispatch or peer-schedule as peer orchestrators.</li>
+<li>Parallel workers are optional capacity under control-plane direction, not independent planners.</li>
+<li>Serial-first is the safe default; parallelism is introduced only when shared-state contention is controlled.</li>
 </ul>
-<p>This is the difference between a choreographed fleet and agent sprawl: one managed thread, one orchestrator directing traffic, bounded by governance. The doctrine is simple — and necessary at any scale.</p>
+<p>This is the difference between a choreographed fleet and agent sprawl: one orchestrator directing traffic under governance. Detailed WIP bounds, admission algorithms, and deployment knobs are implementation concerns and are out of scope for this public reference.</p>
 <hr />
 <h2 id="5-hitl-governance-risk-tiered-human-in-the-loop">5. HITL Governance: Risk-Tiered Human-in-the-Loop</h2>
 <h3 id="51-risk-tiers">5.1 Risk Tiers</h3>
@@ -448,7 +448,12 @@ blockquote {
 <hr />
 <h2 id="6-ogacs-execution-invariants-and-operational-governance">6. OGACS: Execution Invariants and Operational Governance</h2>
 <h3 id="61-what-is-ogacs">6.1 What Is OGACS?</h3>
-<p>OGACS (Operational Governance for Autonomous Cognition Systems) is the minimal governance layer that enforces execution invariants in real time. It runs alongside the runtime and intercepts operations as they occur, evaluating each against a fixed set of invariants before allowing execution to proceed.</p>
+<p>OGACS (Operational Governance for Autonomous Cognition Systems) is the policy framework for trusted autonomy — not a product, not a single implementation. OGACS defines the governance layers (SQDEC priority order, CR/Review Gate, Done=disk evidence, HITL gating, vault governance, doctrine) that autonomous systems follow.</p>
+<p>The Peregrines Falconer HERO stack (Hermes-Sasha custom configuration and vault process) is a primary live implementation of OGACS policy for a supervised agent seat, not the whole of OGACS. The AAIAAS dual-plane architecture (control plane + customer Falconer plane) is the product architecture that also runs under OGACS policy.</p>
+<blockquote>
+<p>OGACS is the operational governance framework for autonomous cognition. The Peregrines Falconer HERO stack is a primary live implementation of OGACS policy for a supervised agent seat — not the whole of OGACS, and not a substitute for the dual-plane product architecture.</p>
+</blockquote>
+<p>OGACS is the operational governance framework for autonomous cognition. The Peregrines Falconer HERO stack (Hermes-Sasha custom configuration and vault process) is a primary live implementation of OGACS policy for a supervised agent seat — not the whole of OGACS, and not a substitute for the dual-plane product architecture described in §7.1.</p>
 <p>OGACS = Operational Governance for Autonomous Cognition Systems — the invariant layer that makes trusted autonomy possible. For correspondence regarding OGACS or the AAIAAS reference architecture, contact guy@guysavage.com.</p>
 <p>OGACS is not a policy engine that loads rules dynamically. It is an invariant enforcement layer with a fixed, auditable set of constraints. Its role is to prevent drift — the divergence between intended and actual execution behavior.</p>
 <h3 id="62-enforcement-model">6.2 Enforcement Model</h3>
@@ -458,7 +463,7 @@ blockquote {
 <li><strong>OPEN mode</strong> (standard): All capabilities are available, standard governance applies. This is the default operational condition.</li>
 <li><strong>LOCKDOWN mode</strong> (containment): Execution is suppressed; only safety-critical operations are permitted, and all other operations require explicit operator authorization. Skill loading collapses to the safety layer only.</li>
 </ul>
-<p><strong>Drift Detection.</strong> The system continuously compares current operational state against the authoritative baseline (the committed configuration state). When drift is detected, OGACS triggers convergence workflows — controlled processes that align the current state back to the authoritative baseline through merge, re-commit, or governance intervention.</p>
+<p><strong>Drift Detection.</strong> The system compares operational state against an authoritative baseline. When drift is detected, OGACS requires controlled convergence — automated where safe, escalated to operators where judgment is required — rather than silent divergence.</p>
 <h3 id="63-invariant-set">6.3 Invariant Set</h3>
 <p>OGACS invariants cover the following domains:</p>
 <ul>
@@ -470,14 +475,8 @@ blockquote {
 <li><strong>Artifact Separation:</strong> Durable outputs remain externalized and addressable. Prompt context and execution memory never replace artifact records.</li>
 </ul>
 <h3 id="64-drift-and-convergence">6.4 Drift and Convergence</h3>
-<p>When the system detects that current state diverges from the authoritative baseline, it initiates a convergence workflow:</p>
-<ol>
-<li><strong>Detection:</strong> State comparison against committed baseline identifies the divergence.</li>
-<li><strong>Classification:</strong> The drift is classified by severity (minor configuration change, skill version mismatch, execution policy deviation).</li>
-<li><strong>Resolution:</strong> The system either automatically converges (for minor changes) or escalates to human review (for significant deviations).</li>
-<li><strong>Verification:</strong> Post-convergence validation confirms the system is back to authoritative state.</li>
-</ol>
-<p>This loop is continuous and automated. Drift detection is not a periodic audit — it is a real-time structural property of the architecture.</p>
+<p>OGACS treats divergence from the authoritative baseline as a first-class governance event. When drift is detected, the system requires a controlled return to baseline — via automated reconciliation where safe, or operator escalation where judgment is required — then verifies that authoritative state is restored.</p>
+<p>Drift handling is a continuous architectural property, not a periodic audit exercise. Step-by-step convergence runbooks, severity taxonomies, and merge procedures are implementation detail and are reserved for a later operating-model guide.</p>
 <hr />
 <h2 id="7-identity-zero-trust-alignment">7. Identity &amp; Zero-Trust Alignment</h2>
 <h3 id="71-dual-plane-architecture">7.1 Dual-Plane Architecture</h3>
@@ -555,10 +554,14 @@ blockquote {
 <p>Most AI platforms deliver static capability: you define a skill or workflow, it executes as designed, and improvement requires manual re-engineering. The AAIAAS platform implements a cognitive compounding pattern — a self-improvement loop where skills become more effective through accumulated execution experience.</p>
 <p>This is not training in the traditional ML sense. The platform does not fine-tune models or adjust weights. Instead, it implements a skill evolutor that observes execution outcomes, evaluates quality signals (completion rate, verification pass rate, operator feedback, cost efficiency), and proposes skill improvements for operator review.</p>
 <h3 id="82-how-it-works">8.2 How It Works</h3>
-<p>The evolutor pattern operates on three timescales:</p>
-<p><strong>Run-over-run improvement (immediate).</strong> Each execution produces structured quality signals — did the task complete? Did it pass verification? How much did it cost? How many steps were required? These signals accumulate into a skill health score that is visible at a glance. A health score of 82/100 with three specific recommendations tells the operator exactly what to improve.</p>
-<p><strong>Skill iteration (weekly).</strong> Skills that consistently score below a threshold trigger an improvement cycle. The system proposes modifications — adjusted parameters, alternative execution paths, different enrichment steps — and the operator reviews and approves changes. Approved changes are versioned and tested before promotion to production.</p>
-<p><strong>Cross-skill learning (monthly).</strong> Patterns that emerge across skill executions — such as a particular verification step consistently catching the same class of errors — are abstracted into general improvements that propagate to related skills. This is where compounding accelerates: each skill&#x27;s improvement raises the floor for all others.</p>
+<p>Cognitive compounding accumulates structured quality signals from execution — completion, verification outcomes, operator feedback, and cost/effort — and uses them to propose skill improvements for human review. The platform does not silently retrain models or auto-promote unreviewed skill changes.</p>
+<p><strong>Reference loop (principle-level):</strong></p>
+<ul>
+<li><strong>Immediate:</strong> Per-run signals accumulate so operators can see skill health trend, not only pass/fail of the last run.</li>
+<li><strong>Iterative:</strong> Underperforming skills can enter a reviewed improvement cycle; approved changes are versioned before promotion.</li>
+<li><strong>Compounding:</strong> Patterns that recur across skills may be abstracted into shared improvements over time, raising the floor for related capabilities.</li>
+</ul>
+<p>Exact scoring formulas, health-score UIs, and calendar cadences (weekly/monthly) are product implementation details and are out of scope for this public reference architecture.</p>
 <h3 id="83-why-this-matters">8.3 Why This Matters</h3>
 <p>The cognitive compounding pattern produces a system whose capabilities grow over time without proportional engineering investment. The first run of a skill delivers baseline value. The twentieth run, informed by accumulated execution data, delivers measurably better results. The hundredth run, benefiting from cross-skill patterns, delivers results that no single engineer could have engineered manually.</p>
 <p>This is the core product thesis: agents that improve themselves are not a feature — they are the only architecture that scales autonomously without linearly scaling engineering overhead.</p>
@@ -615,7 +618,7 @@ blockquote {
 <hr />
 <p><em>This whitepaper is published by AAIAAS.ai (Agentic Artificial Intelligence as a Service). Architectural invariants, governance patterns, and operational procedures described herein reflect the public reference architecture. Actor taxonomies and product-specific naming are published at:</em></p>
 <p>https://www.peregrines.ai/docs/falconry-taxonomy</p>
-<p><em>For high-level reference, the Falconry Taxonomy defines three actor roles: <strong>Falconer</strong> (strategic planner and governor), <strong>Peregrine</strong> (autonomous execution worker), and <strong>Talon</strong> (control-plane orchestrator with HITL authority). www.peregrines.ai is the product marketing surface; this whitepaper remains the architectural reference.</em></p>
+<p><em>For high-level reference, the Falconry Taxonomy defines: <strong>Falconer</strong> (orchestrator / control plane with HITL authority), <strong>Peregrine</strong> (worker agent on an assigned execution plane), and <strong>Talon</strong> (skill or modular capability the worker calls). www.peregrines.ai is the product marketing surface; this whitepaper remains the architectural reference.</em></p>
 </div>
 
 </body>
