@@ -162,9 +162,9 @@ blockquote {
 <li><a href="#22-why-the-model-centric-approach-fails">2.2 Why the Model-Centric Approach Fails</a></li>
 <li><a href="#23-inference-as-commodity-second-brain-as-value">2.3 Inference as Commodity, Second Brain as Value</a></li>
 <li><a href="#24-production-default-mid-size-models-harness">2.4 Production Default: Mid-Size Models + Harness</a></li>
-<li><a href="#25-placement-not-apology-capability-by-plane-not-apology">2.5 Placement Not Apology: Capability by Plane, Not Apology</a></li>
-<li><a href="#26-honest-limits-chunking-mitigation">2.6 Honest Limits + Chunking Mitigation</a></li>
-<li><a href="#27-cp-residual-headroom-soft-not-volume">2.7 CP Residual Headroom: Soft, Not Volume</a></li>
+<li><a href="#25-capability-placement-by-plane">2.5 Capability Placement by Plane</a></li>
+<li><a href="#26-limits-and-chunking-under-the-harness">2.6 Limits and Chunking under the Harness</a></li>
+<li><a href="#27-control-plane-headroom">2.7 Control-Plane Headroom</a></li>
 <li><a href="#28-local-inference-security-boundary">2.8 Local Inference Security Boundary</a></li>
 </ul>
 </li>
@@ -244,7 +244,8 @@ blockquote {
 <h2 id="1-executive-summary">1. Executive Summary</h2>
 <p>The prevailing narrative in enterprise AI focuses on models: which foundation model is best, which provider offers the best price-performance ratio, which prompt engineering technique unlocks the highest accuracy. This model-centric view produces systems that are fragile, opaque, and difficult to govern. When the model changes — and it will change — the entire system must be rebuilt.</p>
 <p>The alternative is to flip the architecture. Place the model abstraction layer — the <strong>Harness</strong> — at the center of the design. Models become interchangeable commodities. Planning, policy, verification, and governance remain centralized and stable. Execution remains distributed, provider-agnostic, and resilient.</p>
-<p>This whitepaper presents the reference architecture behind <strong>AAIAAS (Agentic Artificial Intelligence as a Service)</strong> — published at AAIAAS.ai — a platform built on this harness-first principle. It is designed for organizations that need autonomous AI that can be trusted: systems that execute reliably, remain compliant under pressure, and improve themselves over time.</p>
+<p>This whitepaper defines the <strong>AAIAAS reference architecture</strong>: a harness-first control plane for governed autonomy. Models are treated as interchangeable commodities. Planning, policy, verification, and proof remain stable. Execution is provider-agnostic across cloud, device, and air-gap planes.</p>
+<p>The document is written for technical leaders, security architects, and operators evaluating autonomous systems for production. It specifies architectural layers, execution invariants, HITL governance, and operational constraints. Product branding, actor taxonomies, and implementation runbooks are maintained on the product surfaces and in separate operating guides.</p>
 <p>The architecture delivers five capabilities that are rare in production:</p>
 <ol>
 <li><strong>Provider-agnostic execution</strong> — swap models without rewriting task logic</li>
@@ -254,8 +255,7 @@ blockquote {
 <li><strong>Cognitive compounding</strong> — skills that improve run-over-run through a closed self-improvement loop</li>
 </ol>
 <p>The platform is deployed across three execution planes (cloud-shared, device-local, air-gapped), supports hybrid configurations where local inference assists without replacing central orchestration, and is designed to operate in sovereign or private environments where data residency requirements are strict.</p>
-<p>This document describes the architecture, the governance model, and the operational invariants that make it work. It is intended for technical leaders, security architects, and operators evaluating autonomous AI platforms for production deployment.</p>
-<p>Product-branded internal nomenclature and product-specific actor taxonomies are intentionally out of scope for this public reference architecture; they will be published when the control-plane product surface is mature enough for that level of detail.</p>
+<p>Product-specific actor taxonomies and control-plane UI details are published on the product surface. This document defines the architectural invariants and governance model only.</p>
 <hr />
 <h2 id="2-the-problem-model-centric-failure-modes">2. The Problem: Model-Centric Failure Modes</h2>
 <h3 id="21-three-recurring-failure-patterns">2.1 Three Recurring Failure Patterns</h3>
@@ -279,64 +279,25 @@ blockquote {
 <p>This has implications for how organizations evaluate autonomous AI investment. The ROI does not come from which model you choose — it comes from how thoroughly the executor has learned your operational context, embedded your policies, and compounded its skills through execution. A well-tuned second brain running a commodity model outperforms a blank-slate executor on a premium model.</p>
 <h3 id="24-production-default-mid-size-models-harness">2.4 Production Default: Mid-Size Models + Harness</h3>
 <p>Most production agent workloads sit in the body of the difficulty distribution: retrieval and synthesis, structured extraction, scoped tool use, short-horizon planning, and verification against explicit contracts. For these tasks, a well-post-trained mid-size model (tens of billions of parameters) served efficiently often saturates quality. Further scale yields diminishing returns on the common case while increasing latency and cost.</p>
-<p>The harness — planning, policy, admission control, verification before completion, and proof of execution — determines reliability more than raw parameter count. Frontier-scale models remain valuable for hard-tail reasoning, distillation teachers, and capability headroom; they are not the default for volume execution. Provider-agnostic design lets the same control plane route bulk work to efficient mid-size models and escalate only when needed.</p>
+<p>The harness — planning, policy, admission control, verification before completion, and proof of execution — determines reliability more than raw parameter count. Provider-agnostic design routes bulk work to efficient mid-size models by default. Stronger models remain available where the architecture places them — primarily with control-plane orchestration and distillation — not as the volume path for every worker turn.</p>
 <blockquote>
-<p>For production volume, a strong mid-size model behind a real control plane is the rational default. Keep frontier / 1T+ for the hard tail and for training/distillation teachers.</p>
+<p>For production volume, a strong mid-size model behind a real control plane is the rational default. Capability is placed by plane: local sweet-spot inference for workers and talons; control-plane headroom for governance and the rare cases that need it.</p>
 </blockquote>
-<h3 id="25-placement-not-apology-capability-by-plane-not-apology">2.5 Placement Not Apology: Capability by Plane, Not Apology</h3>
-<p>This is not a quality compromise — it is architecture. The platform deliberately places execution volume on the flat region of the quality curve and reserves stronger capacity for the rare cases that need more headroom. The signal is placement, not apology.</p>
-<p><strong>Sweet-spot local inference for workers and talons;</strong> cloud control plane for governance and the rare cases that need more headroom — limitations acknowledged, frontier not the volume path.</p>
-<table>
-<thead><tr>
-<th>Lead with (placement)</th>
-<th>Soften / avoid (apology tone)</th>
-</tr></thead><tbody>
-<tr>
-<td>Capability is <strong>placed by plane</strong>: execution volume local; plan/admit/policy at CP</td>
-<td>&quot;Escalate to frontier for hard-tail&quot; as the headline</td>
-</tr>
-<tr>
-<td>Sweet spot <strong>saturates body execution</strong> under harness + chunking</td>
-<td>Calibrated &quot;fraction of tasks need frontier&quot; or plant model brands</td>
-</tr>
-<tr>
-<td>Residual hard cases are <strong>rare</strong>; CP may use stronger models for orchestration</td>
-<td>Implying local workers are a compromised B-team</td>
-</tr>
-<tr>
-<td>Limitations of mid-size <strong>acknowledged</strong> via harness design</td>
-<td>Claiming chunking erases all hard-tail limits</td>
-</tr>
-</tbody></table>
+<h3 id="25-capability-placement-by-plane">2.5 Capability Placement by Plane</h3>
+<p>Capability is <strong>placed by plane</strong>, not treated as a temporary compromise.</p>
+<ul>
+<li><strong>Workers and talons</strong> (execution volume): sweet-spot local mid-size inference on the body of the task distribution.</li>
+<li><strong>Cloud control plane</strong> (governance): planning, admission, policy, and the rare steps that need more reasoning headroom.</li>
+</ul>
+<p>For the body of production agent work, quality gains from further model scale diminish while cost and latency keep rising. The rational operating point sits on that plateau. Under SQDEC, that is efficient default placement: Safety and Quality set the bar; Economics and Delivery improve when volume stays on the plateau.</p>
 <blockquote>
-<p>Past the body plateau, further scale raises cost and latency faster than it raises success on typical workloads — marginal cost exceeds marginal benefit for volume execution.</p>
+<p>Past the body plateau, further scale raises cost and latency faster than it raises success on typical workloads.</p>
 </blockquote>
-<p>For the body of production agent work, quality gains from further model scale diminish while cost and latency keep rising — the rational operating point sits on that plateau: <strong>sweet-spot local inference for workers and talons</strong>, with the cloud control plane holding governance and the rare cases that need more headroom. Under SQDEC, that is efficient default placement — not a quality compromise.</p>
-<h3 id="26-honest-limits-chunking-mitigation">2.6 Honest Limits + Chunking Mitigation</h3>
-<p>Mid-size models still underperform on hard-tail work: deep multi-hop reasoning, fragile long-horizon trajectories, and rare knowledge. The harness mitigates this not by pretending those limits vanish, but by <strong>chunking</strong> large outcomes into short-horizon, verifiable units where local mid-size capacity is sufficient.</p>
-<table>
-<thead><tr>
-<th>Say (public altitude)</th>
-<th>Don&#x27;t say</th>
-</tr></thead><tbody>
-<tr>
-<td>Mid-size can fail on long-horizon, weakly decomposable, or rare-knowledge bites</td>
-<td>&quot;Chunking makes mid-size equal to frontier&quot;</td>
-</tr>
-<tr>
-<td>Harness <strong>decomposes and verifies</strong> so most work stays on the plateau</td>
-<td>Plant SOP dump (named seats, path-move scripts)</td>
-</tr>
-<tr>
-<td>Rare residual headroom lives with the <strong>control plane</strong> (soft; not volume path)</td>
-<td>Calibrated &quot;breakeven at 35B FP8&quot; or frontier-as-apology</td>
-</tr>
-</tbody></table>
-<p><strong>Chunking strategy</strong> = control-plane move that maps large outcomes onto <strong>body-class bites</strong> (short horizon, one outcome, Done=disk gate between bites). Bad chunking = continuous multi-goal thrash without verify. Good chunking = sequential verified units; residual irreducible bites escalate <strong>altitude to the CP</strong> (optional stronger CP inference), not every worker seat.</p>
-<h3 id="27-cp-residual-headroom-soft-not-volume">2.7 CP Residual Headroom: Soft, Not Volume</h3>
-<p>Residual hard cases are rare; when needed, stronger models assist <strong>orchestration and hard judgment at the control plane</strong>, while workers stay on efficient local inference.</p>
-<p>Internal ops reading: talon default = local mid-size; CP may use cloud stronger models for plan / irreducible residual; no silent always-on frontier on workers.</p>
-<p>This is a <strong>soft</strong> headroom signal — not a volume path. The control plane uses stronger models when SQDEC Safety or Quality demand it; Economics and Delivery favor keeping the bulk on the flat plateau. The harness enforces this discipline by requiring explicit escalation when a task class exceeds the mid-size quality bar.</p>
+<h3 id="26-limits-and-chunking-under-the-harness">2.6 Limits and Chunking under the Harness</h3>
+<p>Mid-size models still underperform on long-horizon, weakly decomposable, or rare-knowledge work. The architecture does not claim otherwise. The harness addresses those limits by <strong>chunking</strong> large outcomes into short-horizon, verifiable units where local mid-size capacity is sufficient — one outcome per bite, with verification between bites.</p>
+<p>Chunking is a control-plane move: map whole-meal jobs onto body-class units. Good chunking is sequential, verified work. Residual bites that remain hard after honest decomposition escalate <strong>altitude to the control plane</strong> (optional stronger control-plane inference), not every worker seat.</p>
+<h3 id="27-control-plane-headroom">2.7 Control-Plane Headroom</h3>
+<p>When a step needs more headroom after decomposition and verification, stronger models assist <strong>orchestration and hard judgment at the control plane</strong>. Workers stay on efficient local inference. There is no silent always-on high-scale path on every worker turn; headroom is explicit, gated, and rare relative to volume.</p>
 <h3 id="28-local-inference-security-boundary">2.8 Local Inference Security Boundary</h3>
 <p>When workloads use device-local, on-premises, or air-gap inference endpoints, sensitive content can be processed without sending that content to external cloud model providers. This is a capability of the deployment topology, not a property of the harness itself. The table below summarizes content residency by mode:</p>
 <table>
@@ -459,7 +420,7 @@ blockquote {
 <li>Parallel workers are optional capacity under control-plane direction, not independent planners.</li>
 <li>Serial-first is the safe default; parallelism is introduced only when shared-state contention is controlled.</li>
 </ul>
-<p>This is the difference between a choreographed fleet and agent sprawl: one orchestrator directing traffic under governance. Detailed WIP bounds, admission algorithms, and deployment knobs are implementation concerns and are out of scope for this public reference.</p>
+<p>This is the difference between a choreographed fleet and agent sprawl: one orchestrator directing traffic under governance. Exact WIP bounds, admission algorithms, and deployment knobs are defined in operating guides and product configuration — not in this reference architecture.</p>
 <hr />
 <h2 id="5-hitl-governance-risk-tiered-human-in-the-loop">5. HITL Governance: Risk-Tiered Human-in-the-Loop</h2>
 <h3 id="51-risk-tiers">5.1 Risk Tiers.</h3>
@@ -521,14 +482,10 @@ blockquote {
 <hr />
 <h2 id="6-ogacs-execution-invariants-and-operational-governance">6. OGACS: Execution Invariants and Operational Governance</h2>
 <h3 id="61-what-is-ogacs">6.1 What Is OGACS?.</h3>
-<p>OGACS (Operational Governance for Autonomous Cognition Systems) is the policy framework for trusted autonomy — not a product, not a single implementation. OGACS defines the governance layers (SQDEC priority order, CR/Review Gate, Done=disk evidence, HITL gating, vault governance, doctrine) that autonomous systems follow.</p>
-<p>The Peregrines Falconer HERO stack (Hermes-Sasha custom configuration and vault process) is a primary live implementation of OGACS policy for a supervised agent seat, not the whole of OGACS. The AAIAAS dual-plane architecture (control plane + customer Falconer plane) is the product architecture that also runs under OGACS policy.</p>
-<blockquote>
-<p>OGACS is the operational governance framework for autonomous cognition. The Peregrines Falconer HERO stack is a primary live implementation of OGACS policy for a supervised agent seat — not the whole of OGACS, and not a substitute for the dual-plane product architecture.</p>
-</blockquote>
-<p>OGACS is the operational governance framework for autonomous cognition. The Peregrines Falconer HERO stack (Hermes-Sasha custom configuration and vault process) is a primary live implementation of OGACS policy for a supervised agent seat — not the whole of OGACS, and not a substitute for the dual-plane product architecture described in §8.1.</p>
-<p>OGACS = Operational Governance for Autonomous Cognition Systems — the invariant layer that makes trusted autonomy possible. For correspondence regarding OGACS or the AAIAAS reference architecture, contact guy@guysavage.com.</p>
-<p>OGACS is not a policy engine that loads rules dynamically. It is an invariant enforcement layer with a fixed, auditable set of constraints. Its role is to prevent drift — the divergence between intended and actual execution behavior.</p>
+<p>OGACS (Operational Governance for Autonomous Cognition Systems) is the invariant governance layer for autonomous cognition. It defines the policy stack — SQDEC priority order, CR/Review Gate, Done=disk evidence, HITL gating, vault governance, and doctrine — that autonomous systems follow.</p>
+<p>Live product implementations apply OGACS policy within a dual-plane architecture; this paper specifies the policy and invariants, not a single product configuration. The Peregrines Falconer HERO stack is one live application of OGACS policy for a supervised agent seat. The AAIAAS dual-plane architecture (control plane + customer Falconer plane) applies the same policy at product scope.</p>
+<p>OGACS is an invariant enforcement layer with a fixed, auditable set of constraints — not a dynamically loaded rule engine. Its role is to prevent drift: divergence between intended and actual execution behavior.</p>
+<p>For correspondence regarding OGACS or the AAIAAS reference architecture, contact guy@guysavage.com.</p>
 <h3 id="62-enforcement-model">6.2 Enforcement Model.</h3>
 <p>OGACS evaluates operations through two primary dimensions:</p>
 <p><strong>Operational Mode.</strong> The system operates in one of two modes:</p>
@@ -549,7 +506,7 @@ blockquote {
 </ul>
 <h3 id="64-drift-and-convergence">6.4 Drift and Convergence.</h3>
 <p>OGACS treats divergence from the authoritative baseline as a first-class governance event. When drift is detected, the system requires a controlled return to baseline — via automated reconciliation where safe, or operator escalation where judgment is required — then verifies that authoritative state is restored.</p>
-<p>Drift handling is a continuous architectural property, not a periodic audit exercise. Step-by-step convergence runbooks, severity taxonomies, and merge procedures are implementation detail and are reserved for a later operating-model guide.</p>
+<p>Drift handling is a continuous architectural property, not a periodic audit exercise. Step-by-step convergence runbooks, severity taxonomies, and merge procedures are maintained in operating guides.</p>
 <hr />
 <h2 id="7-identity-zero-trust-alignment">7. Identity &amp; Zero-Trust Alignment</h2>
 <h3 id="71-dual-plane-architecture">7.1 Dual-Plane Architecture.</h3>
@@ -611,7 +568,7 @@ blockquote {
 </tbody></table>
 <p><strong>Credentials at the edge.</strong> Access credentials are resolved from an approved vault system at the execution plane. The control plane provides policy, audit, and orchestration — it is not a password store. This keeps secrets out of chat logs, prompts, and model context.</p>
 <p><strong>No secret sprawl.</strong> No long-lived secrets in chat, prompts, or as model context SSoT. Short-lived, least-privilege credentials preferred. No model or harness component serves as a de facto credential repository.</p>
-<p>Falconer operates <strong>in</strong> the governed endpoint bubble (not around agency ICAM). This is a <strong>reference design</strong> aligned with Zero Trust principles — it is not a Zero Trust certification, FedRAMP authorization, or ICAM replacement.</p>
+<p>Falconer operates <strong>in</strong> the governed endpoint bubble (not around agency ICAM). This is a reference design aligned with Zero Trust principles. It is not a Zero Trust certification, FedRAMP authorization, or ICAM replacement.</p>
 <h3 id="74-explicit-non-claims">7.4 Explicit Non-Claims.</h3>
 <p>The following are <strong>not</strong> claims of this design:</p>
 <ul>
@@ -619,7 +576,7 @@ blockquote {
 <li>Falconer does <strong>not</strong> inherit customer ICAM via a SaaS browser in the Peregrines cloud without an endpoint install</li>
 <li>Falconer does <strong>not</strong> accept password paste into chat or use the CP as a customer identity provider</li>
 <li>This whitepaper is not an ATO, FedRAMP, or agency ICAM certification document</li>
-<li>The open-web (Pathfinder) capability is not production-complete for all hostile UX surfaces</li>
+<li>Open-web and hostile-UX coverage is capability-scoped; production use is limited to surfaces that satisfy the verification and fail-closed invariants defined herein</li>
 </ul>
 <hr />
 <h2 id="8-cognitive-compounding-self-improving-skill-loops">8. Cognitive Compounding: Self-Improving Skill Loops</h2>
@@ -634,7 +591,7 @@ blockquote {
 <li><strong>Iterative:</strong> Underperforming skills can enter a reviewed improvement cycle; approved changes are versioned before promotion.</li>
 <li><strong>Compounding:</strong> Patterns that recur across skills may be abstracted into shared improvements over time, raising the floor for related capabilities.</li>
 </ul>
-<p>Exact scoring formulas, health-score UIs, and calendar cadences (weekly/monthly) are product implementation details and are out of scope for this public reference architecture.</p>
+<p>Exact scoring formulas, health-score UIs, and calendar cadences are defined on the product surface and in operating guides.</p>
 <h3 id="83-why-this-matters">8.3 Why This Matters.</h3>
 <p>The cognitive compounding pattern produces a system whose capabilities grow over time without proportional engineering investment. The first run of a skill delivers baseline value. The twentieth run, informed by accumulated execution data, delivers measurably better results. The hundredth run, benefiting from cross-skill patterns, delivers results that no single engineer could have engineered manually.</p>
 <p>That growth depends on continued human engagement in the loop — not only as a safety brake, but as a co-evolutor. Skill proposals require operator review; quality signals include operator feedback; redesign of underperforming workflows is a human act. Set-and-forget removes the corrective channel that keeps both the skill library and the operator’s judgment calibrated (see §5.5).</p>
@@ -690,9 +647,9 @@ blockquote {
 <p><strong>Sovereign/On-Premises.</strong> The control plane is deployed within the tenant&#x27;s infrastructure. Model providers may be external (via secure API) or fully local. Workers run on tenant hardware. This configuration satisfies strict data residency and sovereignty requirements.</p>
 <p><strong>Hybrid.</strong> The control plane runs in the cloud. Device workers run on-premises or at the edge. The two communicate over encrypted channels with the control-plane tether. This is the default posture for enterprise deployments with distributed operations.</p>
 <hr />
-<p><em>This whitepaper is published by AAIAAS.ai (Agentic Artificial Intelligence as a Service). Architectural invariants, governance patterns, and operational procedures described herein reflect the public reference architecture. Actor taxonomies and product-specific naming are published at:</em></p>
+<p><em>This whitepaper is published by AAIAAS.ai (Agentic Artificial Intelligence as a Service). It defines architectural invariants and the governance model. Product-specific actor taxonomies and control-plane UI details are published on the product surface:</em></p>
 <p>https://www.peregrines.ai/docs/falconry-taxonomy</p>
-<p><em>For high-level reference, the Falconry Taxonomy defines: <strong>Falconer</strong> (orchestrator / control plane with HITL authority), <strong>Peregrine</strong> (worker agent on an assigned execution plane), and <strong>Talon</strong> (skill or modular capability the worker calls). www.peregrines.ai is the product marketing surface; this whitepaper remains the architectural reference.</em></p>
+<p><em>For high-level reference, the Falconry Taxonomy defines: <strong>Falconer</strong> (orchestrator / control plane with HITL authority), <strong>Peregrine</strong> (worker agent on an assigned execution plane), and <strong>Talon</strong> (skill or modular capability the worker calls). www.peregrines.ai is the product surface; this whitepaper remains the architectural reference.</em></p>
 </div>
 
 </body>
