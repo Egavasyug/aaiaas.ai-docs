@@ -1,7 +1,7 @@
 # Harness-First Agentic AI: Control Plane, Execution, and Governed Autonomy
 
 **AAIAAS (Agentic Artificial Intelligence as a Service) Reference Architecture Whitepaper**  
-**Version 1.2.1**
+**Version 1.3**
 **July 2026**
 
 ---
@@ -14,7 +14,10 @@
    - 2.2 Why the Model-Centric Approach Fails
    - 2.3 Inference as Commodity, Second Brain as Value
    - 2.4 Production Default: Mid-Size Models + Harness
-   - 2.5 Local Inference Security Boundary
+   - 2.5 Placement Not Apology: Capability by Plane, Not Apology
+   - 2.6 Honest Limits + Chunking Mitigation
+   - 2.7 CP Residual Headroom: Soft, Not Volume
+   - 2.8 Local Inference Security Boundary
 3. [Reference Architecture](#3-reference-architecture)
    - 3.1 Six Layers, Three Planes
    - 3.2 The Harness Layer: Five Invariants
@@ -126,7 +129,44 @@ The harness — planning, policy, admission control, verification before complet
 
 > For production volume, a strong mid-size model behind a real control plane is the rational default. Keep frontier / 1T+ for the hard tail and for training/distillation teachers.
 
-### 2.5 Local Inference Security Boundary
+### 2.5 Placement Not Apology: Capability by Plane, Not Apology
+
+This is not a quality compromise — it is architecture. The platform deliberately places execution volume on the flat region of the quality curve and reserves stronger capacity for the rare cases that need more headroom. The signal is placement, not apology.
+
+**Sweet-spot local inference for workers and talons;** cloud control plane for governance and the rare cases that need more headroom — limitations acknowledged, frontier not the volume path.
+
+| Lead with (placement) | Soften / avoid (apology tone) |
+|----------------------|-------------------------------|
+| Capability is **placed by plane**: execution volume local; plan/admit/policy at CP | "Escalate to frontier for hard-tail" as the headline |
+| Sweet spot **saturates body execution** under harness + chunking | Calibrated "fraction of tasks need frontier" or plant model brands |
+| Residual hard cases are **rare**; CP may use stronger models for orchestration | Implying local workers are a compromised B-team |
+| Limitations of mid-size **acknowledged** via harness design | Claiming chunking erases all hard-tail limits |
+
+> Past the body plateau, further scale raises cost and latency faster than it raises success on typical workloads — marginal cost exceeds marginal benefit for volume execution.
+
+For the body of production agent work, quality gains from further model scale diminish while cost and latency keep rising — the rational operating point sits on that plateau: **sweet-spot local inference for workers and talons**, with the cloud control plane holding governance and the rare cases that need more headroom. Under SQDEC, that is efficient default placement — not a quality compromise.
+
+### 2.6 Honest Limits + Chunking Mitigation
+
+Mid-size models still underperform on hard-tail work: deep multi-hop reasoning, fragile long-horizon trajectories, and rare knowledge. The harness mitigates this not by pretending those limits vanish, but by **chunking** large outcomes into short-horizon, verifiable units where local mid-size capacity is sufficient.
+
+| Say (public altitude) | Don't say |
+|----------------------|-----------|
+| Mid-size can fail on long-horizon, weakly decomposable, or rare-knowledge bites | "Chunking makes mid-size equal to frontier" |
+| Harness **decomposes and verifies** so most work stays on the plateau | Plant SOP dump (named seats, path-move scripts) |
+| Rare residual headroom lives with the **control plane** (soft; not volume path) | Calibrated "breakeven at 35B FP8" or frontier-as-apology |
+
+**Chunking strategy** = control-plane move that maps large outcomes onto **body-class bites** (short horizon, one outcome, Done=disk gate between bites). Bad chunking = continuous multi-goal thrash without verify. Good chunking = sequential verified units; residual irreducible bites escalate **altitude to the CP** (optional stronger CP inference), not every worker seat.
+
+### 2.7 CP Residual Headroom: Soft, Not Volume
+
+Residual hard cases are rare; when needed, stronger models assist **orchestration and hard judgment at the control plane**, while workers stay on efficient local inference.
+
+Internal ops reading: talon default = local mid-size; CP may use cloud stronger models for plan / irreducible residual; no silent always-on frontier on workers.
+
+This is a **soft** headroom signal — not a volume path. The control plane uses stronger models when SQDEC Safety or Quality demand it; Economics and Delivery favor keeping the bulk on the flat plateau. The harness enforces this discipline by requiring explicit escalation when a task class exceeds the mid-size quality bar.
+
+### 2.8 Local Inference Security Boundary
 
 When workloads use device-local, on-premises, or air-gap inference endpoints, sensitive content can be processed without sending that content to external cloud model providers. This is a capability of the deployment topology, not a property of the harness itself. The table below summarizes content residency by mode:
 
