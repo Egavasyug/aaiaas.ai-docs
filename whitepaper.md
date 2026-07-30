@@ -12,6 +12,9 @@
 2. [The Problem: Model-Centric Failure Modes](#2-the-problem-model-centric-failure-modes)
    - 2.1 Three Recurring Failure Patterns
    - 2.2 Why the Model-Centric Approach Fails
+   - 2.3 Inference as Commodity, Second Brain as Value
+   - 2.4 Production Default: Mid-Size Models + Harness
+   - 2.5 Local Inference Security Boundary
 3. [Reference Architecture](#3-reference-architecture)
    - 3.1 Six Layers, Three Planes
    - 3.2 The Harness Layer: Five Invariants
@@ -22,7 +25,7 @@
    - 4.2 Governance Controls
    - 4.3 Telemetry and Observability
    - 4.4 Managed Concurrency and Admission Control
-5. [HITL Governance: Risk-Tiered Human-in-the-Loop](#5-hitl-governance-risk-tiered-human-in-the-loop)
+5. [HITL Governance: Risk-Tiered Human-in-the-Loop](#5-hitl-governance-risk-tiered-human-the-loop)
    - 5.1 Risk Tiers
    - 5.2 Operation Permanence Classification
    - 5.3 Waiver Policy
@@ -41,7 +44,7 @@
    - 8.1 The Evolutor Pattern
    - 8.2 How It Works
    - 8.3 Why This Matters
-9. [Execution Planes: Cloud, Device, and Air-Gap](#9-execution-planes-cloud-device-and-air-gap)
+9. [Execution Planes: Cloud, Device, and Air-Gap](#9-execution-plans-cloud-device-and-air-gap)
    - 9.1 Cloud Execution: Multi-Tenant Worker Infrastructure
    - 9.2 Device Execution: Tenant-Local Workers
    - 9.3 Air-Gap Deployment
@@ -50,6 +53,9 @@
    - 10.1 Canonical Deployment Reference
 
 ---
+
+
+
 
 ## 1. Executive Summary
 
@@ -74,6 +80,8 @@ This document describes the architecture, the governance model, and the operatio
 Product-branded internal nomenclature and product-specific actor taxonomies are intentionally out of scope for this public reference architecture; they will be published when the control-plane product surface is mature enough for that level of detail.
 
 ---
+
+
 
 ## 2. The Problem: Model-Centric Failure Modes
 
@@ -109,7 +117,15 @@ That bespoke state is the tenant-scoped second brain: a customized state vector 
 
 This has implications for how organizations evaluate autonomous AI investment. The ROI does not come from which model you choose — it comes from how thoroughly the executor has learned your operational context, embedded your policies, and compounded its skills through execution. A well-tuned second brain running a commodity model outperforms a blank-slate executor on a premium model.
 
-### 2.4 Local Inference Security Boundary
+### 2.4 Production Default: Mid-Size Models + Harness
+
+Most production agent workloads sit in the body of the difficulty distribution: retrieval and synthesis, structured extraction, scoped tool use, short-horizon planning, and verification against explicit contracts. For these tasks, a well-post-trained mid-size model (tens of billions of parameters) served efficiently often saturates quality. Further scale yields diminishing returns on the common case while increasing latency and cost.
+
+The harness — planning, policy, admission control, verification before completion, and proof of execution — determines reliability more than raw parameter count. Frontier-scale models remain valuable for hard-tail reasoning, distillation teachers, and capability headroom; they are not the default for volume execution. Provider-agnostic design lets the same control plane route bulk work to efficient mid-size models and escalate only when needed.
+
+> For production volume, a strong mid-size model behind a real control plane is the rational default. Keep frontier / 1T+ for the hard tail and for training/distillation teachers.
+
+### 2.5 Local Inference Security Boundary
 
 When workloads use device-local, on-premises, or air-gap inference endpoints, sensitive content can be processed without sending that content to external cloud model providers. This is a capability of the deployment topology, not a property of the harness itself. The table below summarizes content residency by mode:
 
@@ -119,13 +135,12 @@ When workloads use device-local, on-premises, or air-gap inference endpoints, se
 | Hybrid | Depends on task path | Cloud CP / cloud workers may still see admitted payloads |
 | Air-gap | No outbound from execution plane | Strictest residency; model runs on local hardware |
 
-Device-local inference is explicitly a **Harness Layer co-processor** (§9.2) — it assists with local retrieval, summarization, fact extraction, and privacy-preserving preprocessing without replacing strategic planning or policy authority in the control plane. Even when inference is local, the control-plane tether remains the orchestrator.
+Device-local inference is explicitly a **Harness Layer co-processor** (§10.2) — it assists with local retrieval, summarization, fact extraction, and privacy-preserving preprocessing without replacing strategic planning or policy authority in the control plane. Even when inference is local, the control-plane tether remains the orchestrator.
 
 ---
-
 ## 3. Reference Architecture
 
-### 3.1 Six Layers, Three Planes
+### 3.1 Six Layers, Three Planes.
 
 The AAIAAS architecture is organized into six distinct layers, each with a bounded responsibility. This layering is not optional. Violating layer boundaries requires an architectural decision record and explicit review.
 
@@ -148,7 +163,7 @@ These layers operate across three execution planes:
 
 No plane may silently assume the responsibilities of another. Control plans and evaluates but does not execute. Execution workers execute but do not plan. This separation is the architectural invariant that makes governed autonomy possible.
 
-### 3.2 The Harness Layer: Five Invariants
+### 3.2 The Harness Layer: Five Invariants.
 
 The Harness Layer is the differentiator. It provides:
 
@@ -164,7 +179,7 @@ The Harness Layer is the differentiator. It provides:
 
 Six additional Harness invariants enforce safety hierarchy (the safety tier of the SQDEC ordering is inviolable, regardless of economic or delivery pressure), tenant-segmented memory, artifact-separation discipline (durable artifacts remain externalized and addressable, not collapsed into prompt context), and execution capability verification (the Harness verifies that the target execution plane can satisfy required skill contracts before admitting a task graph into the pipeline).
 
-### 3.3 Execution Plane Invariants
+### 3.3 Execution Plane Invariants.
 
 The execution layer is governed by its own invariant set:
 
@@ -174,7 +189,7 @@ The execution layer is governed by its own invariant set:
 - **Fail-Closed Execution:** Workers fail closed on unsupported skill types, invalid payload schemas, or missing authorization. Silent fallback execution is forbidden.
 - **Tenant Authorization:** Worker authorization is evaluated against the worker's authorized tenant set. Device workers serve a single tenant. Cloud workers serve an authorized set. Cross-tenant execution is always auditable.
 
-### 3.4 Tenant Isolation
+### 3.4 Tenant Isolation.
 
 Every tenant undergoes a bootstrap lifecycle before activation: a defined provisioning sequence that establishes tenant record, settings, feature flags, memory namespace, public skill access, execution authorization, and observability scope. A tenant must not reach active status until all bootstrap resources exist. Authentication success alone does not imply readiness.
 
@@ -184,7 +199,7 @@ All tenant data and execution remain isolated. Cross-tenant data leakage is stru
 
 ## 4. Control Plane and Worker Governance
 
-### 4.1 Roles and Responsibilities
+### 4.1 Roles and Responsibilities.
 
 The platform separates orchestration from execution:
 
@@ -196,7 +211,7 @@ The platform separates orchestration from execution:
 
 **Operator dashboard.** The elevated observation and decision surface where operators monitor task state, review HITL approval queues, and direct execution.
 
-### 4.2 Governance Controls
+### 4.2 Governance Controls.
 
 Three mechanisms keep autonomous execution safe:
 
@@ -206,11 +221,11 @@ Three mechanisms keep autonomous execution safe:
 
 **Control-plane tether.** Workers remain connected to the control plane through heartbeat signals and recall paths. Even workers running locally with local inference assistance are tethered to the central orchestrator. They can operate semi-independently but can always be recalled.
 
-### 4.3 Telemetry and Observability
+### 4.3 Telemetry and Observability.
 
 Every worker emits telemetry at every lifecycle stage — planning, dispatch, execution, completion, and verification. Silent operation is not an option. Every task produces structured logs suitable for aggregation and analysis, with traceability across tenant, worker, execution plane, and skill.
 
-### 4.4 Managed Concurrency and Admission Control
+### 4.4 Managed Concurrency and Admission Control.
 
 Workers may execute in parallel as a capacity optimization — but parallelism is never an unmanaged default. The control plane exercises authoritative task admission and sequencing. Unbounded multi-agent execution without admission control is a governance failure mode: conflicting writes, undoable state, and unauditable outcomes — not operational maturity.
 
@@ -225,7 +240,7 @@ This is the difference between a choreographed fleet and agent sprawl: one orche
 
 ## 5. HITL Governance: Risk-Tiered Human-in-the-Loop
 
-### 5.1 Risk Tiers
+### 5.1 Risk Tiers.
 
 The platform classifies every operation into one of four risk tiers, and each tier has a defined approval requirement:
 
@@ -236,25 +251,25 @@ The platform classifies every operation into one of four risk tiers, and each ti
 | **High** | Critical state changes, significant cost implications, or security-sensitive actions | Require approval |
 | **Critical** | Irreversible destructive actions or root-level security changes | Require typed confirmation |
 
-### 5.2 Operation Permanence Classification
+### 5.2 Operation Permanence Classification.
 
 Operations are further classified by permanence:
 
 - **Type 1 (Reversible):** Operations where the system state can be restored via automated rollback or point-in-time recovery. These require a documented rollback plan in the task metadata but may proceed under medium-tier rules.
 - **Type 2 (Irreversible):** Operations that result in data loss, irreversible state changes, or non-refundable costs. These always require HITL approval regardless of risk score and must include explicit risk acceptance.
 
-### 5.3 Waiver Policy
+### 5.3 Waiver Policy.
 
 Waivers are granted per-action only. No session-wide bypass is permitted. No silent bypass exists — every waived HITL checkpoint generates an auditable event. System-level invariants — specifically the safety constraints of the SQDEC ordering — cannot be waived under any circumstances.
 
 High and Critical risk operations cannot be approved via voice interfaces. Critical risk operations require typed confirmation to prevent accidental activation.
 
-### 5.4 High-Risk Operation Catalog
+### 5.4 High-Risk Operation Catalog.
 
 The following operation categories are hard-coded as High or Critical risk:
 
 - Deploy to Production: **High**
-- Delete Data (Database or Storage): **Critical** (Type 2)
+- Delete Data (Database or Storage): **Critical** (Type 2 — Irreversible)
 - Billing Changes (Plan upgrade, downgrade, or cancellation): **High**
 - Secret Rotation or Credential Invalidation: **High**
 - Skill Promotion (Development to Production): **High**
@@ -265,7 +280,7 @@ This catalog is not exhaustive — any new operation category is evaluated again
 
 ## 6. OGACS: Execution Invariants and Operational Governance
 
-### 6.1 What Is OGACS?
+### 6.1 What Is OGACS?.
 
 OGACS (Operational Governance for Autonomous Cognition Systems) is the policy framework for trusted autonomy — not a product, not a single implementation. OGACS defines the governance layers (SQDEC priority order, CR/Review Gate, Done=disk evidence, HITL gating, vault governance, doctrine) that autonomous systems follow.
 
@@ -273,14 +288,14 @@ The Peregrines Falconer HERO stack (Hermes-Sasha custom configuration and vault 
 
 > OGACS is the operational governance framework for autonomous cognition. The Peregrines Falconer HERO stack is a primary live implementation of OGACS policy for a supervised agent seat — not the whole of OGACS, and not a substitute for the dual-plane product architecture.
 
-OGACS is the operational governance framework for autonomous cognition. The Peregrines Falconer HERO stack (Hermes-Sasha custom configuration and vault process) is a primary live implementation of OGACS policy for a supervised agent seat — not the whole of OGACS, and not a substitute for the dual-plane product architecture described in §7.1.
+OGACS is the operational governance framework for autonomous cognition. The Peregrines Falconer HERO stack (Hermes-Sasha custom configuration and vault process) is a primary live implementation of OGACS policy for a supervised agent seat — not the whole of OGACS, and not a substitute for the dual-plane product architecture described in §8.1.
 
 OGACS = Operational Governance for Autonomous Cognition Systems — the invariant layer that makes trusted autonomy possible.
 For correspondence regarding OGACS or the AAIAAS reference architecture, contact guy@guysavage.com.
 
 OGACS is not a policy engine that loads rules dynamically. It is an invariant enforcement layer with a fixed, auditable set of constraints. Its role is to prevent drift — the divergence between intended and actual execution behavior.
 
-### 6.2 Enforcement Model
+### 6.2 Enforcement Model.
 
 OGACS evaluates operations through two primary dimensions:
 
@@ -291,7 +306,7 @@ OGACS evaluates operations through two primary dimensions:
 
 **Drift Detection.** The system compares operational state against an authoritative baseline. When drift is detected, OGACS requires controlled convergence — automated where safe, escalated to operators where judgment is required — rather than silent divergence.
 
-### 6.3 Invariant Set
+### 6.3 Invariant Set.
 
 OGACS invariants cover the following domains:
 
@@ -302,7 +317,7 @@ OGACS invariants cover the following domains:
 - **Tenant Segregation:** Cross-tenant operations are forbidden unless explicitly authorized. Isolation is structural, not policy-dependent.
 - **Artifact Separation:** Durable outputs remain externalized and addressable. Prompt context and execution memory never replace artifact records.
 
-### 6.4 Drift and Convergence
+### 6.4 Drift and Convergence.
 
 OGACS treats divergence from the authoritative baseline as a first-class governance event. When drift is detected, the system requires a controlled return to baseline — via automated reconciliation where safe, or operator escalation where judgment is required — then verifies that authoritative state is restored.
 
@@ -312,7 +327,7 @@ Drift handling is a continuous architectural property, not a periodic audit exer
 
 ## 7. Identity & Zero-Trust Alignment
 
-### 7.1 Dual-Plane Architecture
+### 7.1 Dual-Plane Architecture.
 
 AAIAAS follows a dual-plane identity model: a cloud control plane (policy, audit, orchestration) and a customer- or device-hosted execution plane (agency). This separation ensures that identity secrets never transit the control plane.
 
@@ -320,7 +335,7 @@ AAIAAS follows a dual-plane identity model: a cloud control plane (policy, audit
 
 The control plane provides **policy and audit**; it does **not** hold agency SSO secrets.
 
-### 7.2 Identity & SSO Principles
+### 7.2 Identity & SSO Principles.
 
 The platform implements three SSO access models, aligned with Zero Trust and ICAM best practices:
 
@@ -330,7 +345,7 @@ The platform implements three SSO access models, aligned with Zero Trust and ICA
 | **B. Vaulted app identity** | Service account / OAuth client / PAT from customer vault at edge. | Preferred for APIs and unattended work |
 | **C. Cloud CP holds SSO** | Password relay or SaaS browser as user without endpoint session | **Forbidden** — violates zero-trust |
 
-### 7.3 Zero Trust Principles
+### 7.3 Zero Trust Principles.
 
 | ZT Principle | Falconer Implication |
 |--------------|---------------------|
@@ -346,7 +361,7 @@ The platform implements three SSO access models, aligned with Zero Trust and ICA
 
 Falconer operates **in** the governed endpoint bubble (not around agency ICAM). This is a **reference design** aligned with Zero Trust principles — it is not a Zero Trust certification, FedRAMP authorization, or ICAM replacement.
 
-### 7.4 Explicit Non-Claims
+### 7.4 Explicit Non-Claims.
 
 The following are **not** claims of this design:
 
@@ -360,13 +375,13 @@ The following are **not** claims of this design:
 
 ## 8. Cognitive Compounding: Self-Improving Skill Loops
 
-### 8.1 The Evolutor Pattern
+### 8.1 The Evolutor Pattern.
 
 Most AI platforms deliver static capability: you define a skill or workflow, it executes as designed, and improvement requires manual re-engineering. The AAIAAS platform implements a cognitive compounding pattern — a self-improvement loop where skills become more effective through accumulated execution experience.
 
 This is not training in the traditional ML sense. The platform does not fine-tune models or adjust weights. Instead, it implements a skill evolutor that observes execution outcomes, evaluates quality signals (completion rate, verification pass rate, operator feedback, cost efficiency), and proposes skill improvements for operator review.
 
-### 8.2 How It Works
+### 8.2 How It Works.
 
 Cognitive compounding accumulates structured quality signals from execution — completion, verification outcomes, operator feedback, and cost/effort — and uses them to propose skill improvements for human review. The platform does not silently retrain models or auto-promote unreviewed skill changes.
 
@@ -377,7 +392,7 @@ Cognitive compounding accumulates structured quality signals from execution — 
 
 Exact scoring formulas, health-score UIs, and calendar cadences (weekly/monthly) are product implementation details and are out of scope for this public reference architecture.
 
-### 8.3 Why This Matters
+### 8.3 Why This Matters.
 
 The cognitive compounding pattern produces a system whose capabilities grow over time without proportional engineering investment. The first run of a skill delivers baseline value. The twentieth run, informed by accumulated execution data, delivers measurably better results. The hundredth run, benefiting from cross-skill patterns, delivers results that no single engineer could have engineered manually.
 
@@ -387,7 +402,7 @@ This is the core product thesis: agents that improve themselves are not a featur
 
 ## 9. Execution Planes: Cloud, Device, and Air-Gap
 
-### 9.1 Cloud Execution: Multi-Tenant Worker Infrastructure
+### 9.1 Cloud Execution: Multi-Tenant Worker Infrastructure.
 
 The cloud execution plane provides shared, multi-tenant worker infrastructure hosted on managed cloud services. Workers in this plane:
 
@@ -399,7 +414,7 @@ The cloud execution plane provides shared, multi-tenant worker infrastructure ho
 
 This is the default deployment posture and the operational baseline. Most tasks execute in the cloud plane.
 
-### 9.2 Device Execution: Tenant-Local Workers
+### 9.2 Device Execution: Tenant-Local Workers.
 
 The device execution plane provides tenant-owned local or on-premises workers. Workers in this plane:
 
@@ -413,7 +428,7 @@ Local inference in device mode is explicitly constrained: it operates as a **Har
 
 This separation is structural. The control plane is the brain. Device-local models are the sensory apparatus.
 
-### 9.3 Air-Gap Deployment
+### 9.3 Air-Gap Deployment.
 
 For tenants with strict data residency or sovereignty requirements, the architecture supports air-gap execution:
 
@@ -425,7 +440,7 @@ For tenants with strict data residency or sovereignty requirements, the architec
 
 This is the most restrictive deployment mode and requires careful operational planning, but it is natively supported by the architecture, not bolted on as an afterthought.
 
-### 9.4 Hybrid Configurations
+### 9.4 Hybrid Configurations.
 
 Most production deployments will use hybrid configurations:
 
@@ -441,7 +456,7 @@ Local-assist workers may operate semi-independently in the field while remaining
 
 ## 10. Deployment Topologies and Production Posture
 
-### 10.1 Canonical Deployment Reference
+### 10.1 Canonical Deployment Reference.
 
 The platform supports the following deployment topologies:
 
