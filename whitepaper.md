@@ -1,7 +1,7 @@
 # Harness-First Agentic AI: Control Plane, Execution, and Governed Autonomy
 
 **AAIAAS (Agentic Artificial Intelligence as a Service) Reference Architecture Whitepaper**  
-**Version 1.2**
+**Version 1.2.1**
 **July 2026**
 
 ---
@@ -30,6 +30,7 @@
    - 5.2 Operation Permanence Classification
    - 5.3 Waiver Policy
    - 5.4 High-Risk Operation Catalog
+   - 5.5 HITL as Operator Compounding, Not Only Approval
 6. [OGACS: Execution Invariants and Operational Governance](#6-ogacs-execution-invariants-and-operational-governance)
    - 6.1 What Is OGACS?
    - 6.2 Enforcement Model
@@ -276,6 +277,18 @@ The following operation categories are hard-coded as High or Critical risk:
 
 This catalog is not exhaustive — any new operation category is evaluated against the same risk framework, but these are the established baseline for the platform's operating posture.
 
+### 5.5 HITL as Operator Compounding, Not Only Approval.
+
+Risk-tiered approval is necessary — and incomplete as a description of effective HITL. Theater-HITL stops at “a human clicked approve.” Production HITL also keeps the **operator** in a learning loop.
+
+> "There's no magic bullet, the operator still has to know what they are doing."
+
+HITL and cognitive compounding make operators **more efficient** as they leverage agentic tools — higher throughput, better reuse of proven skills, less repetitive toil. They do **not** remove the need for an operator, and they do **not** make domain-naive or undisciplined operation adequate. Judgment about scope, risk, and “good enough” remains human; the platform amplifies competent operators rather than substituting for competence.
+
+HITL is not only a safety gate. Sustained human involvement in design, review of execution evidence and outstanding work, and steering is how operational judgment compounds. Pure set-and-forget patterns remove corrective signal from both the agent and the operator; silent degradation of quality, scope discipline, and situational awareness is the typical result. Effective HITL therefore preserves meaningful engagement — approval of high-stakes actions, examination of proof packs and outcomes, and periodic redesign of workflows — so that human cognitive compounding continues alongside system improvement.
+
+This does not require human approval of every step. Risk tiers and permanence rules still route routine work to auto-approve or notify paths. The point is that **meaningful** engagement remains available and is exercised where quality, scope, and irreversibility demand it — so neither the system nor the operator degrades into rubber-stamping or unsupervised drift.
+
 ---
 
 ## 6. OGACS: Execution Invariants and Operational Governance
@@ -396,7 +409,9 @@ Exact scoring formulas, health-score UIs, and calendar cadences (weekly/monthly)
 
 The cognitive compounding pattern produces a system whose capabilities grow over time without proportional engineering investment. The first run of a skill delivers baseline value. The twentieth run, informed by accumulated execution data, delivers measurably better results. The hundredth run, benefiting from cross-skill patterns, delivers results that no single engineer could have engineered manually.
 
-This is the core product thesis: agents that improve themselves are not a feature — they are the only architecture that scales autonomously without linearly scaling engineering overhead.
+That growth depends on continued human engagement in the loop — not only as a safety brake, but as a co-evolutor. Skill proposals require operator review; quality signals include operator feedback; redesign of underperforming workflows is a human act. Set-and-forget removes the corrective channel that keeps both the skill library and the operator’s judgment calibrated (see §5.5).
+
+This is the core product thesis: agents that improve themselves are not a feature — they are the only architecture that scales autonomously without linearly scaling engineering overhead — and that improvement remains supervised so silent degradation does not masquerade as autonomy.
 
 ---
 

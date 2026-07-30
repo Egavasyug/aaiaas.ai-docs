@@ -147,7 +147,7 @@ blockquote {
 <h1 style="text-align:center; border-bottom: 3px double #0d1b2a;">Harness-First Agentic AI</h1>
 <h2 style="text-align:center; font-size:13pt; color:#555; border:none; margin-top:0;">Control Plane, Execution, and Governed Autonomy</h2>
 <p style="text-align:center; color:#777; font-size:10pt; margin-top:0; margin-bottom:0.15em;">AAIAAS (Agentic Artificial Intelligence as a Service) Reference Architecture Whitepaper</p>
-<p style="text-align:center; color:#777; font-size:10pt; margin-top:0; margin-bottom:0.15em;">Version 1.2</p>
+<p style="text-align:center; color:#777; font-size:10pt; margin-top:0; margin-bottom:0.15em;">Version 1.2.1</p>
 <p style="text-align:center; color:#777; font-size:10pt; margin-top:0; margin-bottom:0.15em;">July 2026</p>
 <hr>
 <h2>Table of Contents</h2>
@@ -190,6 +190,7 @@ blockquote {
 <li><a href="#52-operation-permanence-classification">5.2 Operation Permanence Classification.</a></li>
 <li><a href="#53-waiver-policy">5.3 Waiver Policy.</a></li>
 <li><a href="#54-high-risk-operation-catalog">5.4 High-Risk Operation Catalog.</a></li>
+<li><a href="#55-hitl-as-operator-compounding-not-only-approval">5.5 HITL as Operator Compounding, Not Only Approval.</a></li>
 </ul>
 </li>
 <li>
@@ -452,6 +453,14 @@ blockquote {
 <li>Skill Promotion (Development to Production): <strong>High</strong></li>
 </ul>
 <p>This catalog is not exhaustive — any new operation category is evaluated against the same risk framework, but these are the established baseline for the platform&#x27;s operating posture.</p>
+<h3 id="55-hitl-as-operator-compounding-not-only-approval">5.5 HITL as Operator Compounding, Not Only Approval.</h3>
+<p>Risk-tiered approval is necessary — and incomplete as a description of effective HITL. Theater-HITL stops at “a human clicked approve.” Production HITL also keeps the <strong>operator</strong> in a learning loop.</p>
+<blockquote>
+<p>&quot;There&#x27;s no magic bullet, the operator still has to know what they are doing.&quot;</p>
+</blockquote>
+<p>HITL and cognitive compounding make operators <strong>more efficient</strong> as they leverage agentic tools — higher throughput, better reuse of proven skills, less repetitive toil. They do <strong>not</strong> remove the need for an operator, and they do <strong>not</strong> make domain-naive or undisciplined operation adequate. Judgment about scope, risk, and “good enough” remains human; the platform amplifies competent operators rather than substituting for competence.</p>
+<p>HITL is not only a safety gate. Sustained human involvement in design, review of execution evidence and outstanding work, and steering is how operational judgment compounds. Pure set-and-forget patterns remove corrective signal from both the agent and the operator; silent degradation of quality, scope discipline, and situational awareness is the typical result. Effective HITL therefore preserves meaningful engagement — approval of high-stakes actions, examination of proof packs and outcomes, and periodic redesign of workflows — so that human cognitive compounding continues alongside system improvement.</p>
+<p>This does not require human approval of every step. Risk tiers and permanence rules still route routine work to auto-approve or notify paths. The point is that <strong>meaningful</strong> engagement remains available and is exercised where quality, scope, and irreversibility demand it — so neither the system nor the operator degrades into rubber-stamping or unsupervised drift.</p>
 <hr />
 <h2 id="6-ogacs-execution-invariants-and-operational-governance">6. OGACS: Execution Invariants and Operational Governance</h2>
 <h3 id="61-what-is-ogacs">6.1 What Is OGACS?.</h3>
@@ -571,7 +580,8 @@ blockquote {
 <p>Exact scoring formulas, health-score UIs, and calendar cadences (weekly/monthly) are product implementation details and are out of scope for this public reference architecture.</p>
 <h3 id="83-why-this-matters">8.3 Why This Matters.</h3>
 <p>The cognitive compounding pattern produces a system whose capabilities grow over time without proportional engineering investment. The first run of a skill delivers baseline value. The twentieth run, informed by accumulated execution data, delivers measurably better results. The hundredth run, benefiting from cross-skill patterns, delivers results that no single engineer could have engineered manually.</p>
-<p>This is the core product thesis: agents that improve themselves are not a feature — they are the only architecture that scales autonomously without linearly scaling engineering overhead.</p>
+<p>That growth depends on continued human engagement in the loop — not only as a safety brake, but as a co-evolutor. Skill proposals require operator review; quality signals include operator feedback; redesign of underperforming workflows is a human act. Set-and-forget removes the corrective channel that keeps both the skill library and the operator’s judgment calibrated (see §5.5).</p>
+<p>This is the core product thesis: agents that improve themselves are not a feature — they are the only architecture that scales autonomously without linearly scaling engineering overhead — and that improvement remains supervised so silent degradation does not masquerade as autonomy.</p>
 <hr />
 <h2 id="9-execution-planes-cloud-device-and-air-gap">9. Execution Planes: Cloud, Device, and Air-Gap</h2>
 <h3 id="91-cloud-execution-multi-tenant-worker-infrastructure">9.1 Cloud Execution: Multi-Tenant Worker Infrastructure.</h3>
