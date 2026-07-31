@@ -144,6 +144,8 @@ For the body of production agent work, quality gains from further model scale di
 
 > Past the body plateau, further scale raises cost and latency faster than it raises success on typical workloads.
 
+Under SQDEC, routing volume work to frontier-scale models is **over-capacity**: Safety and Quality are already met on the plateau; Economics and Delivery degrade when every seat pays for headroom it does not use.
+
 ### 2.6 Limits and Chunking under the Harness
 
 Mid-size models still underperform on long-horizon, weakly decomposable, or rare-knowledge work. The architecture does not claim otherwise. The harness addresses those limits by **chunking** large outcomes into short-horizon, verifiable units where local mid-size capacity is sufficient — one outcome per bite, with verification between bites.

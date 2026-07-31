@@ -315,6 +315,7 @@ figure figcaption {
 <blockquote>
 <p>Past the body plateau, further scale raises cost and latency faster than it raises success on typical workloads.</p>
 </blockquote>
+<p>Under SQDEC, routing volume work to frontier-scale models is <strong>over-capacity</strong>: Safety and Quality are already met on the plateau; Economics and Delivery degrade when every seat pays for headroom it does not use.</p>
 <h3 id="26-limits-and-chunking-under-the-harness">2.6 Limits and Chunking under the Harness</h3>
 <p>Mid-size models still underperform on long-horizon, weakly decomposable, or rare-knowledge work. The architecture does not claim otherwise. The harness addresses those limits by <strong>chunking</strong> large outcomes into short-horizon, verifiable units where local mid-size capacity is sufficient — one outcome per bite, with verification between bites.</p>
 <p>Chunking is a control-plane move: map whole-meal jobs onto body-class units. Good chunking is sequential, verified work. Residual bites that remain hard after honest decomposition escalate <strong>altitude to the control plane</strong> (optional stronger control-plane inference), not every worker seat.</p>
