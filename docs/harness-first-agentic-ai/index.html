@@ -504,8 +504,8 @@ figure figcaption {
 <hr />
 <h2 id="6-ogacs-execution-invariants-and-operational-governance">6. OGACS: Execution Invariants and Operational Governance</h2>
 <h3 id="61-what-is-ogacs">6.1 What Is OGACS?.</h3>
-<p>OGACS (Operational Governance for Autonomous Cognition Systems) is the invariant governance layer for autonomous cognition. It defines the policy stack — SQDEC priority order, CR/Review Gate, Done=disk evidence, HITL gating, vault governance, and doctrine — that autonomous systems follow.</p>
-<p>Live product implementations apply OGACS policy within a dual-plane architecture; this paper specifies the policy and invariants, not a single product configuration. The Peregrines Falconer HERO stack is one live application of OGACS policy for a supervised agent seat. The AAIAAS dual-plane architecture (control plane + customer Falconer plane) applies the same policy at product scope.</p>
+<p>OGACS (Operational Governance for Autonomous Cognition Systems) is the invariant governance layer for autonomous cognition. It defines the policy stack — SQDEC priority order, CR/Review Gate, verified completion evidence, HITL gating, vault governance, and doctrine — that autonomous systems follow.</p>
+<p>Live product implementations apply OGACS policy within a dual-plane architecture; this paper specifies the policy and invariants, not a single product configuration.</p>
 <p>OGACS is an invariant enforcement layer with a fixed, auditable set of constraints — not a dynamically loaded rule engine. Its role is to prevent drift: divergence between intended and actual execution behavior.</p>
 <p>For correspondence regarding OGACS or the AAIAAS reference architecture, contact guy@guysavage.com.</p>
 <h3 id="62-enforcement-model">6.2 Enforcement Model.</h3>
@@ -665,7 +665,7 @@ figure figcaption {
 <h2 id="10-deployment-topologies-and-production-posture">10. Deployment Topologies and Production Posture</h2>
 <h3 id="101-canonical-deployment-reference">10.1 Canonical Deployment Reference.</h3>
 <p>The platform supports the following deployment topologies:</p>
-<p><strong>Production Cloud (default).</strong> The control plane is deployed on a managed cloud service (Railway) with a backing database (Supabase). Workers run in the cloud execution plane. Local device workers are optional. This is the standard configuration for most tenants.</p>
+<p><strong>Production Cloud (default).</strong> The control plane is deployed on a managed cloud service with a managed database. Workers run in the cloud execution plane. Local device workers are optional. This is the standard configuration for most tenants.</p>
 <p><strong>Sovereign/On-Premises.</strong> The control plane is deployed within the tenant&#x27;s infrastructure. Model providers may be external (via secure API) or fully local. Workers run on tenant hardware. This configuration satisfies strict data residency and sovereignty requirements.</p>
 <p><strong>Hybrid.</strong> The control plane runs in the cloud. Device workers run on-premises or at the edge. The two communicate over encrypted channels with the control-plane tether. This is the default posture for enterprise deployments with distributed operations.</p>
 <hr />

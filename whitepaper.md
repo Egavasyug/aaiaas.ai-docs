@@ -323,9 +323,9 @@ This does not require human approval of every step. Risk tiers and permanence ru
 
 ### 6.1 What Is OGACS?.
 
-OGACS (Operational Governance for Autonomous Cognition Systems) is the invariant governance layer for autonomous cognition. It defines the policy stack — SQDEC priority order, CR/Review Gate, Done=disk evidence, HITL gating, vault governance, and doctrine — that autonomous systems follow.
+OGACS (Operational Governance for Autonomous Cognition Systems) is the invariant governance layer for autonomous cognition. It defines the policy stack — SQDEC priority order, CR/Review Gate, verified completion evidence, HITL gating, vault governance, and doctrine — that autonomous systems follow.
 
-Live product implementations apply OGACS policy within a dual-plane architecture; this paper specifies the policy and invariants, not a single product configuration. The Peregrines Falconer HERO stack is one live application of OGACS policy for a supervised agent seat. The AAIAAS dual-plane architecture (control plane + customer Falconer plane) applies the same policy at product scope.
+Live product implementations apply OGACS policy within a dual-plane architecture; this paper specifies the policy and invariants, not a single product configuration.
 
 OGACS is an invariant enforcement layer with a fixed, auditable set of constraints — not a dynamically loaded rule engine. Its role is to prevent drift: divergence between intended and actual execution behavior.
 
@@ -498,7 +498,7 @@ Local-assist workers may operate semi-independently in the field while remaining
 
 The platform supports the following deployment topologies:
 
-**Production Cloud (default).** The control plane is deployed on a managed cloud service (Railway) with a backing database (Supabase). Workers run in the cloud execution plane. Local device workers are optional. This is the standard configuration for most tenants.
+**Production Cloud (default).** The control plane is deployed on a managed cloud service with a managed database. Workers run in the cloud execution plane. Local device workers are optional. This is the standard configuration for most tenants.
 
 **Sovereign/On-Premises.** The control plane is deployed within the tenant's infrastructure. Model providers may be external (via secure API) or fully local. Workers run on tenant hardware. This configuration satisfies strict data residency and sovereignty requirements.
 
