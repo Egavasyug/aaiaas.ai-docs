@@ -332,7 +332,9 @@ def md_body_to_html(body: str) -> tuple[str, list[tuple[str, str, list[tuple[str
             # Verify asset exists
             if abs_asset.exists():
                 out.append(f'<figure id="fig-{slugify(alt)}">')
-                out.append(f'<img src="{html.escape(str(abs_asset))}" alt="{html.escape(alt)}" />')
+                # URL-relative path for Next.js/static site serving
+                url_path = "/" + rel_path if rel_path.startswith("docs/") else rel_path
+                out.append(f'<img src="{html.escape(url_path)}" alt="{html.escape(alt)}" />')
                 out.append(f'<figcaption>{html.escape(alt)}</figcaption>')
                 out.append('</figure>')
             else:

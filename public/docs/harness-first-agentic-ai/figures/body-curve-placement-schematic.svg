@@ -51,13 +51,13 @@
 
   <!-- Tick/dot at curve onset for local workers (x≈440, y≈170) -->
   <circle cx="440" cy="169" r="3" fill="#0d1b2a"/>
-  <line x1="440" y1="169" x2="440" y2="178" stroke="#0d1b2a" stroke-width="1"/>
+  <line x1="440" y1="169" x2="440" y2="174" stroke="#0d1b2a" stroke-width="1"/>
 
   <!-- Annotation: local workers on plateau (high success, at plateau onset, under flat curve) -->
-  <rect x="365" y="178" width="150" height="36" fill="#e8edf2" rx="3" stroke="#0d1b2a" stroke-width="0.5"/>
-  <text x="440" y="193" text-anchor="middle" font-size="9" fill="#333">
+  <rect x="375" y="174" width="130" height="22" fill="#e8edf2" rx="3" stroke="#0d1b2a" stroke-width="0.5"/>
+  <text x="440" y="189" text-anchor="middle" font-size="9" fill="#333">
     <tspan x="440" dy="0">Local workers &amp; talons</tspan>
-    <tspan x="440" dy="14">(mid-size · high success)</tspan>
+    <tspan x="440" dy="12">(mid-size · high success)</tspan>
   </text>
 
   <!-- Dashed separator: body vs. control-plane -->
