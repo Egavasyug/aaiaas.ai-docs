@@ -129,6 +129,10 @@ The harness — planning, policy, admission control, verification before complet
 
 > For production volume, a strong mid-size model behind a real control plane is the rational default. Capability is placed by plane: local sweet-spot inference for workers and talons; control-plane headroom for governance and the rare cases that need it.
 
+![Diminishing returns graph showing task success on a fixed mix vs. scale, with a flattening plateau for body work, a chunking arrow toward body-sized units, and residual control-plane capacity above the graph.](docs/harness-first-agentic-ai/figures/body-curve-placement-schematic.svg)
+
+*Body work executes local on the plateau; control-plane capacity sits above the graph, not on every worker seat.*
+
 ### 2.5 Capability Placement by Plane
 
 Capability is **placed by plane**, not treated as a temporary compromise.

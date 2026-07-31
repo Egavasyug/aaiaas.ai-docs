@@ -113,6 +113,23 @@ blockquote {
     color: #444;
     font-style: italic;
 }
+figure {
+    margin: 0.4in 0;
+    text-align: center;
+    page-break-inside: avoid;
+}
+figure img {
+    max-width: 100%;
+    height: auto;
+    display: inline-block;
+}
+figure figcaption {
+    margin-top: 0.25in;
+    font-size: 10pt;
+    color: #555;
+    font-style: italic;
+    text-align: center;
+}
 #toc {
     page-break-after: always;
 }
@@ -301,6 +318,27 @@ def md_body_to_html(body: str) -> tuple[str, list[tuple[str, str, list[tuple[str
             flush_list()
             table_html, i = parse_table(lines, i)
             out.append(table_html)
+            continue
+
+        # markdown image: ![alt](path)
+        img_m = re.match(r"^!\[([^\]]*)\]\(([^)]+)\)$", s)
+        if img_m:
+            flush_para()
+            flush_list()
+            alt = img_m.group(1)
+            rel_path = img_m.group(2)
+            # Resolve relative to whitepaper.md directory
+            abs_asset = (MD.parent / rel_path).resolve()
+            # Verify asset exists
+            if abs_asset.exists():
+                out.append(f'<figure id="fig-{slugify(alt)}">')
+                out.append(f'<img src="{html.escape(str(abs_asset))}" alt="{html.escape(alt)}" />')
+                out.append(f'<figcaption>{html.escape(alt)}</figcaption>')
+                out.append('</figure>')
+            else:
+                # Fallback: just output the path as-is so governor can inspect
+                out.append(f'<p><em>[asset missing: {html.escape(rel_path)}]</em></p>')
+            i += 1
             continue
 
         m2 = re.match(r"^## (.+)$", s)
