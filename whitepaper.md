@@ -1,6 +1,6 @@
-# Harness-First Agentic AI™: Control Plane, Execution, and Governed Autonomy
+# Harness-First Agentic AI: Control Plane, Execution, and Governed Autonomy
 
-**AAIAAS™ (Agentic Artificial Intelligence as a Service) Whitepaper**  
+**AAIAAS (Agentic Artificial Intelligence as a Service) Reference Architecture Whitepaper**  
 **Version 1.3**
 **July 2026**
 
@@ -67,7 +67,7 @@ The prevailing narrative in enterprise AI focuses on models: which foundation mo
 
 The alternative is to flip the architecture. Place the model abstraction layer — the **Harness** — at the center of the design. Models become interchangeable commodities. Planning, policy, verification, and governance remain centralized and stable. Execution remains distributed, provider-agnostic, and resilient.
 
-This whitepaper defines the **AAIAAS™ reference architecture**: a harness-first control plane for governed autonomy. Models are treated as interchangeable commodities. Planning, policy, verification, and proof remain stable. Execution is provider-agnostic across cloud, device, and air-gap planes.
+This whitepaper defines the **AAIAAS reference architecture**: a harness-first control plane for governed autonomy. Models are treated as interchangeable commodities. Planning, policy, verification, and proof remain stable. Execution is provider-agnostic across cloud, device, and air-gap planes.
 
 The document is written for technical leaders, security architects, and operators evaluating autonomous systems for production. It specifies architectural layers, execution invariants, HITL governance, and operational constraints. Product branding, actor taxonomies, and implementation runbooks are maintained on the product surfaces and in separate operating guides.
 
@@ -173,7 +173,7 @@ Device-local inference is explicitly a **Harness Layer co-processor** (§10.2) �
 
 ### 3.1 Six Layers, Three Planes.
 
-The AAIAAS™ architecture is organized into six distinct layers, each with a bounded responsibility. This layering is not optional. Violating layer boundaries requires an architectural decision record and explicit review.
+The AAIAAS architecture is organized into six distinct layers, each with a bounded responsibility. This layering is not optional. Violating layer boundaries requires an architectural decision record and explicit review.
 
 | Layer | Responsibility |
 |-------|---------------|
@@ -321,7 +321,7 @@ This does not require human approval of every step. Risk tiers and permanence ru
 
 ---
 
-## 6. OGACS™: Execution Invariants and Operational Governance
+## 6. OGACS: Execution Invariants and Operational Governance
 
 ### 6.1 What Is OGACS?.
 
@@ -331,7 +331,7 @@ Live product implementations apply OGACS policy within a dual-plane architecture
 
 OGACS is an invariant enforcement layer with a fixed, auditable set of constraints — not a dynamically loaded rule engine. Its role is to prevent drift: divergence between intended and actual execution behavior.
 
-For correspondence regarding OGACS or the AAIAAS™ reference architecture, contact guy@guysavage.com.
+For correspondence regarding OGACS or the AAIAAS reference architecture, contact guy@guysavage.com.
 
 ### 6.2 Enforcement Model.
 
@@ -367,7 +367,7 @@ Drift handling is a continuous architectural property, not a periodic audit exer
 
 ### 7.1 Dual-Plane Architecture.
 
-AAIAAS™ follows a dual-plane identity model: a cloud control plane (policy, audit, orchestration) and a customer- or device-hosted execution plane (agency). This separation ensures that identity secrets never transit the control plane.
+AAIAAS follows a dual-plane identity model: a cloud control plane (policy, audit, orchestration) and a customer- or device-hosted execution plane (agency). This separation ensures that identity secrets never transit the control plane.
 
 > Customer Falconer runs on a governed endpoint (desktop/VDI). For interactive SSO applications it operates under the user's (or approved robot's) already-established ICAM session, similar to an attended RPA agent. Long-lived or API access uses vault-brokered delegated credentials, not password relay through the cloud control plane. The control plane provides policy and audit; it does not hold agency SSO secrets.
 
@@ -415,7 +415,7 @@ The following are **not** claims of this design:
 
 ### 8.1 The Evolutor Pattern.
 
-Most AI platforms deliver static capability: you define a skill or workflow, it executes as designed, and improvement requires manual re-engineering. The AAIAAS™ platform implements a cognitive compounding pattern — a self-improvement loop where skills become more effective through accumulated execution experience.
+Most AI platforms deliver static capability: you define a skill or workflow, it executes as designed, and improvement requires manual re-engineering. The AAIAAS platform implements a cognitive compounding pattern — a self-improvement loop where skills become more effective through accumulated execution experience.
 
 This is not training in the traditional ML sense. The platform does not fine-tune models or adjust weights. Instead, it implements a skill evolutor that observes execution outcomes, evaluates quality signals (completion rate, verification pass rate, operator feedback, cost efficiency), and proposes skill improvements for operator review.
 
@@ -508,13 +508,8 @@ The platform supports the following deployment topologies:
 
 ---
 
-This whitepaper is published by AAIAAS.ai as an architectural reference of Peregrines AI, Inc.
-Product vocabulary and control-plane surfaces:
+*This whitepaper is published by AAIAAS.ai (Agentic Artificial Intelligence as a Service). It defines architectural invariants and the governance model. Product-specific actor taxonomies and control-plane UI details are published on the product surface:*
+
 https://www.peregrines.ai/docs/falconry-taxonomy
 
 *For high-level reference, the Falconry Taxonomy defines: **Falconer** (orchestrator / control plane with HITL authority), **Peregrine** (worker agent on an assigned execution plane), and **Talon** (skill or modular capability the worker calls). www.peregrines.ai is the product surface; this whitepaper remains the architectural reference.*
-
----
-PEREGRINES™, AAIAAS™, and OGACS™ are trademarks of Peregrines AI, Inc.
-U.S. trademark applications pending. Serial nos. 50032311, 50032341, 50032358.
-All rights reserved.

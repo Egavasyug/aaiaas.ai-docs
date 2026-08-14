@@ -3,49 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Harness-First Agentic AI™: Control Plane, Execution, and Governed Autonomy</title>
+<title>Harness-First Agentic AI: Control Plane, Execution, and Governed Autonomy</title>
 <style>
 
 @page {
     size: letter;
     margin: 1in 1.2in;
 }
-@page :left {
-    @top-left {
-        content: string(document-title);
-        font-size: 8pt;
-        color: #777;
-        font-family: Georgia, serif;
-    }
-    @bottom-left {
-        content: counter(page);
-        font-size: 8pt;
-        color: #777;
-        font-family: Georgia, serif;
-    }
-}
-@page :right {
-    @top-right {
-        content: string(section-title);
-        font-size: 8pt;
-        color: #777;
-        font-family: Georgia, serif;
-    }
-    @bottom-right {
-        content: counter(page);
-        font-size: 8pt;
-        color: #777;
-        font-family: Georgia, serif;
-    }
-}
-@page :first {
-    @top-left { content: none; }
-    @top-right { content: none; }
-    @bottom-left { content: none; }
-    @bottom-right { content: none; }
-}
 body {
-    string-set: document-title "Harness-First Agentic AI\u2122 v1.3";
     font-family: Georgia, 'Times New Roman', serif;
     font-size: 11pt;
     line-height: 1.65;
@@ -196,9 +161,9 @@ figure figcaption {
 <body>
 
 <div id="toc">
-<h1 style="text-align:center; border-bottom: 3px double #0d1b2a;">Harness-First Agentic AI™</h1>
+<h1 style="text-align:center; border-bottom: 3px double #0d1b2a;">Harness-First Agentic AI</h1>
 <h2 style="text-align:center; font-size:13pt; color:#555; border:none; margin-top:0;">Control Plane, Execution, and Governed Autonomy</h2>
-<p style="text-align:center; color:#777; font-size:10pt; margin-top:0; margin-bottom:0.15em;">AAIAAS™ (Agentic Artificial Intelligence as a Service) Whitepaper</p>
+<p style="text-align:center; color:#777; font-size:10pt; margin-top:0; margin-bottom:0.15em;">AAIAAS (Agentic Artificial Intelligence as a Service) Reference Architecture Whitepaper</p>
 <p style="text-align:center; color:#777; font-size:10pt; margin-top:0; margin-bottom:0.15em;">Version 1.3</p>
 <p style="text-align:center; color:#777; font-size:10pt; margin-top:0; margin-bottom:0.15em;">July 2026</p>
 <hr>
@@ -249,7 +214,7 @@ figure figcaption {
 </ul>
 </li>
 <li>
-<a href="#6-ogacs-execution-invariants-and-operational-governance">OGACS™: Execution Invariants and Operational Governance</a>
+<a href="#6-ogacs-execution-invariants-and-operational-governance">OGACS: Execution Invariants and Operational Governance</a>
 <ul>
 <li><a href="#61-what-is-ogacs">6.1 What Is OGACS?.</a></li>
 <li><a href="#62-enforcement-model">6.2 Enforcement Model.</a></li>
@@ -296,7 +261,7 @@ figure figcaption {
 <h2 id="1-executive-summary">1. Executive Summary</h2>
 <p>The prevailing narrative in enterprise AI focuses on models: which foundation model is best, which provider offers the best price-performance ratio, which prompt engineering technique unlocks the highest accuracy. This model-centric view produces systems that are fragile, opaque, and difficult to govern. When the model changes — and it will change — the entire system must be rebuilt.</p>
 <p>The alternative is to flip the architecture. Place the model abstraction layer — the <strong>Harness</strong> — at the center of the design. Models become interchangeable commodities. Planning, policy, verification, and governance remain centralized and stable. Execution remains distributed, provider-agnostic, and resilient.</p>
-<p>This whitepaper defines the <strong>AAIAAS™ reference architecture</strong>: a harness-first control plane for governed autonomy. Models are treated as interchangeable commodities. Planning, policy, verification, and proof remain stable. Execution is provider-agnostic across cloud, device, and air-gap planes.</p>
+<p>This whitepaper defines the <strong>AAIAAS reference architecture</strong>: a harness-first control plane for governed autonomy. Models are treated as interchangeable commodities. Planning, policy, verification, and proof remain stable. Execution is provider-agnostic across cloud, device, and air-gap planes.</p>
 <p>The document is written for technical leaders, security architects, and operators evaluating autonomous systems for production. It specifies architectural layers, execution invariants, HITL governance, and operational constraints. Product branding, actor taxonomies, and implementation runbooks are maintained on the product surfaces and in separate operating guides.</p>
 <p>The architecture delivers five capabilities that are rare in production:</p>
 <ol>
@@ -384,7 +349,7 @@ figure figcaption {
 <hr />
 <h2 id="3-reference-architecture">3. Reference Architecture</h2>
 <h3 id="31-six-layers-three-planes">3.1 Six Layers, Three Planes.</h3>
-<p>The AAIAAS™ architecture is organized into six distinct layers, each with a bounded responsibility. This layering is not optional. Violating layer boundaries requires an architectural decision record and explicit review.</p>
+<p>The AAIAAS architecture is organized into six distinct layers, each with a bounded responsibility. This layering is not optional. Violating layer boundaries requires an architectural decision record and explicit review.</p>
 <table>
 <thead><tr>
 <th>Layer</th>
@@ -538,12 +503,12 @@ figure figcaption {
 <p>HITL is not only a safety gate. Sustained human involvement in design, review of execution evidence and outstanding work, and steering is how operational judgment compounds. Pure set-and-forget patterns remove corrective signal from both the agent and the operator; silent degradation of quality, scope discipline, and situational awareness is the typical result. Effective HITL therefore preserves meaningful engagement — approval of high-stakes actions, examination of proof packs and outcomes, and periodic redesign of workflows — so that human cognitive compounding continues alongside system improvement.</p>
 <p>This does not require human approval of every step. Risk tiers and permanence rules still route routine work to auto-approve or notify paths. The point is that <strong>meaningful</strong> engagement remains available and is exercised where quality, scope, and irreversibility demand it — so neither the system nor the operator degrades into rubber-stamping or unsupervised drift.</p>
 <hr />
-<h2 id="6-ogacs-execution-invariants-and-operational-governance">6. OGACS™: Execution Invariants and Operational Governance</h2>
+<h2 id="6-ogacs-execution-invariants-and-operational-governance">6. OGACS: Execution Invariants and Operational Governance</h2>
 <h3 id="61-what-is-ogacs">6.1 What Is OGACS?.</h3>
 <p>OGACS (Operational Governance for Autonomous Cognition Systems) is the invariant governance layer for autonomous cognition. It defines the policy stack — SQDEC priority order, CR/Review Gate, verified completion evidence, HITL gating, vault governance, and doctrine — that autonomous systems follow.</p>
 <p>Live product implementations apply OGACS policy within a dual-plane architecture; this paper specifies the policy and invariants, not a single product configuration.</p>
 <p>OGACS is an invariant enforcement layer with a fixed, auditable set of constraints — not a dynamically loaded rule engine. Its role is to prevent drift: divergence between intended and actual execution behavior.</p>
-<p>For correspondence regarding OGACS or the AAIAAS™ reference architecture, contact guy@guysavage.com.</p>
+<p>For correspondence regarding OGACS or the AAIAAS reference architecture, contact guy@guysavage.com.</p>
 <h3 id="62-enforcement-model">6.2 Enforcement Model.</h3>
 <p>OGACS evaluates operations through two primary dimensions:</p>
 <p><strong>Operational Mode.</strong> The system operates in one of two modes:</p>
@@ -568,7 +533,7 @@ figure figcaption {
 <hr />
 <h2 id="7-identity-zero-trust-alignment">7. Identity &amp; Zero-Trust Alignment</h2>
 <h3 id="71-dual-plane-architecture">7.1 Dual-Plane Architecture.</h3>
-<p>AAIAAS™ follows a dual-plane identity model: a cloud control plane (policy, audit, orchestration) and a customer- or device-hosted execution plane (agency). This separation ensures that identity secrets never transit the control plane.</p>
+<p>AAIAAS follows a dual-plane identity model: a cloud control plane (policy, audit, orchestration) and a customer- or device-hosted execution plane (agency). This separation ensures that identity secrets never transit the control plane.</p>
 <blockquote>
 <p>Customer Falconer runs on a governed endpoint (desktop/VDI). For interactive SSO applications it operates under the user&#x27;s (or approved robot&#x27;s) already-established ICAM session, similar to an attended RPA agent. Long-lived or API access uses vault-brokered delegated credentials, not password relay through the cloud control plane. The control plane provides policy and audit; it does not hold agency SSO secrets.</p>
 </blockquote>
@@ -639,7 +604,7 @@ figure figcaption {
 <hr />
 <h2 id="8-cognitive-compounding-self-improving-skill-loops">8. Cognitive Compounding: Self-Improving Skill Loops</h2>
 <h3 id="81-the-evolutor-pattern">8.1 The Evolutor Pattern.</h3>
-<p>Most AI platforms deliver static capability: you define a skill or workflow, it executes as designed, and improvement requires manual re-engineering. The AAIAAS™ platform implements a cognitive compounding pattern — a self-improvement loop where skills become more effective through accumulated execution experience.</p>
+<p>Most AI platforms deliver static capability: you define a skill or workflow, it executes as designed, and improvement requires manual re-engineering. The AAIAAS platform implements a cognitive compounding pattern — a self-improvement loop where skills become more effective through accumulated execution experience.</p>
 <p>This is not training in the traditional ML sense. The platform does not fine-tune models or adjust weights. Instead, it implements a skill evolutor that observes execution outcomes, evaluates quality signals (completion rate, verification pass rate, operator feedback, cost efficiency), and proposes skill improvements for operator review.</p>
 <h3 id="82-how-it-works">8.2 How It Works.</h3>
 <p>Cognitive compounding accumulates structured quality signals from execution — completion, verification outcomes, operator feedback, and cost/effort — and uses them to propose skill improvements for human review. The platform does not silently retrain models or auto-promote unreviewed skill changes.</p>
@@ -705,10 +670,9 @@ figure figcaption {
 <p><strong>Sovereign/On-Premises.</strong> The control plane is deployed within the tenant&#x27;s infrastructure. Model providers may be external (via secure API) or fully local. Workers run on tenant hardware. This configuration satisfies strict data residency and sovereignty requirements.</p>
 <p><strong>Hybrid.</strong> The control plane runs in the cloud. Device workers run on-premises or at the edge. The two communicate over encrypted channels with the control-plane tether. This is the default posture for enterprise deployments with distributed operations.</p>
 <hr />
-<p>This whitepaper is published by AAIAAS.ai as an architectural reference of Peregrines AI, Inc. Product vocabulary and control-plane surfaces: https://www.peregrines.ai/docs/falconry-taxonomy</p>
+<p><em>This whitepaper is published by AAIAAS.ai (Agentic Artificial Intelligence as a Service). It defines architectural invariants and the governance model. Product-specific actor taxonomies and control-plane UI details are published on the product surface:</em></p>
+<p>https://www.peregrines.ai/docs/falconry-taxonomy</p>
 <p><em>For high-level reference, the Falconry Taxonomy defines: <strong>Falconer</strong> (orchestrator / control plane with HITL authority), <strong>Peregrine</strong> (worker agent on an assigned execution plane), and <strong>Talon</strong> (skill or modular capability the worker calls). www.peregrines.ai is the product surface; this whitepaper remains the architectural reference.</em></p>
-<hr />
-<p>PEREGRINES™, AAIAAS™, and OGACS™ are trademarks of Peregrines AI, Inc. U.S. trademark applications pending. Serial nos. 50032311, 50032341, 50032358. All rights reserved.</p>
 </div>
 
 </body>

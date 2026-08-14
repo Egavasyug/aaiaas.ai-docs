@@ -22,42 +22,7 @@ STYLE = r"""
     size: letter;
     margin: 1in 1.2in;
 }
-@page :left {
-    @top-left {
-        content: string(document-title);
-        font-size: 8pt;
-        color: #777;
-        font-family: Georgia, serif;
-    }
-    @bottom-left {
-        content: counter(page);
-        font-size: 8pt;
-        color: #777;
-        font-family: Georgia, serif;
-    }
-}
-@page :right {
-    @top-right {
-        content: string(section-title);
-        font-size: 8pt;
-        color: #777;
-        font-family: Georgia, serif;
-    }
-    @bottom-right {
-        content: counter(page);
-        font-size: 8pt;
-        color: #777;
-        font-family: Georgia, serif;
-    }
-}
-@page :first {
-    @top-left { content: none; }
-    @top-right { content: none; }
-    @bottom-left { content: none; }
-    @bottom-right { content: none; }
-}
 body {
-    string-set: document-title "Harness-First Agentic AI\u2122 v1.3";
     font-family: Georgia, 'Times New Roman', serif;
     font-size: 11pt;
     line-height: 1.65;
