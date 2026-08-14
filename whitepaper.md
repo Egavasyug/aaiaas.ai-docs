@@ -1,6 +1,6 @@
 # Harness-First Agentic AI: Control Plane, Execution, and Governed Autonomy
 
-**AAIAAS (Agentic Artificial Intelligence as a Service) Reference Architecture Whitepaper**  
+**AAIAAS™ (Agentic Artificial Intelligence as a Service) Whitepaper**  
 **Version 1.3**
 **July 2026**
 
@@ -67,7 +67,7 @@ The prevailing narrative in enterprise AI focuses on models: which foundation mo
 
 The alternative is to flip the architecture. Place the model abstraction layer — the **Harness** — at the center of the design. Models become interchangeable commodities. Planning, policy, verification, and governance remain centralized and stable. Execution remains distributed, provider-agnostic, and resilient.
 
-This whitepaper defines the **AAIAAS reference architecture**: a harness-first control plane for governed autonomy. Models are treated as interchangeable commodities. Planning, policy, verification, and proof remain stable. Execution is provider-agnostic across cloud, device, and air-gap planes.
+This whitepaper defines the **AAIAAS™ reference architecture**: a harness-first control plane for governed autonomy. Models are treated as interchangeable commodities. Planning, policy, verification, and proof remain stable. Execution is provider-agnostic across cloud, device, and air-gap planes.
 
 The document is written for technical leaders, security architects, and operators evaluating autonomous systems for production. It specifies architectural layers, execution invariants, HITL governance, and operational constraints. Product branding, actor taxonomies, and implementation runbooks are maintained on the product surfaces and in separate operating guides.
 
@@ -173,7 +173,7 @@ Device-local inference is explicitly a **Harness Layer co-processor** (§10.2) �
 
 ### 3.1 Six Layers, Three Planes.
 
-The AAIAAS architecture is organized into six distinct layers, each with a bounded responsibility. This layering is not optional. Violating layer boundaries requires an architectural decision record and explicit review.
+The AAIAAS™ architecture is organized into six distinct layers, each with a bounded responsibility. This layering is not optional. Violating layer boundaries requires an architectural decision record and explicit review.
 
 | Layer | Responsibility |
 |-------|---------------|
@@ -321,7 +321,7 @@ This does not require human approval of every step. Risk tiers and permanence ru
 
 ---
 
-## 6. OGACS: Execution Invariants and Operational Governance
+## 6. OGACS™: Execution Invariants and Operational Governance
 
 ### 6.1 What Is OGACS?.
 
@@ -513,3 +513,7 @@ The platform supports the following deployment topologies:
 https://www.peregrines.ai/docs/falconry-taxonomy
 
 *For high-level reference, the Falconry Taxonomy defines: **Falconer** (orchestrator / control plane with HITL authority), **Peregrine** (worker agent on an assigned execution plane), and **Talon** (skill or modular capability the worker calls). www.peregrines.ai is the product surface; this whitepaper remains the architectural reference.*
+
+PEREGRINES™, AAIAAS™, and OGACS™ are trademarks of Peregrines AI, Inc.
+U.S. trademark applications pending. Serial nos. 50032311, 50032341, 50032358.
+All rights reserved.
