@@ -1,8 +1,8 @@
 # Harness-First Agentic AI: Control Plane, Execution, and Governed Autonomy
 
 **AAIAAS™ (Agentic Artificial Intelligence as a Service) Whitepaper**  
-**Version 1.3**
-**July 2026**
+**Version 1.4.1**
+**October 2026**
 
 ---
 
@@ -53,6 +53,7 @@
    - 9.2 Device Execution: Tenant-Local Workers
    - 9.3 Air-Gap Deployment
    - 9.4 Hybrid Configurations
+   - 9.5 Secret-Bearing Operations
 10. [Deployment Topologies and Production Posture](#10-deployment-topologies-and-production-posture)
    - 10.1 Canonical Deployment Reference
 
@@ -68,8 +69,6 @@ The prevailing narrative in enterprise AI focuses on models: which foundation mo
 The alternative is to flip the architecture. Place the model abstraction layer — the **Harness** — at the center of the design. Models become interchangeable commodities. Planning, policy, verification, and governance remain centralized and stable. Execution remains distributed, provider-agnostic, and resilient.
 
 This whitepaper defines the **AAIAAS™ reference architecture**: a harness-first control plane for governed autonomy. Models are treated as interchangeable commodities. Planning, policy, verification, and proof remain stable. Execution is provider-agnostic across cloud, device, and air-gap planes.
-
-The document is written for technical leaders, security architects, and operators evaluating autonomous systems for production. It specifies architectural layers, execution invariants, HITL governance, and operational constraints. Product branding, actor taxonomies, and implementation runbooks are maintained on the product surfaces and in separate operating guides.
 
 The architecture delivers five capabilities that are rare in production:
 
@@ -137,20 +136,20 @@ The harness — planning, policy, admission control, verification before complet
 
 Capability is **placed by plane**, not treated as a temporary compromise.
 
-- **Workers and talons** (execution volume): sweet-spot local mid-size inference on the body of the task distribution.
+- **Peregrines and their talons** (execution volume): sweet-spot local mid-size inference on the body of the task distribution.
 - **Cloud control plane** (governance): planning, admission, policy, and the rare steps that need more reasoning headroom.
 
-For the body of production agent work, quality gains from further model scale diminish while cost and latency keep rising. The rational operating point sits on that plateau. Under SQDEC, that is efficient default placement: Safety and Quality set the bar; Economics and Delivery improve when volume stays on the plateau.
+For the body of production agent work, quality gains from further model scale diminish while cost and latency keep rising. The rational operating point sits on that plateau. Under SQDEC (Safety > Quality > Delivery > Economics > Control), that is efficient default placement: Safety and Quality set the bar; Economics and Delivery improve when volume stays on the plateau.
 
 > Past the body plateau, further scale raises cost and latency faster than it raises success on typical workloads.
 
-Under SQDEC, routing volume work to frontier-scale models is **over-capacity**: Safety and Quality are already met on the plateau; Economics and Delivery degrade when every seat pays for headroom it does not use.
+Under SQDEC, routing volume work to frontier-scale models over-provisions capacity: Safety and Quality are already met on the plateau; Economics and Delivery degrade when every seat pays for headroom it does not use.
 
 ### 2.6 Limits and Chunking under the Harness
 
 Mid-size models still underperform on long-horizon, weakly decomposable, or rare-knowledge work. The architecture does not claim otherwise. The harness addresses those limits by **chunking** large outcomes into short-horizon, verifiable units where local mid-size capacity is sufficient — one outcome per bite, with verification between bites.
 
-Chunking is a control-plane move: map whole-meal jobs onto body-class units. Good chunking is sequential, verified work. Residual bites that remain hard after honest decomposition escalate **altitude to the control plane** (optional stronger control-plane inference), not every worker seat.
+Chunking is a control-plane move: map whole-meal jobs onto body-class units. Good chunking is sequential, verified work. Residual bites that remain hard after honest decomposition escalate **to the control plane** (optional stronger control-plane inference), not every worker seat.
 
 ### 2.7 Control-Plane Headroom
 
@@ -166,14 +165,14 @@ When workloads use device-local, on-premises, or air-gap inference endpoints, se
 | Hybrid | Depends on task path | Cloud CP / cloud workers may still see admitted payloads |
 | Air-gap | No outbound from execution plane | Strictest residency; model runs on local hardware |
 
-Device-local inference is explicitly a **Harness Layer co-processor** (§10.2) — it assists with local retrieval, summarization, fact extraction, and privacy-preserving preprocessing without replacing strategic planning or policy authority in the control plane. Even when inference is local, the control-plane tether remains the orchestrator.
+Device-local inference is explicitly a **Harness Layer co-processor** (§9.2) — it assists with local retrieval, summarization, fact extraction, and privacy-preserving preprocessing without replacing strategic planning or policy authority in the control plane. Even when inference is local, the control-plane tether remains the orchestrator.
 
 ---
 ## 3. Reference Architecture
 
 ### 3.1 Six Layers, Three Planes.
 
-The AAIAAS™ architecture is organized into six distinct layers, each with a bounded responsibility. This layering is not optional. Violating layer boundaries requires an architectural decision record and explicit review.
+The AAIAAS™ architecture is organized into six distinct layers, each with a bounded responsibility. This layering is not optional. Violating layer boundaries requires an architectural decision record (Change Record) and explicit review.
 
 | Layer | Responsibility |
 |-------|---------------|
@@ -206,9 +205,11 @@ The Harness Layer is the differentiator. It provides:
 
 **Invariant 4 — Verification Before Completion.** Task completion requires satisfaction of verification policies. A task does not complete until its output is verified against the acceptance criteria defined in the task spec.
 
+> **Evidence note:** External decompilation validates harness-first approaches. A developer used AI agents and over 500 billion tokens to rebuild Modern Warfare 2's source code — matching 83% of the original game's functions byte-for-byte after a 17-year gap (Shane Downing, *Tom's Hardware*, 12 Oct 2026). The agents operated through verification-before-completion loops, cross-referencing outputs against the original codebase to prevent drift. Source: [Tom's Hardware](https://www.tomshardware.com/tech-industry/artificial-intelligence/dev-used-ai-agents-and-more-than-500-billion-tokens-to-rebuild-call-of-duty-modern-warfare-2s-source-code-83-percent-of-the-2009-shooters-functions-now-match-the-original-byte-for-byte).
+
 **Invariant 5 — Bounded Execution.** Task graph expansion obeys explicit depth and fan-out limits. The system will not generate infinitely recursive task chains. Every execution path has a ceiling.
 
-Six additional Harness invariants enforce safety hierarchy (the safety tier of the SQDEC ordering is inviolable, regardless of economic or delivery pressure), tenant-segmented memory, artifact-separation discipline (durable artifacts remain externalized and addressable, not collapsed into prompt context), and execution capability verification (the Harness verifies that the target execution plane can satisfy required skill contracts before admitting a task graph into the pipeline).
+Four additional Harness invariants enforce safety hierarchy (the safety tier of the SQDEC ordering is inviolable, regardless of economic or delivery pressure), tenant-segmented memory, artifact-separation discipline (durable artifacts remain externalized and addressable, not collapsed into prompt context), and execution capability verification (the Harness verifies that the target execution plane can satisfy required skill contracts before admitting a task graph into the pipeline).
 
 ### 3.3 Execution Plane Invariants.
 
@@ -258,10 +259,10 @@ Every worker emits telemetry at every lifecycle stage — planning, dispatch, ex
 
 ### 4.4 Managed Concurrency and Admission Control.
 
-Workers may execute in parallel as a capacity optimization — but parallelism is never an unmanaged default. The control plane exercises authoritative task admission and sequencing. Unbounded multi-agent execution without admission control is a governance failure mode: conflicting writes, undoable state, and unauditable outcomes — not operational maturity.
+Workers may execute in parallel as a capacity optimization — but parallelism is never an unmanaged default. The control plane exercises authoritative task admission and sequencing. Unbounded multi-agent execution without admission control is a governance failure mode: conflicting writes, unrecoverable state, and unauditable outcomes — not operational maturity.
 
 **Doctrine (reference):**
-- Tasks are admitted by the orchestrator; workers do not self-dispatch or peer-schedule as peer orchestrators.
+- Tasks are admitted by the orchestrator; workers do not self-dispatch or peer-schedule as orchestrators.
 - Parallel workers are optional capacity under control-plane direction, not independent planners.
 - Serial-first is the safe default; parallelism is introduced only when shared-state contention is controlled.
 
@@ -331,7 +332,7 @@ Live product implementations apply OGACS policy within a dual-plane architecture
 
 OGACS is an invariant enforcement layer with a fixed, auditable set of constraints — not a dynamically loaded rule engine. Its role is to prevent drift: divergence between intended and actual execution behavior.
 
-For correspondence regarding OGACS or the AAIAAS reference architecture, contact guy@guysavage.com.
+For correspondence regarding OGACS or the AAIAAS reference architecture, contact falconer@peregrines.ai.
 
 ### 6.2 Enforcement Model.
 
@@ -369,9 +370,7 @@ Drift handling is a continuous architectural property, not a periodic audit exer
 
 AAIAAS follows a dual-plane identity model: a cloud control plane (policy, audit, orchestration) and a customer- or device-hosted execution plane (agency). This separation ensures that identity secrets never transit the control plane.
 
-> Customer Falconer runs on a governed endpoint (desktop/VDI). For interactive SSO applications it operates under the user's (or approved robot's) already-established ICAM session, similar to an attended RPA agent. Long-lived or API access uses vault-brokered delegated credentials, not password relay through the cloud control plane. The control plane provides policy and audit; it does not hold agency SSO secrets.
-
-The control plane provides **policy and audit**; it does **not** hold agency SSO secrets.
+> A Peregrine runs on the customer's governed endpoint (desktop/VDI) and drives that session, under the Falconer's policy and tether. For interactive SSO applications it operates under the user's (or approved robot's) already-established ICAM session, similar to an attended RPA agent. Long-lived or API access uses vault-brokered delegated credentials, not password relay through the cloud control plane. The control plane provides policy and audit; it does not hold agency SSO secrets.
 
 ### 7.2 Identity & SSO Principles.
 
@@ -406,7 +405,7 @@ The following are **not** claims of this design:
 - Falconer does **not** bypass ICAM, CAPTCHA, or agency anti-automation by design
 - Falconer does **not** inherit customer ICAM via a SaaS browser in the Peregrines cloud without an endpoint install
 - Falconer does **not** accept password paste into chat or use the CP as a customer identity provider
-- This whitepaper is not an ATO, FedRAMP, or agency ICAM certification document
+- This whitepaper is not an Authority to Operate (ATO), FedRAMP, or agency ICAM certification document
 - Open-web and hostile-UX coverage is capability-scoped; production use is limited to surfaces that satisfy the verification and fail-closed invariants defined herein
 
 ---
@@ -432,7 +431,7 @@ Exact scoring formulas, health-score UIs, and calendar cadences are defined on t
 
 ### 8.3 Why This Matters.
 
-The cognitive compounding pattern produces a system whose capabilities grow over time without proportional engineering investment. The first run of a skill delivers baseline value. The twentieth run, informed by accumulated execution data, delivers measurably better results. The hundredth run, benefiting from cross-skill patterns, delivers results that no single engineer could have engineered manually.
+The cognitive compounding pattern produces a system whose capabilities grow over time without proportional engineering investment. The first run of a skill delivers baseline value. The twentieth run, informed by accumulated execution data, delivers measurably better results. The hundredth run, benefiting from cross-skill patterns, delivers results that no single engineer could have engineered manually — similar to how agents rebuilt Modern Warfare 2's source code (MW2) through accumulated execution, then cross-referenced byte-exact outcomes.
 
 That growth depends on continued human engagement in the loop — not only as a safety brake, but as a co-evolutor. Skill proposals require operator review; quality signals include operator feedback; redesign of underperforming workflows is a human act. Set-and-forget removes the corrective channel that keeps both the skill library and the operator’s judgment calibrated (see §5.5).
 
@@ -474,11 +473,18 @@ For tenants with strict data residency or sovereignty requirements, the architec
 
 - No outbound network connectivity from the execution plane
 - Workers execute entirely within the tenant's network boundary
-- The control plane may be deployed within the same network or accessed through a one-way data diode
+- The control plane may be deployed within the same network; the tether runs inside the enclave — only telemetry and audit cross outward
 - Model inference runs on local hardware
 - All artifacts, proofs, and audit logs are generated and stored on-premises
 
 This is the most restrictive deployment mode and requires careful operational planning, but it is natively supported by the architecture, not bolted on as an afterthought.
+
+
+### 9.5 Secret-Bearing Operations
+
+Some work puts key material or privileged credentials into the agent's working context: signing and deploying smart contracts with Foundry using wallet keys, operating HSM-backed systems, or handling production secrets. Running that work on external inference risks exposing prompts, tool outputs, and reasoning traces containing sensitive material to a third party outside your control. For these **secret-bearing** operations, Peregrines run with customer-hosted inference on customer hardware, so keys, context, and outputs never leave the customer boundary. This is not an option to toggle; it is the only way to keep the chain of custody secure.
+
+Policy: tasks touching signing keys, seed phrases, or privileged credentials route to local inference only; signing/deploy is Type 2 (irreversible) and always requires pre-approval.
 
 ### 9.4 Hybrid Configurations.
 
@@ -508,11 +514,15 @@ The platform supports the following deployment topologies:
 
 ---
 
-*This whitepaper is published by AAIAAS.ai (Agentic Artificial Intelligence as a Service). It defines architectural invariants and the governance model. Product-specific actor taxonomies and control-plane UI details are published on the product surface:*
+*This whitepaper is published by AAIAAS.ai (Agentic Artificial Intelligence as a Service). It defines architectural invariants and the governance model. Product-specific actor taxonomies and control-plane UI details are published on the product surface.*
 
-https://www.peregrines.ai/docs/falconry-taxonomy
+**[Download PDF (Version 1.4.1)](/docs/harness-first-agentic-ai.pdf)**
 
-*For high-level reference, the Falconry Taxonomy defines: **Falconer** (orchestrator / control plane with HITL authority), **Peregrine** (worker agent on an assigned execution plane), and **Talon** (skill or modular capability the worker calls). www.peregrines.ai is the product surface; this whitepaper remains the architectural reference.*
+*For high-level reference, the [Falconry Taxonomy](https://www.peregrines.ai/docs/falconry-taxonomy) defines: **Falconer** (orchestrator / control plane with HITL authority), **Peregrine** (worker agent on an assigned execution plane), and **Talon** (skill or modular capability the worker calls). www.peregrines.ai is the product surface; this whitepaper remains the architectural reference.*
+
+---
+
+*Agentic AI with delegated authority, operating wherever needed. Deployed across Cloud, Device, and Air-Gap planes.**Questions? Contact [falconer@peregrines.ai](mailto:falconer@peregrines.ai).*
 
 PEREGRINES™, AAIAAS™, and OGACS™ are trademarks of Peregrines AI, Inc.
 U.S. trademark applications pending. Serial nos. 50032311, 50032341, 50032358.

@@ -164,9 +164,8 @@ figure figcaption {
 <h1 style="text-align:center; border-bottom: 3px double #0d1b2a;">Harness-First Agentic AI</h1>
 <h2 style="text-align:center; font-size:13pt; color:#555; border:none; margin-top:0;">Control Plane, Execution, and Governed Autonomy</h2>
 <p style="text-align:center; color:#777; font-size:10pt; margin-top:0; margin-bottom:0.15em;">AAIAAS™ (Agentic Artificial Intelligence as a Service) Whitepaper</p>
-<p style="text-align:center; color:#777; font-size:10pt; margin-top:0; margin-bottom:0.15em;">Version 1.4</p>
+<p style="text-align:center; color:#777; font-size:10pt; margin-top:0; margin-bottom:0.15em;">Version 1.4.1</p>
 <p style="text-align:center; color:#777; font-size:10pt; margin-top:0; margin-bottom:0.15em;">October 2026</p>
-<p style="text-align:center; color:#777; font-size:10pt; margin-top:0; margin-bottom:0.15em;">Changelog: 1.4 — date refresh, graphic path fix</p>
 <hr>
 <h2>Table of Contents</h2>
 <ol>
@@ -246,6 +245,7 @@ figure figcaption {
 <li><a href="#91-cloud-execution-multi-tenant-worker-infrastructure">9.1 Cloud Execution: Multi-Tenant Worker Infrastructure.</a></li>
 <li><a href="#92-device-execution-tenant-local-workers">9.2 Device Execution: Tenant-Local Workers.</a></li>
 <li><a href="#93-air-gap-deployment">9.3 Air-Gap Deployment.</a></li>
+<li><a href="#95-secret-bearing-operations">9.5 Secret-Bearing Operations</a></li>
 <li><a href="#94-hybrid-configurations">9.4 Hybrid Configurations.</a></li>
 </ul>
 </li>
@@ -263,7 +263,6 @@ figure figcaption {
 <p>The prevailing narrative in enterprise AI focuses on models: which foundation model is best, which provider offers the best price-performance ratio, which prompt engineering technique unlocks the highest accuracy. This model-centric view produces systems that are fragile, opaque, and difficult to govern. When the model changes — and it will change — the entire system must be rebuilt.</p>
 <p>The alternative is to flip the architecture. Place the model abstraction layer — the <strong>Harness</strong> — at the center of the design. Models become interchangeable commodities. Planning, policy, verification, and governance remain centralized and stable. Execution remains distributed, provider-agnostic, and resilient.</p>
 <p>This whitepaper defines the <strong>AAIAAS™ reference architecture</strong>: a harness-first control plane for governed autonomy. Models are treated as interchangeable commodities. Planning, policy, verification, and proof remain stable. Execution is provider-agnostic across cloud, device, and air-gap planes.</p>
-<p>The document is written for technical leaders, security architects, and operators evaluating autonomous systems for production. It specifies architectural layers, execution invariants, HITL governance, and operational constraints. Product branding, actor taxonomies, and implementation runbooks are maintained on the product surfaces and in separate operating guides.</p>
 <p>The architecture delivers five capabilities that are rare in production:</p>
 <ol>
 <li><strong>Provider-agnostic execution</strong> — swap models without rewriting task logic</li>
@@ -309,17 +308,17 @@ figure figcaption {
 <h3 id="25-capability-placement-by-plane">2.5 Capability Placement by Plane</h3>
 <p>Capability is <strong>placed by plane</strong>, not treated as a temporary compromise.</p>
 <ul>
-<li><strong>Workers and talons</strong> (execution volume): sweet-spot local mid-size inference on the body of the task distribution.</li>
+<li><strong>Peregrines and their talons</strong> (execution volume): sweet-spot local mid-size inference on the body of the task distribution.</li>
 <li><strong>Cloud control plane</strong> (governance): planning, admission, policy, and the rare steps that need more reasoning headroom.</li>
 </ul>
-<p>For the body of production agent work, quality gains from further model scale diminish while cost and latency keep rising. The rational operating point sits on that plateau. Under SQDEC, that is efficient default placement: Safety and Quality set the bar; Economics and Delivery improve when volume stays on the plateau.</p>
+<p>For the body of production agent work, quality gains from further model scale diminish while cost and latency keep rising. The rational operating point sits on that plateau. Under SQDEC (Safety &gt; Quality &gt; Delivery &gt; Economics &gt; Control), that is efficient default placement: Safety and Quality set the bar; Economics and Delivery improve when volume stays on the plateau.</p>
 <blockquote>
 <p>Past the body plateau, further scale raises cost and latency faster than it raises success on typical workloads.</p>
 </blockquote>
-<p>Under SQDEC, routing volume work to frontier-scale models is <strong>over-capacity</strong>: Safety and Quality are already met on the plateau; Economics and Delivery degrade when every seat pays for headroom it does not use.</p>
+<p>Under SQDEC, routing volume work to frontier-scale models over-provisions capacity: Safety and Quality are already met on the plateau; Economics and Delivery degrade when every seat pays for headroom it does not use.</p>
 <h3 id="26-limits-and-chunking-under-the-harness">2.6 Limits and Chunking under the Harness</h3>
 <p>Mid-size models still underperform on long-horizon, weakly decomposable, or rare-knowledge work. The architecture does not claim otherwise. The harness addresses those limits by <strong>chunking</strong> large outcomes into short-horizon, verifiable units where local mid-size capacity is sufficient — one outcome per bite, with verification between bites.</p>
-<p>Chunking is a control-plane move: map whole-meal jobs onto body-class units. Good chunking is sequential, verified work. Residual bites that remain hard after honest decomposition escalate <strong>altitude to the control plane</strong> (optional stronger control-plane inference), not every worker seat.</p>
+<p>Chunking is a control-plane move: map whole-meal jobs onto body-class units. Good chunking is sequential, verified work. Residual bites that remain hard after honest decomposition escalate <strong>to the control plane</strong> (optional stronger control-plane inference), not every worker seat.</p>
 <h3 id="27-control-plane-headroom">2.7 Control-Plane Headroom</h3>
 <p>When a step needs more headroom after decomposition and verification, stronger models assist <strong>orchestration and hard judgment at the control plane</strong>. Workers stay on efficient local inference. There is no silent always-on high-scale path on every worker turn; headroom is explicit, gated, and rare relative to volume.</p>
 <h3 id="28-local-inference-security-boundary">2.8 Local Inference Security Boundary</h3>
@@ -346,11 +345,11 @@ figure figcaption {
 <td>Strictest residency; model runs on local hardware</td>
 </tr>
 </tbody></table>
-<p>Device-local inference is explicitly a <strong>Harness Layer co-processor</strong> (§10.2) — it assists with local retrieval, summarization, fact extraction, and privacy-preserving preprocessing without replacing strategic planning or policy authority in the control plane. Even when inference is local, the control-plane tether remains the orchestrator.</p>
+<p>Device-local inference is explicitly a <strong>Harness Layer co-processor</strong> (§9.2) — it assists with local retrieval, summarization, fact extraction, and privacy-preserving preprocessing without replacing strategic planning or policy authority in the control plane. Even when inference is local, the control-plane tether remains the orchestrator.</p>
 <hr />
 <h2 id="3-reference-architecture">3. Reference Architecture</h2>
 <h3 id="31-six-layers-three-planes">3.1 Six Layers, Three Planes.</h3>
-<p>The AAIAAS™ architecture is organized into six distinct layers, each with a bounded responsibility. This layering is not optional. Violating layer boundaries requires an architectural decision record and explicit review.</p>
+<p>The AAIAAS™ architecture is organized into six distinct layers, each with a bounded responsibility. This layering is not optional. Violating layer boundaries requires an architectural decision record (Change Record) and explicit review.</p>
 <table>
 <thead><tr>
 <th>Layer</th>
@@ -407,8 +406,11 @@ figure figcaption {
 <p><strong>Invariant 2 — Provider-Agnostic Capabilities.</strong> Skill semantics are defined independently of any model. A &quot;browse the web&quot; skill produces the same output contract whether powered by a GPT model, a Claude model, or a local open-source model.</p>
 <p><strong>Invariant 3 — Graceful Degradation.</strong> Optional enrichment steps (retrieval-augmented generation, planner critic passes, billing telemetry) degrade gracefully unless explicitly marked as hard-required by policy. Failures produce structured diagnostics, not cascading failures.</p>
 <p><strong>Invariant 4 — Verification Before Completion.</strong> Task completion requires satisfaction of verification policies. A task does not complete until its output is verified against the acceptance criteria defined in the task spec.</p>
+<blockquote>
+<p><strong>Evidence note:</strong> External decompilation validates harness-first approaches. A developer used AI agents and over 500 billion tokens to rebuild Modern Warfare 2&#x27;s source code — matching 83% of the original game&#x27;s functions byte-for-byte after a 17-year gap (Shane Downing, <em>Tom&#x27;s Hardware</em>, 12 Oct 2026). The agents operated through verification-before-completion loops, cross-referencing outputs against the original codebase to prevent drift. Source: <a href="https://www.tomshardware.com/tech-industry/artificial-intelligence/dev-used-ai-agents-and-more-than-500-billion-tokens-to-rebuild-call-of-duty-modern-warfare-2s-source-code-83-percent-of-the-2009-shooters-functions-now-match-the-original-byte-for-byte">Tom&#x27;s Hardware</a>.</p>
+</blockquote>
 <p><strong>Invariant 5 — Bounded Execution.</strong> Task graph expansion obeys explicit depth and fan-out limits. The system will not generate infinitely recursive task chains. Every execution path has a ceiling.</p>
-<p>Six additional Harness invariants enforce safety hierarchy (the safety tier of the SQDEC ordering is inviolable, regardless of economic or delivery pressure), tenant-segmented memory, artifact-separation discipline (durable artifacts remain externalized and addressable, not collapsed into prompt context), and execution capability verification (the Harness verifies that the target execution plane can satisfy required skill contracts before admitting a task graph into the pipeline).</p>
+<p>Four additional Harness invariants enforce safety hierarchy (the safety tier of the SQDEC ordering is inviolable, regardless of economic or delivery pressure), tenant-segmented memory, artifact-separation discipline (durable artifacts remain externalized and addressable, not collapsed into prompt context), and execution capability verification (the Harness verifies that the target execution plane can satisfy required skill contracts before admitting a task graph into the pipeline).</p>
 <h3 id="33-execution-plane-invariants">3.3 Execution Plane Invariants.</h3>
 <p>The execution layer is governed by its own invariant set:</p>
 <ul>
@@ -437,10 +439,10 @@ figure figcaption {
 <h3 id="43-telemetry-and-observability">4.3 Telemetry and Observability.</h3>
 <p>Every worker emits telemetry at every lifecycle stage — planning, dispatch, execution, completion, and verification. Silent operation is not an option. Every task produces structured logs suitable for aggregation and analysis, with traceability across tenant, worker, execution plane, and skill.</p>
 <h3 id="44-managed-concurrency-and-admission-control">4.4 Managed Concurrency and Admission Control.</h3>
-<p>Workers may execute in parallel as a capacity optimization — but parallelism is never an unmanaged default. The control plane exercises authoritative task admission and sequencing. Unbounded multi-agent execution without admission control is a governance failure mode: conflicting writes, undoable state, and unauditable outcomes — not operational maturity.</p>
+<p>Workers may execute in parallel as a capacity optimization — but parallelism is never an unmanaged default. The control plane exercises authoritative task admission and sequencing. Unbounded multi-agent execution without admission control is a governance failure mode: conflicting writes, unrecoverable state, and unauditable outcomes — not operational maturity.</p>
 <p><strong>Doctrine (reference):</strong></p>
 <ul>
-<li>Tasks are admitted by the orchestrator; workers do not self-dispatch or peer-schedule as peer orchestrators.</li>
+<li>Tasks are admitted by the orchestrator; workers do not self-dispatch or peer-schedule as orchestrators.</li>
 <li>Parallel workers are optional capacity under control-plane direction, not independent planners.</li>
 <li>Serial-first is the safe default; parallelism is introduced only when shared-state contention is controlled.</li>
 </ul>
@@ -509,7 +511,7 @@ figure figcaption {
 <p>OGACS (Operational Governance for Autonomous Cognition Systems) is the invariant governance layer for autonomous cognition. It defines the policy stack — SQDEC priority order, CR/Review Gate, verified completion evidence, HITL gating, vault governance, and doctrine — that autonomous systems follow.</p>
 <p>Live product implementations apply OGACS policy within a dual-plane architecture; this paper specifies the policy and invariants, not a single product configuration.</p>
 <p>OGACS is an invariant enforcement layer with a fixed, auditable set of constraints — not a dynamically loaded rule engine. Its role is to prevent drift: divergence between intended and actual execution behavior.</p>
-<p>For correspondence regarding OGACS or the AAIAAS reference architecture, contact guy@guysavage.com.</p>
+<p>For correspondence regarding OGACS or the AAIAAS reference architecture, contact falconer@peregrines.ai.</p>
 <h3 id="62-enforcement-model">6.2 Enforcement Model.</h3>
 <p>OGACS evaluates operations through two primary dimensions:</p>
 <p><strong>Operational Mode.</strong> The system operates in one of two modes:</p>
@@ -536,9 +538,8 @@ figure figcaption {
 <h3 id="71-dual-plane-architecture">7.1 Dual-Plane Architecture.</h3>
 <p>AAIAAS follows a dual-plane identity model: a cloud control plane (policy, audit, orchestration) and a customer- or device-hosted execution plane (agency). This separation ensures that identity secrets never transit the control plane.</p>
 <blockquote>
-<p>Customer Falconer runs on a governed endpoint (desktop/VDI). For interactive SSO applications it operates under the user&#x27;s (or approved robot&#x27;s) already-established ICAM session, similar to an attended RPA agent. Long-lived or API access uses vault-brokered delegated credentials, not password relay through the cloud control plane. The control plane provides policy and audit; it does not hold agency SSO secrets.</p>
+<p>A Peregrine runs on the customer&#x27;s governed endpoint (desktop/VDI) and drives that session, under the Falconer&#x27;s policy and tether. For interactive SSO applications it operates under the user&#x27;s (or approved robot&#x27;s) already-established ICAM session, similar to an attended RPA agent. Long-lived or API access uses vault-brokered delegated credentials, not password relay through the cloud control plane. The control plane provides policy and audit; it does not hold agency SSO secrets.</p>
 </blockquote>
-<p>The control plane provides <strong>policy and audit</strong>; it does <strong>not</strong> hold agency SSO secrets.</p>
 <h3 id="72-identity-sso-principles">7.2 Identity &amp; SSO Principles.</h3>
 <p>The platform implements three SSO access models, aligned with Zero Trust and ICAM best practices:</p>
 <table>
@@ -599,7 +600,7 @@ figure figcaption {
 <li>Falconer does <strong>not</strong> bypass ICAM, CAPTCHA, or agency anti-automation by design</li>
 <li>Falconer does <strong>not</strong> inherit customer ICAM via a SaaS browser in the Peregrines cloud without an endpoint install</li>
 <li>Falconer does <strong>not</strong> accept password paste into chat or use the CP as a customer identity provider</li>
-<li>This whitepaper is not an ATO, FedRAMP, or agency ICAM certification document</li>
+<li>This whitepaper is not an Authority to Operate (ATO), FedRAMP, or agency ICAM certification document</li>
 <li>Open-web and hostile-UX coverage is capability-scoped; production use is limited to surfaces that satisfy the verification and fail-closed invariants defined herein</li>
 </ul>
 <hr />
@@ -617,7 +618,7 @@ figure figcaption {
 </ul>
 <p>Exact scoring formulas, health-score UIs, and calendar cadences are defined on the product surface and in operating guides.</p>
 <h3 id="83-why-this-matters">8.3 Why This Matters.</h3>
-<p>The cognitive compounding pattern produces a system whose capabilities grow over time without proportional engineering investment. The first run of a skill delivers baseline value. The twentieth run, informed by accumulated execution data, delivers measurably better results. The hundredth run, benefiting from cross-skill patterns, delivers results that no single engineer could have engineered manually.</p>
+<p>The cognitive compounding pattern produces a system whose capabilities grow over time without proportional engineering investment. The first run of a skill delivers baseline value. The twentieth run, informed by accumulated execution data, delivers measurably better results. The hundredth run, benefiting from cross-skill patterns, delivers results that no single engineer could have engineered manually — similar to how agents rebuilt Modern Warfare 2&#x27;s source code (MW2) through accumulated execution, then cross-referenced byte-exact outcomes.</p>
 <p>That growth depends on continued human engagement in the loop — not only as a safety brake, but as a co-evolutor. Skill proposals require operator review; quality signals include operator feedback; redesign of underperforming workflows is a human act. Set-and-forget removes the corrective channel that keeps both the skill library and the operator’s judgment calibrated (see §5.5).</p>
 <p>This is the core product thesis: agents that improve themselves are not a feature — they are the only architecture that scales autonomously without linearly scaling engineering overhead — and that improvement remains supervised so silent degradation does not masquerade as autonomy.</p>
 <hr />
@@ -648,11 +649,14 @@ figure figcaption {
 <ul>
 <li>No outbound network connectivity from the execution plane</li>
 <li>Workers execute entirely within the tenant&#x27;s network boundary</li>
-<li>The control plane may be deployed within the same network or accessed through a one-way data diode</li>
+<li>The control plane may be deployed within the same network; the tether runs inside the enclave — only telemetry and audit cross outward</li>
 <li>Model inference runs on local hardware</li>
 <li>All artifacts, proofs, and audit logs are generated and stored on-premises</li>
 </ul>
 <p>This is the most restrictive deployment mode and requires careful operational planning, but it is natively supported by the architecture, not bolted on as an afterthought.</p>
+<h3 id="95-secret-bearing-operations">9.5 Secret-Bearing Operations</h3>
+<p>Some work puts key material or privileged credentials into the agent&#x27;s working context: signing and deploying smart contracts with Foundry using wallet keys, operating HSM-backed systems, or handling production secrets. Running that work on external inference risks exposing prompts, tool outputs, and reasoning traces containing sensitive material to a third party outside your control. For these <strong>secret-bearing</strong> operations, Peregrines run with customer-hosted inference on customer hardware, so keys, context, and outputs never leave the customer boundary. This is not an option to toggle; it is the only way to keep the chain of custody secure.</p>
+<p>Policy: tasks touching signing keys, seed phrases, or privileged credentials route to local inference only; signing/deploy is Type 2 (irreversible) and always requires pre-approval.</p>
 <h3 id="94-hybrid-configurations">9.4 Hybrid Configurations.</h3>
 <p>Most production deployments will use hybrid configurations:</p>
 <ul>
@@ -671,9 +675,11 @@ figure figcaption {
 <p><strong>Sovereign/On-Premises.</strong> The control plane is deployed within the tenant&#x27;s infrastructure. Model providers may be external (via secure API) or fully local. Workers run on tenant hardware. This configuration satisfies strict data residency and sovereignty requirements.</p>
 <p><strong>Hybrid.</strong> The control plane runs in the cloud. Device workers run on-premises or at the edge. The two communicate over encrypted channels with the control-plane tether. This is the default posture for enterprise deployments with distributed operations.</p>
 <hr />
-<p><em>This whitepaper is published by AAIAAS.ai (Agentic Artificial Intelligence as a Service). It defines architectural invariants and the governance model. Product-specific actor taxonomies and control-plane UI details are published on the product surface:</em></p>
-<p>https://www.peregrines.ai/docs/falconry-taxonomy</p>
-<p><em>For high-level reference, the Falconry Taxonomy defines: <strong>Falconer</strong> (orchestrator / control plane with HITL authority), <strong>Peregrine</strong> (worker agent on an assigned execution plane), and <strong>Talon</strong> (skill or modular capability the worker calls). www.peregrines.ai is the product surface; this whitepaper remains the architectural reference.</em></p>
+<p><em>This whitepaper is published by AAIAAS.ai (Agentic Artificial Intelligence as a Service). It defines architectural invariants and the governance model. Product-specific actor taxonomies and control-plane UI details are published on the product surface.</em></p>
+<p><strong><a href="/docs/harness-first-agentic-ai.pdf">Download PDF (Version 1.4.1)</a></strong></p>
+<p><em>For high-level reference, the <a href="https://www.peregrines.ai/docs/falconry-taxonomy">Falconry Taxonomy</a> defines: <strong>Falconer</strong> (orchestrator / control plane with HITL authority), <strong>Peregrine</strong> (worker agent on an assigned execution plane), and <strong>Talon</strong> (skill or modular capability the worker calls). www.peregrines.ai is the product surface; this whitepaper remains the architectural reference.</em></p>
+<hr />
+<p>*Agentic AI with delegated authority, operating wherever needed. Deployed across Cloud, Device, and Air-Gap planes.**Questions? Contact <a href="mailto:falconer@peregrines.ai">falconer@peregrines.ai</a>.*</p>
 <p>PEREGRINES™, AAIAAS™, and OGACS™ are trademarks of Peregrines AI, Inc. U.S. trademark applications pending. Serial nos. 50032311, 50032341, 50032358. All rights reserved.</p>
 </div>
 
