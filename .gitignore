@@ -5,3 +5,5 @@ node_modules/
 package-lock.json
 .vercel
 !docs/harness-first-agentic-ai.pdf
+
+# chore: trigger Vercel deploy for WP v1.4.1 (2026-10-12)
