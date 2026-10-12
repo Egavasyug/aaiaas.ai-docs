@@ -37,7 +37,7 @@ try {
     margin: { top: '0.7in', bottom: '0.7in', left: '0.85in', right: '0.85in' },
     printBackground: true,
     displayHeaderFooter: true,
-    headerTemplate: `<div style="font-size:7.5pt; font-family:Georgia; text-align:right; width:100%; padding-right:16px; color:#444;">Harness-First Agentic AI — AAIAAS.ai Whitepaper v1.3</div>`,
+    headerTemplate: `<div style="font-size:7.5pt; font-family:Georgia; text-align:right; width:100%; padding-right:16px; color:#444;">Harness-First Agentic AI — AAIAAS.ai Whitepaper v1.4</div>`,
     footerTemplate: `<div style="font-size:7pt; font-family:Georgia; text-align:center; width:100%; color:#666;"><span class="pageNumber"></span> of <span class="totalPages"></span> &nbsp; &bull; &nbsp; PEREGRINES™, AAIAAS™, and OGACS™ are trademarks of Peregrines AI, Inc. U.S. trademark applications pending. Serial nos. 50032311, 50032341, 50032358. All rights reserved.</div>`
   });
   console.log(`PDF written to ${pdfPath}`);
