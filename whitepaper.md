@@ -1,7 +1,7 @@
 # Harness-First Agentic AI: Control Plane, Execution, and Governed Autonomy
 
 **AAIAAS™ (Agentic Artificial Intelligence as a Service) Whitepaper**  
-**Version 1.4.1**
+**Version 1.5**
 **October 2026**
 
 ---
@@ -514,9 +514,33 @@ The platform supports the following deployment topologies:
 
 ---
 
+## 11. Conclusion
+
+The harness-first paradigm shifts agentic AI from model-size obsession to context-quality discipline. By treating the context window as the primary artifact — the thing the harness retrieves, scores, and assembles — platforms deliver reliable capability regardless of upstream model progress. Model providers commoditize; the harness compounds.
+
+The brain in AI is only as large as the context it can hold. — Dr. Guy Savage
+
+A well-constructed harness retrieves the right context at the right time, assembles it into a focused working set, and lets a modest model do what it does best: execute with precision. The result is a system that improves not by chasing ever-larger models, but by deepening its domain grounding, sharpening its retrieval, and tightening its governance loops.
+
+This is not a stopgap. It is the production posture for agentic AI that must be trusted, audited, and held accountable. Deploy across Cloud, Device, and Air-Gap planes. Govern with OGACS. Iterate with skill loops. The harness is the brain.
+
+---
+
+### Call to Action
+
+**Operators:** Audit your current agent deployments. Are you investing in model size or harness quality? Start by scoring your context retrieval on three dimensions — relevance, precision, and freshness. The delta between model-centric and harness-first is measurable.
+
+**Architects:** Design your next platform with context as the first-class object. Instrument retrieval, enforce tenant isolation, and wire governance into the execution loop before the first task runs.
+
+**Leaders:** Delegate authority with boundaries. The harness-first model is not just technical — it is organizational. It turns distributed workers into a coherent team by giving each one the right context at the right time, with clear authority and accountable governance.
+
+The question is no longer *which model*. It is *what context*.
+
+---
+
 *This whitepaper is published by AAIAAS.ai (Agentic Artificial Intelligence as a Service). It defines architectural invariants and the governance model. Product-specific actor taxonomies and control-plane UI details are published on the product surface.*
 
-**[Download PDF (Version 1.4.1)](/docs/harness-first-agentic-ai.pdf)**
+**[Download PDF (Version 1.5)](/docs/harness-first-agentic-ai.pdf)**
 
 *For high-level reference, the [Falconry Taxonomy](https://www.peregrines.ai/docs/falconry-taxonomy) defines: **Falconer** (orchestrator / control plane with HITL authority), **Peregrine** (worker agent on an assigned execution plane), and **Talon** (skill or modular capability the worker calls). www.peregrines.ai is the product surface; this whitepaper remains the architectural reference.*
 
