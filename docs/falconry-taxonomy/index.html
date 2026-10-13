@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Falconry Taxonomy — Peregrines</title>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --fg: #e8e6e3;
+      --muted: #9a9590;
+      --accent: #c8a86e;
+      --accent-dim: #a08050;
+      --card-bg: #14141a;
+      --border: #2a2a35;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.6;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+    h1 { font-size: 2.2rem; font-weight: 700; color: var(--accent); margin-bottom: 0.5rem; border-bottom: 2px solid var(--accent-dim); padding-bottom: 0.5rem; }
+    h2 { font-size: 1.5rem; font-weight: 600; margin: 2.5rem 0 1rem; color: var(--fg); }
+    p { margin-bottom: 1rem; color: var(--muted); font-size: 1.05rem; }
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0 2rem; }
+    th, td { text-align: left; padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+    th { background: var(--card-bg); color: var(--accent); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    td { color: var(--fg); font-size: 0.95rem; }
+    td:first-child { font-weight: 600; color: var(--accent); white-space: nowrap; }
+    td:last-child { color: var(--muted); }
+    .note { color: var(--muted); font-size: 0.9rem; }
+    .back { display: inline-block; margin-bottom: 2rem; color: var(--accent); text-decoration: none; }
+    .back:hover { opacity: 0.85; }
+    .footer-links { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+    .footer-links p { font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+
+  <a class="back" href="/">&larr; PEREGRINES™</a>
+
+  <h1>Falconry Taxonomy</h1>
+  <p>Product vocabulary for PEREGRINES™. Each term uses a classical falconry metaphor mapped to plain-English system capabilities.</p>
+
+  <h2>North Star</h2>
+  <p><strong>"Agentic AI with delegated authority, operating wherever needed, through secure edge-device execution."</strong></p>
+
+  <h2>Actors</h2>
+  <table>
+    <thead>
+      <tr><th>Term</th><th>Falconry meaning</th><th>Product mapping</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Falconer</td>
+        <td>Handler who directs the hunt</td>
+        <td>Orchestrator — plans tasks, manages scope, exercises HITL authority via the control plane</td>
+      </tr>
+      <tr>
+        <td>Peregrine</td>
+        <td>Precision hunting bird</td>
+        <td>Worker agent — executes individual tasks on an assigned plane with verified proof</td>
+      </tr>
+      <tr>
+        <td>Talon</td>
+        <td>Capability used in the strike</td>
+        <td>Skill or modular capability — provider-agnostic tooling the worker calls during execution</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Places</h2>
+  <table>
+    <thead>
+      <tr><th>Term</th><th>Falconry meaning</th><th>Product mapping</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Mews</td>
+        <td>Permanent housing</td>
+        <td>Development or staging environment where agents train and test safely</td>
+      </tr>
+      <tr>
+        <td>Perch</td>
+        <td>Observation point</td>
+        <td>Operator dashboard — task state, progress, and approval interface</td>
+      </tr>
+      <tr>
+        <td>Field</td>
+        <td>Hunting ground</td>
+        <td>Target execution environment — production or integration where real work happens</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Controls</h2>
+  <table>
+    <thead>
+      <tr><th>Term</th><th>Falconry meaning</th><th>Product mapping</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Hood</td>
+        <td>Calm before release</td>
+        <td>HITL approval gate — the agent pauses for human authorization before risky actions</td>
+      </tr>
+      <tr>
+        <td>Jesses</td>
+        <td>Leg straps that limit range</td>
+        <td>Budget caps and runaway limits — prevent uncontrolled resource consumption</td>
+      </tr>
+      <tr>
+        <td>Creance</td>
+        <td>Training tether</td>
+        <td>Control-plane tether — heartbeat monitoring, forced recall, and bounded execution</td>
+      </tr>
+      <tr>
+        <td>Bell</td>
+        <td>Always audible to the falconer</td>
+        <td>Telemetry — every lifecycle stage emits auditable signals: plans, executions, proofs</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Security posture (ZT-aligned)</h2>
+  <table>
+    <thead>
+      <tr><th>ZT idea (plain)</th><th>Falconry term</th><th>Product meaning</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Never trust the network alone</td>
+        <td><strong>Field</strong> / Home roost</td>
+        <td>Agency on governed endpoint (desktop/VDI), not a random cloud browser for customer sessions</td>
+      </tr>
+      <tr>
+        <td>Verify identity (customer IdP)</td>
+        <td>Session <strong>in the Field</strong></td>
+        <td>Drive already-established user/robot session; do <strong>not</strong> replace agency ICAM/IdP</td>
+      </tr>
+      <tr>
+        <td>Least privilege</td>
+        <td><strong>Jesses</strong></td>
+        <td>Scoped sites, vault paths, seats</td>
+      </tr>
+      <tr>
+        <td>Human gate</td>
+        <td><strong>Hood</strong></td>
+        <td>HITL before high-stakes actions</td>
+      </tr>
+      <tr>
+        <td>Continuous eval / re-auth</td>
+        <td><strong>Hood re-applied</strong></td>
+        <td>Expiry or step-up → fail closed; re-auth</td>
+      </tr>
+      <tr>
+        <td>Policy vs secrets</td>
+        <td><strong>Creance ≠ keys</strong></td>
+        <td>Creance = policy/audit/tether; <strong>keys and SSO stay in the Field</strong></td>
+      </tr>
+    </tbody>
+  </table>
+  <blockquote>
+    Keys stay in the Field; Creance carries policy and recall, not identity secrets.
+  </blockquote>
+  <p class="note" style="margin-top: 1.5rem;">
+    Reference design aligned with Zero Trust principles — <strong>not</strong> Zero Trust certification, FedRAMP authorization, or ICAM replacement.
+  </p>
+
+  <div class="footer-links">
+    <p>
+      Full reference architecture:
+      <a href="https://www.aaiaas.ai/docs/harness-first-agentic-ai" style="color: var(--accent);">AAIAAS Whitepaper</a>
+    </p>
+    <p>
+      Control plane application:
+      <a href="https://cp.peregrines.ai" style="color: var(--accent);">cp.peregrines.ai</a>
+    </p>
+  </div>
+
+  <div style="margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); font-size: 0.85rem; color: var(--muted);">
+    <p>PEREGRINES™, AAIAAS™, and OGACS™ are trademarks of Peregrines AI, Inc.</p>
+    <p>U.S. trademark applications pending. Serial nos. 50032311, 50032341, 50032358.</p>
+    <p>All rights reserved.</p>
+  </div>
+
+</body>
+</html>

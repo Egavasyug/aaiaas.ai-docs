@@ -1,11 +1,5 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
-  "redirects": [
-    {
-      "source": "/docs/harness-first-agentic-ai",
-      "destination": "/",
-      "permanent": true
-    }
-  ]
+  "redirects": []
 }
