@@ -14,7 +14,7 @@
 
   <!-- Axis labels -->
   <text x="330" y="430" text-anchor="middle" fill="#a0a0c0" font-size="12">Context size → (runbook, sensor history, closeout state)</text>
-  <text x="18" y="240" text-anchor="middle" fill="#a0a0c0" font-size="12" transform="rotate(-90 18 240)">Model capability → (reasoning floor)</text>
+  <text x="18" y="240" text-anchor="middle" fill="#a0a0c0" font-size="12" transform="rotate(-90 18 240)">Model capability → (qualitative band)</text>
 
   <!-- Numeric-ish tick labels (relative, not absolute scale) -->
   <text x="80" y="418" text-anchor="middle" fill="#606080" font-size="9">32k</text>
@@ -28,26 +28,24 @@
   <line x1="280" y1="70" x2="280" y2="400" stroke="#2a2a4a" stroke-width="1" stroke-dasharray="4,4"/>
 
   <!-- Illustrative envelope (conceptual only) -->
-  <polygon points="140,340 280,200 280,340" fill="none" stroke="#3a3a5a" stroke-width="1.5" stroke-dasharray="5,4"/>
-  <text x="210" y="270" text-anchor="middle" fill="#505070" font-size="10" font-style="italic">illustrative</text>
+  <polygon points="80,340 280,200 280,340" fill="none" stroke="#3a3a5a" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <text x="190" y="270" text-anchor="middle" fill="#505070" font-size="10" font-style="italic">illustrative</text>
 
-  <!-- Measured: Spark 64k cold TTFT probe A 31.7s (vLLM 0.21) -->
-  <circle cx="280" cy="220" r="10" fill="#6bcb77"/>
-  <text x="300" y="216" text-anchor="start" fill="#6bcb77" font-size="11">Spark 64k cold TTFT 31.7 s</text>
-  <text x="300" y="230" text-anchor="start" fill="#8080a0" font-size="9">vLLM 0.21 · bench-0.21.json</text>
+  <!-- Measured: DGX Spark 64k cold TTFT — both probes same capability band (y) -->
+  <circle cx="280" cy="235" r="10" fill="#6bcb77"/>
+  <circle cx="300" cy="235" r="10" fill="#4ecdc4"/>
+  <text x="320" y="220" text-anchor="start" fill="#6bcb77" font-size="11">DGX Spark 64k cold TTFT 31.7 s</text>
+  <text x="320" y="234" text-anchor="start" fill="#8080a0" font-size="9">vLLM 0.21 · internal bench Oct 20 2026</text>
+  <text x="320" y="252" text-anchor="start" fill="#4ecdc4" font-size="11">DGX Spark 64k cold TTFT 29.9 s</text>
+  <text x="320" y="266" text-anchor="start" fill="#8080a0" font-size="9">vLLM 0.32 · internal bench Oct 20 2026</text>
 
-  <!-- Measured: Spark 64k cold TTFT probe B 29.9s (vLLM 0.32) -->
-  <circle cx="280" cy="250" r="10" fill="#4ecdc4"/>
-  <text x="300" y="246" text-anchor="start" fill="#4ecdc4" font-size="11">Spark 64k cold TTFT 29.9 s</text>
-  <text x="300" y="260" text-anchor="start" fill="#8080a0" font-size="9">vLLM 0.32 · bench-0.32.json</text>
+  <!-- Warm annotation (same DGX Spark 64k session) -->
+  <text x="320" y="286" text-anchor="start" fill="#a0a0c0" font-size="10">Warm means 11.5 s / 10.9 s (labeled warm)</text>
 
-  <!-- Warm annotation (same Spark 64k session) -->
-  <text x="300" y="280" text-anchor="start" fill="#a0a0c0" font-size="10">Warm means 11.5 s / 10.9 s (labeled warm)</text>
-
-  <!-- Nitro 32k qualitative smoke — not a latency measurement -->
-  <circle cx="140" cy="340" r="9" fill="none" stroke="#ffd93d" stroke-width="2"/>
-  <text x="155" y="336" text-anchor="start" fill="#ffd93d" font-size="11">Nitro 32k smoke (qualitative)</text>
-  <text x="155" y="350" text-anchor="start" fill="#8080a0" font-size="9">not a TTFT measurement · SMOKE.md</text>
+  <!-- Consumer GPU 32k qualitative smoke — on 32k tick (x=80); not a latency measurement -->
+  <circle cx="80" cy="340" r="9" fill="none" stroke="#ffd93d" stroke-width="2"/>
+  <text x="95" y="336" text-anchor="start" fill="#ffd93d" font-size="11">Consumer GPU 32k smoke (qualitative)</text>
+  <text x="95" y="350" text-anchor="start" fill="#8080a0" font-size="9">CPU/RAM offload · not a TTFT measurement</text>
 
   <!-- Optional speed layer note -->
   <text x="420" y="120" text-anchor="middle" fill="#7c7cb0" font-size="11">Optional speed layer</text>
@@ -57,7 +55,7 @@
   <!-- Deciding axis -->
   <text x="400" y="385" text-anchor="start" fill="#e0e0e0" font-size="11" font-style="italic">Context size = deciding axis</text>
 
-  <!-- Footnote — no STEER/B3 jargon -->
-  <text x="320" y="460" text-anchor="middle" fill="#6060a0" font-size="10">Source: 2026-10-20 Spark benches (64k) + Nitro 32k smoke; plant-ops insight 2026-10-23</text>
-  <text x="320" y="476" text-anchor="middle" fill="#505070" font-size="9">Filled = measured cold TTFT; open ring = qualitative smoke only</text>
+  <!-- Footnote -->
+  <text x="320" y="460" text-anchor="middle" fill="#6060a0" font-size="10">Source: 2026-10-20 DGX Spark benches (64k) + consumer GPU 32k smoke; plant-ops insight 2026-10-23</text>
+  <text x="320" y="476" text-anchor="middle" fill="#505070" font-size="9">Filled = measured cold TTFT (same capability band); open ring = qualitative smoke only</text>
 </svg>

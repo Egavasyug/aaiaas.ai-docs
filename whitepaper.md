@@ -139,11 +139,11 @@ The harness — planning, policy, admission control, verification before complet
 
 Key insight (2026-10-23 plant-ops session): for AI in plant ops, **model capability, context size, and speed form a program-management triangle**. Context size is arguably the deciding axis because it holds the runbook, sensor history, and closeout state; capability sets the floor on reasoning; device-side offload that trades speed for context can become too slow for interactive control.
 
-Measured telemetry (Spark / DGX-Spark thinking stack, vLLM 0.21 and 0.32, ~64k prompt) shows cold TTFT of **31.7 s** and **29.9 s** across two probes, with warm inference means of **11.5 s** / **10.9 s** (labeled warm). Separately, a Nitro-class max-context **32k** smoke test is a qualitative pass only — not a latency measurement and not interchangeable with the Spark 64k figures. Evidence: vault `30-Ops/a5v-qwen-ab/evidence-ab-20261020T1708Z/bench-0.21.json` and `bench-0.32.json` (Spark cold/warm); `30-Ops/nitro-strata-qwen38-flash-next-install-20261004/SMOKE.md` (Nitro 32k smoke).
+Measured telemetry on an **NVIDIA DGX Spark (128 GB unified memory)** thinking stack (vLLM 0.21 and 0.32, ~64k prompt) shows cold TTFT of **31.7 s** and **29.9 s** across two probes, with warm inference means of **11.5 s** / **10.9 s** (labeled warm). Separately, a **consumer GPU box using CPU/RAM offload** max-context **32k** smoke test is a qualitative pass only — not a latency measurement and not interchangeable with the DGX Spark 64k figures. Evidence: internal benchmark log, Oct 20 2026 (DGX Spark cold/warm); internal smoke log, Oct 2026 (consumer GPU 32k smoke).
 
-The chart below plots **measured** Spark points at 64k context with cold TTFT annotated, marks Nitro 32k as qualitative smoke, and keeps an optional speed layer. Any conceptual envelope around the points is illustrative only.
+The chart below plots **measured** DGX Spark points at 64k context with cold TTFT annotated, marks the consumer-GPU 32k smoke as qualitative, and keeps an optional speed layer. Any conceptual envelope around the points is illustrative only.
 
-![Capability × Context — measured Spark 64k cold TTFT 31.7/29.9 s; Nitro 32k qualitative smoke; optional speed layer. Context size = deciding axis.](docs/harness-first-agentic-ai/figures/capability-context-triangle.svg)
+![Capability × Context — measured DGX Spark 64k cold TTFT 31.7/29.9 s; consumer GPU 32k qualitative smoke; optional speed layer. Context size = deciding axis.](docs/harness-first-agentic-ai/figures/capability-context-triangle.svg)
 
 These figures inform the production-default curve in §2.4 — mid-size models behind a harness land on the efficiency plateau; cold-start penalties and device smoke constraints are engineering variables the control plane manages.
 
