@@ -1,7 +1,7 @@
 # Harness-First Agentic AI: Control Plane, Execution, and Governed Autonomy
 
 **AAIAAS™ (Agentic Artificial Intelligence as a Service) Whitepaper**  
-**Version 1.5**
+**Version 1.6**
 **October 2026**
 
 ---
@@ -14,6 +14,7 @@
    - 2.2 Why the Model-Centric Approach Fails
    - 2.3 Inference as Commodity, Second Brain as Value
    - 2.4 Production Default: Mid-Size Models + Harness
+   - 2.4.1 Ops Triangle
    - 2.5 Capability Placement by Plane
    - 2.6 Limits and Chunking under the Harness
    - 2.7 Control-Plane Headroom
@@ -131,6 +132,10 @@ The harness — planning, policy, admission control, verification before complet
 ![Diminishing returns on a fixed task mix: task success rises with scale, then flattens. Local mid-size workers and talons operate on that plateau; frontier capacity is not the default volume path.](docs/harness-first-agentic-ai/figures/body-curve-placement-schematic.svg)
 
 *Body work executes local on the plateau; control-plane capacity sits above the graph, not on every worker seat.*
+
+### 2.4.1 Ops Triangle
+
+Operational performance under real load follows three corners of the ops triangle: cold start latency, warm throughput, and device-side smoke verification. Recent telemetry (STEER#277) on Nitro 32k hardware shows cold TTFT of 31.6559 s and 29.8634 s across two probes, warm-labeled inference, B3 verbatim pass, and a ~23 s drop when transitioning between states. These figures inform the production-default curve in §2.4 — mid-size models behind a harness land on the efficiency plateau; cold-start penalties and Nitro 32k smoke constraints are engineering variables the control plane manages.
 
 ### 2.5 Capability Placement by Plane
 
@@ -540,7 +545,7 @@ The question is no longer *which model*. It is *what context*.
 
 *This whitepaper is published by AAIAAS.ai (Agentic Artificial Intelligence as a Service). It defines architectural invariants and the governance model. Product-specific actor taxonomies and control-plane UI details are published on the product surface.*
 
-**[Download PDF (Version 1.5)](/docs/harness-first-agentic-ai.pdf)**
+**[Download PDF (Version 1.6)](/docs/harness-first-agentic-ai.pdf)**
 
 *For high-level reference, the [Falconry Taxonomy](https://www.peregrines.ai/docs/falconry-taxonomy) defines: **Falconer** (orchestrator / control plane with HITL authority), **Peregrine** (worker agent on an assigned execution plane), and **Talon** (skill or modular capability the worker calls). www.peregrines.ai is the product surface; this whitepaper remains the architectural reference.*
 
