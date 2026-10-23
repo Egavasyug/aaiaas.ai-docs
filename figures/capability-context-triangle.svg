@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 500" font-family="system-ui, sans-serif">
+  <!-- Background -->
+  <rect width="640" height="500" fill="#1a1a2e"/>
+
+  <!-- Title -->
+  <text x="320" y="32" text-anchor="middle" fill="#e0e0e0" font-size="15" font-weight="bold">Capability × Context — measured ops points</text>
+  <text x="320" y="50" text-anchor="middle" fill="#8080a0" font-size="11">Illustrative envelope dashed; filled markers = measured or labeled smoke</text>
+
+  <!-- Axes -->
+  <line x1="80" y1="400" x2="580" y2="400" stroke="#4a4a6a" stroke-width="2"/>
+  <line x1="80" y1="70" x2="80" y2="400" stroke="#4a4a6a" stroke-width="2"/>
+  <polygon points="580,400 570,396 570,404" fill="#4a4a6a"/>
+  <polygon points="80,70 76,80 84,80" fill="#4a4a6a"/>
+
+  <!-- Axis labels -->
+  <text x="330" y="430" text-anchor="middle" fill="#a0a0c0" font-size="12">Context size → (runbook, sensor history, closeout state)</text>
+  <text x="18" y="240" text-anchor="middle" fill="#a0a0c0" font-size="12" transform="rotate(-90 18 240)">Model capability → (reasoning floor)</text>
+
+  <!-- Numeric-ish tick labels (relative, not absolute scale) -->
+  <text x="80" y="418" text-anchor="middle" fill="#606080" font-size="9">32k</text>
+  <text x="280" y="418" text-anchor="middle" fill="#606080" font-size="9">64k</text>
+  <text x="480" y="418" text-anchor="middle" fill="#606080" font-size="9">wider</text>
+
+  <!-- Grid -->
+  <line x1="80" y1="320" x2="580" y2="320" stroke="#2a2a4a" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="80" y1="240" x2="580" y2="240" stroke="#2a2a4a" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="80" y1="160" x2="580" y2="160" stroke="#2a2a4a" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="280" y1="70" x2="280" y2="400" stroke="#2a2a4a" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <!-- Illustrative envelope (conceptual only) -->
+  <polygon points="140,340 280,200 280,340" fill="none" stroke="#3a3a5a" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <text x="210" y="270" text-anchor="middle" fill="#505070" font-size="10" font-style="italic">illustrative</text>
+
+  <!-- Measured: Spark 64k cold TTFT probe A 31.7s (vLLM 0.21) -->
+  <circle cx="280" cy="220" r="10" fill="#6bcb77"/>
+  <text x="300" y="216" text-anchor="start" fill="#6bcb77" font-size="11">Spark 64k cold TTFT 31.7 s</text>
+  <text x="300" y="230" text-anchor="start" fill="#8080a0" font-size="9">vLLM 0.21 · bench-0.21.json</text>
+
+  <!-- Measured: Spark 64k cold TTFT probe B 29.9s (vLLM 0.32) -->
+  <circle cx="280" cy="250" r="10" fill="#4ecdc4"/>
+  <text x="300" y="246" text-anchor="start" fill="#4ecdc4" font-size="11">Spark 64k cold TTFT 29.9 s</text>
+  <text x="300" y="260" text-anchor="start" fill="#8080a0" font-size="9">vLLM 0.32 · bench-0.32.json</text>
+
+  <!-- Warm annotation (same Spark 64k session) -->
+  <text x="300" y="280" text-anchor="start" fill="#a0a0c0" font-size="10">Warm means 11.5 s / 10.9 s (labeled warm)</text>
+
+  <!-- Nitro 32k qualitative smoke — not a latency measurement -->
+  <circle cx="140" cy="340" r="9" fill="none" stroke="#ffd93d" stroke-width="2"/>
+  <text x="155" y="336" text-anchor="start" fill="#ffd93d" font-size="11">Nitro 32k smoke (qualitative)</text>
+  <text x="155" y="350" text-anchor="start" fill="#8080a0" font-size="9">not a TTFT measurement · SMOKE.md</text>
+
+  <!-- Optional speed layer note -->
+  <text x="420" y="120" text-anchor="middle" fill="#7c7cb0" font-size="11">Optional speed layer</text>
+  <text x="420" y="136" text-anchor="middle" fill="#7c7cb0" font-size="10">Offload that buys context</text>
+  <text x="420" y="150" text-anchor="middle" fill="#7c7cb0" font-size="10">can cost interactive latency</text>
+
+  <!-- Deciding axis -->
+  <text x="400" y="385" text-anchor="start" fill="#e0e0e0" font-size="11" font-style="italic">Context size = deciding axis</text>
+
+  <!-- Footnote — no STEER/B3 jargon -->
+  <text x="320" y="460" text-anchor="middle" fill="#6060a0" font-size="10">Source: 2026-10-20 Spark benches (64k) + Nitro 32k smoke; plant-ops insight 2026-10-23</text>
+  <text x="320" y="476" text-anchor="middle" fill="#505070" font-size="9">Filled = measured cold TTFT; open ring = qualitative smoke only</text>
+</svg>

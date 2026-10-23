@@ -164,7 +164,7 @@ figure figcaption {
 <h1 style="text-align:center; border-bottom: 3px double #0d1b2a;">Harness-First Agentic AI</h1>
 <h2 style="text-align:center; font-size:13pt; color:#555; border:none; margin-top:0;">Control Plane, Execution, and Governed Autonomy</h2>
 <p style="text-align:center; color:#777; font-size:10pt; margin-top:0; margin-bottom:0.15em;">AAIAAS™ (Agentic Artificial Intelligence as a Service) Whitepaper</p>
-<p style="text-align:center; color:#777; font-size:10pt; margin-top:0; margin-bottom:0.15em;">Version 1.6</p>
+<p style="text-align:center; color:#777; font-size:10pt; margin-top:0; margin-bottom:0.15em;">Version 1.6.2</p>
 <p style="text-align:center; color:#777; font-size:10pt; margin-top:0; margin-bottom:0.15em;">October 2026</p>
 <hr>
 <h2>Table of Contents</h2>
@@ -275,6 +275,7 @@ figure figcaption {
 <li><strong>Cognitive compounding</strong> — skills that improve run-over-run through a closed self-improvement loop</li>
 </ol>
 <p>The platform is deployed across three execution planes (cloud-shared, device-local, air-gapped), supports hybrid configurations where local inference assists without replacing central orchestration, and is designed to operate in sovereign or private environments where data residency requirements are strict.</p>
+<p>A key insight from plant-ops work in October 2026: model capability, context size, and speed form a program-management triangle; context size is often the deciding axis because it holds the runbook, sensor history, and closeout state (§2.4.1).</p>
 <p>Product-specific actor taxonomies and control-plane UI details are published on the product surface. This document defines the architectural invariants and governance model only.</p>
 <hr />
 <h2 id="2-the-problem-model-centric-failure-modes">2. The Problem: Model-Centric Failure Modes</h2>
@@ -309,12 +310,14 @@ figure figcaption {
 </figure>
 <p><em>Body work executes local on the plateau; control-plane capacity sits above the graph, not on every worker seat.</em></p>
 <h3 id="241-ops-triangle">2.4.1 Ops Triangle</h3>
-<p>Operational performance under real load follows three corners of the ops triangle: cold start latency, warm throughput, and device-side smoke verification. Recent telemetry (STEER#277) on Nitro 32k hardware shows cold TTFT of 31.6559 s and 29.8634 s across two probes, warm inference means of 11.5355 s / 10.9023 s (labeled warm), Nitro 32k max-context 32768 smoke qualitative pass, and B3 summary: &quot;2026-10-23, Guy and Sasha: for AI in plant ops, model capability, context size and speed form a program-management triangle. Context size is arguably the deciding axis because it holds the runbook, sensor history and closeout state; capability sets the floor on reasoning; Nitro-style approaches trade speed for context and get too slow.&quot; The graphic plots capability against context with an optional speed layer:</p>
-<figure id="fig-capability-context-program-management-triangle-xcontext-size-runbook-history-state-ycapability-reasoning-floor-speed-layer-nitro-trades-speed-for-context-too-slow-context-size-deciding-axis">
-<img src="/docs/harness-first-agentic-ai/figures/capability-context-triangle.svg" alt="Capability × Context — program-management triangle. X=context size (runbook, history, state), Y=capability (reasoning floor), speed layer (Nitro trades speed for context → too slow). Context size = deciding axis." />
-<figcaption>Capability × Context — program-management triangle. X=context size (runbook, history, state), Y=capability (reasoning floor), speed layer (Nitro trades speed for context → too slow). Context size = deciding axis.</figcaption>
+<p>Key insight (2026-10-23 plant-ops session): for AI in plant ops, <strong>model capability, context size, and speed form a program-management triangle</strong>. Context size is arguably the deciding axis because it holds the runbook, sensor history, and closeout state; capability sets the floor on reasoning; device-side offload that trades speed for context can become too slow for interactive control.</p>
+<p>Measured telemetry (Spark / DGX-Spark thinking stack, vLLM 0.21 and 0.32, ~64k prompt) shows cold TTFT of <strong>31.7 s</strong> and <strong>29.9 s</strong> across two probes, with warm inference means of <strong>11.5 s</strong> / <strong>10.9 s</strong> (labeled warm). Separately, a Nitro-class max-context <strong>32k</strong> smoke test is a qualitative pass only — not a latency measurement and not interchangeable with the Spark 64k figures. Evidence: vault <code>30-Ops/a5v-qwen-ab/evidence-ab-20261020T1708Z/bench-0.21.json</code> and <code>bench-0.32.json</code> (Spark cold/warm); <code>30-Ops/nitro-strata-qwen38-flash-next-install-20261004/SMOKE.md</code> (Nitro 32k smoke).</p>
+<p>The chart below plots <strong>measured</strong> Spark points at 64k context with cold TTFT annotated, marks Nitro 32k as qualitative smoke, and keeps an optional speed layer. Any conceptual envelope around the points is illustrative only.</p>
+<figure id="fig-capability-context-measured-spark-64k-cold-ttft-317299-s-nitro-32k-qualitative-smoke-optional-speed-layer-context-size-deciding-axis">
+<img src="/docs/harness-first-agentic-ai/figures/capability-context-triangle.svg" alt="Capability × Context — measured Spark 64k cold TTFT 31.7/29.9 s; Nitro 32k qualitative smoke; optional speed layer. Context size = deciding axis." />
+<figcaption>Capability × Context — measured Spark 64k cold TTFT 31.7/29.9 s; Nitro 32k qualitative smoke; optional speed layer. Context size = deciding axis.</figcaption>
 </figure>
-<p>These figures inform the production-default curve in §2.4 — mid-size models behind a harness land on the efficiency plateau; cold-start penalties and Nitro 32k smoke constraints are engineering variables the control plane manages.</p>
+<p>These figures inform the production-default curve in §2.4 — mid-size models behind a harness land on the efficiency plateau; cold-start penalties and device smoke constraints are engineering variables the control plane manages.</p>
 <h3 id="25-capability-placement-by-plane">2.5 Capability Placement by Plane</h3>
 <p>Capability is <strong>placed by plane</strong>, not treated as a temporary compromise.</p>
 <ul>
@@ -698,7 +701,7 @@ figure figcaption {
 <p>The question is no longer <em>which model</em>. It is <em>what context</em>.</p>
 <hr />
 <p><em>This whitepaper is published by AAIAAS.ai (Agentic Artificial Intelligence as a Service). It defines architectural invariants and the governance model. Product-specific actor taxonomies and control-plane UI details are published on the product surface.</em></p>
-<p><strong><a href="/docs/harness-first-agentic-ai.pdf">Download PDF (Version 1.6)</a></strong></p>
+<p><strong><a href="/docs/harness-first-agentic-ai.pdf">Download PDF (Version 1.6.2)</a></strong></p>
 <p><em>For high-level reference, the <a href="https://www.peregrines.ai/docs/falconry-taxonomy">Falconry Taxonomy</a> defines: <strong>Falconer</strong> (orchestrator / control plane with HITL authority), <strong>Peregrine</strong> (worker agent on an assigned execution plane), and <strong>Talon</strong> (skill or modular capability the worker calls). www.peregrines.ai is the product surface; this whitepaper remains the architectural reference.</em></p>
 <hr />
 <p>*Agentic AI with delegated authority, operating wherever needed. Deployed across Cloud, Device, and Air-Gap planes.**Questions? Contact <a href="mailto:falconer@peregrines.ai">falconer@peregrines.ai</a>.*</p>
