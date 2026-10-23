@@ -164,7 +164,7 @@ figure figcaption {
 <h1 style="text-align:center; border-bottom: 3px double #0d1b2a;">Harness-First Agentic AI</h1>
 <h2 style="text-align:center; font-size:13pt; color:#555; border:none; margin-top:0;">Control Plane, Execution, and Governed Autonomy</h2>
 <p style="text-align:center; color:#777; font-size:10pt; margin-top:0; margin-bottom:0.15em;">AAIAAS™ (Agentic Artificial Intelligence as a Service) Whitepaper</p>
-<p style="text-align:center; color:#777; font-size:10pt; margin-top:0; margin-bottom:0.15em;">Version 1.6</p>
+<p style="text-align:center; color:#777; font-size:10pt; margin-top:0; margin-bottom:0.15em;">Version 1.5</p>
 <p style="text-align:center; color:#777; font-size:10pt; margin-top:0; margin-bottom:0.15em;">October 2026</p>
 <hr>
 <h2>Table of Contents</h2>
@@ -308,13 +308,6 @@ figure figcaption {
 <figcaption>Diminishing returns on a fixed task mix: task success rises with scale, then flattens. Local mid-size workers and talons operate on that plateau; frontier capacity is not the default volume path.</figcaption>
 </figure>
 <p><em>Body work executes local on the plateau; control-plane capacity sits above the graph, not on every worker seat.</em></p>
-<h3 id="241-ops-triangle">2.4.1 Ops Triangle</h3>
-<p>Operational performance under real load follows three corners of the ops triangle: cold start latency, warm throughput, and device-side smoke verification. Recent telemetry (STEER#277) on Nitro 32k hardware shows cold TTFT of 31.6559 s and 29.8634 s across two probes, warm inference means of 11.5355 s / 10.9023 s (labeled warm), Nitro 32k max-context 32768 smoke qualitative pass, and B3 summary: &quot;2026-10-23, Guy and Sasha: for AI in plant ops, model capability, context size and speed form a program-management triangle. Context size is arguably the deciding axis because it holds the runbook, sensor history and closeout state; capability sets the floor on reasoning; Nitro-style approaches trade speed for context and get too slow.&quot; The graphic plots capability against context with an optional speed layer:</p>
-<figure id="fig-capability-context-program-management-triangle-xcontext-size-runbook-history-state-ycapability-reasoning-floor-speed-layer-nitro-trades-speed-for-context-too-slow-context-size-deciding-axis">
-<img src="/docs/harness-first-agentic-ai/figures/capability-context-triangle.svg" alt="Capability × Context — program-management triangle. X=context size (runbook, history, state), Y=capability (reasoning floor), speed layer (Nitro trades speed for context → too slow). Context size = deciding axis." />
-<figcaption>Capability × Context — program-management triangle. X=context size (runbook, history, state), Y=capability (reasoning floor), speed layer (Nitro trades speed for context → too slow). Context size = deciding axis.</figcaption>
-</figure>
-<p>These figures inform the production-default curve in §2.4 — mid-size models behind a harness land on the efficiency plateau; cold-start penalties and Nitro 32k smoke constraints are engineering variables the control plane manages.</p>
 <h3 id="25-capability-placement-by-plane">2.5 Capability Placement by Plane</h3>
 <p>Capability is <strong>placed by plane</strong>, not treated as a temporary compromise.</p>
 <ul>
@@ -698,7 +691,7 @@ figure figcaption {
 <p>The question is no longer <em>which model</em>. It is <em>what context</em>.</p>
 <hr />
 <p><em>This whitepaper is published by AAIAAS.ai (Agentic Artificial Intelligence as a Service). It defines architectural invariants and the governance model. Product-specific actor taxonomies and control-plane UI details are published on the product surface.</em></p>
-<p><strong><a href="/docs/harness-first-agentic-ai.pdf">Download PDF (Version 1.6)</a></strong></p>
+<p><strong><a href="/docs/harness-first-agentic-ai.pdf">Download PDF (Version 1.5)</a></strong></p>
 <p><em>For high-level reference, the <a href="https://www.peregrines.ai/docs/falconry-taxonomy">Falconry Taxonomy</a> defines: <strong>Falconer</strong> (orchestrator / control plane with HITL authority), <strong>Peregrine</strong> (worker agent on an assigned execution plane), and <strong>Talon</strong> (skill or modular capability the worker calls). www.peregrines.ai is the product surface; this whitepaper remains the architectural reference.</em></p>
 <hr />
 <p>*Agentic AI with delegated authority, operating wherever needed. Deployed across Cloud, Device, and Air-Gap planes.**Questions? Contact <a href="mailto:falconer@peregrines.ai">falconer@peregrines.ai</a>.*</p>
