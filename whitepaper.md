@@ -135,7 +135,11 @@ The harness — planning, policy, admission control, verification before complet
 
 ### 2.4.1 Ops Triangle
 
-Operational performance under real load follows three corners of the ops triangle: cold start latency, warm throughput, and device-side smoke verification. Recent telemetry (STEER#277) on Nitro 32k hardware shows cold TTFT of 31.6559 s and 29.8634 s across two probes, warm-labeled inference, B3 verbatim pass, and a ~23 s drop when transitioning between states. These figures inform the production-default curve in §2.4 — mid-size models behind a harness land on the efficiency plateau; cold-start penalties and Nitro 32k smoke constraints are engineering variables the control plane manages.
+Operational performance under real load follows three corners of the ops triangle: cold start latency, warm throughput, and device-side smoke verification. Recent telemetry (STEER#277) on Nitro 32k hardware shows cold TTFT of 31.6559 s and 29.8634 s across two probes, warm inference means of 11.5355 s / 10.9023 s (labeled warm), Nitro 32k max-context 32768 smoke qualitative pass, and B3 summary: "2026-10-23, Guy and Sasha: for AI in plant ops, model capability, context size and speed form a program-management triangle. Context size is arguably the deciding axis because it holds the runbook, sensor history and closeout state; capability sets the floor on reasoning; Nitro-style approaches trade speed for context and get too slow." The graphic plots capability against context with an optional speed layer:
+
+![Capability × Context — program-management triangle. X=context size (runbook, history, state), Y=capability (reasoning floor), speed layer (Nitro trades speed for context → too slow). Context size = deciding axis.](docs/harness-first-agentic-ai/figures/capability-context-triangle.svg)
+
+These figures inform the production-default curve in §2.4 — mid-size models behind a harness land on the efficiency plateau; cold-start penalties and Nitro 32k smoke constraints are engineering variables the control plane manages.
 
 ### 2.5 Capability Placement by Plane
 

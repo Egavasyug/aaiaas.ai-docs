@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" font-family="system-ui, sans-serif">
+  <!-- Background -->
+  <rect width="640" height="480" fill="#1a1a2e"/>
+  
+  <!-- Title -->
+  <text x="320" y="36" text-anchor="middle" fill="#e0e0e0" font-size="16" font-weight="bold">Capability × Context — Program Management Triangle</text>
+  
+  <!-- Axes -->
+  <line x1="80" y1="420" x2="600" y2="420" stroke="#4a4a6a" stroke-width="2"/>
+  <line x1="80" y1="80" x2="80" y2="420" stroke="#4a4a6a" stroke-width="2"/>
+  
+  <!-- X-axis label -->
+  <text x="340" y="460" text-anchor="middle" fill="#a0a0c0" font-size="13">Context Size (runbook, history, state)</text>
+  
+  <!-- Y-axis label -->
+  <text x="20" y="250" text-anchor="middle" fill="#a0a0c0" font-size="13" transform="rotate(-90 20 250)">Model Capability (reasoning floor)</text>
+  
+  <!-- Grid lines (subtle) -->
+  <line x1="80" y1="340" x2="600" y2="340" stroke="#2a2a4a" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="80" y1="260" x2="600" y2="260" stroke="#2a2a4a" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="80" y1="180" x2="600" y2="180" stroke="#2a2a4a" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="200" y1="80" x2="200" y2="420" stroke="#2a2a4a" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="320" y1="80" x2="320" y2="420" stroke="#2a2a4a" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="440" y1="80" x2="440" y2="420" stroke="#2a2a4a" stroke-width="1" stroke-dasharray="4,4"/>
+  
+  <!-- Triangle vertices -->
+  <!-- Vertex 1: Low context, Low capability — small local model -->
+  <circle cx="160" cy="360" r="18" fill="#ff6b6b" opacity="0.9"/>
+  <text x="160" y="395" text-anchor="middle" fill="#ff6b6b" font-size="11">Nitro 32k</text>
+  
+  <!-- Vertex 2: High context, Low capability — wide but shallow -->
+  <circle cx="480" cy="340" r="18" fill="#ffd93d" opacity="0.9"/>
+  <text x="480" y="375" text-anchor="middle" fill="#ffd93d" font-size="11">Wide context</text>
+  
+  <!-- Vertex 3: Low context, High capability — deep but narrow -->
+  <circle cx="120" cy="120" r="18" fill="#6bcb77" opacity="0.9"/>
+  <text x="120" y="105" text-anchor="middle" fill="#6bcb77" font-size="11">High capability</text>
+  
+  <!-- Triangle edges -->
+  <line x1="160" y1="360" x2="480" y2="340" stroke="#4a4a6a" stroke-width="2" stroke-dasharray="6,3"/>
+  <line x1="480" y1="340" x2="120" y2="120" stroke="#4a4a6a" stroke-width="2" stroke-dasharray="6,3"/>
+  <line x1="120" y1="120" x2="160" y2="360" stroke="#4a4a6a" stroke-width="2" stroke-dasharray="6,3"/>
+  
+  <!-- Triangle label -->
+  <text x="320" y="240" text-anchor="middle" fill="#e0e0e0" font-size="12" font-style="italic">Program-management</text>
+  <text x="320" y="256" text-anchor="middle" fill="#e0e0e0" font-size="12" font-style="italic">triangle</text>
+  
+  <!-- Axis direction arrows -->
+  <polygon points="600,420 590,416 590,424" fill="#4a4a6a"/>
+  <polygon points="80,80 76,90 84,90" fill="#4a4a6a"/>
+  
+  <!-- Speed layer annotation -->
+  <text x="400" y="140" text-anchor="middle" fill="#7c7cb0" font-size="11">Speed layer</text>
+  <text x="400" y="155" text-anchor="middle" fill="#7c7cb0" font-size="11">(Nitro trades speed</text>
+  <text x="400" y="170" text-anchor="middle" fill="#7c7cb0" font-size="11">for context → too slow)</text>
+  
+  <!-- Deciding axis -->
+  <text x="380" y="400" text-anchor="start" fill="#e0e0e0" font-size="11" font-style="italic">Context size = deciding axis</text>
+  
+  <!-- Footnote -->
+  <text x="320" y="475" text-anchor="middle" fill="#6060a0" font-size="10">Source: 2026-10-23, Guy and Sasha (B3 locked verbatim)</text>
+</svg>
